@@ -62,6 +62,12 @@ export interface RaceFinished {
   totals: { name: string; correctCount: number; questionsWonFirst: number }[];
 }
 
+export interface ChatMessage {
+  fromName: string;
+  text: string;
+  at: number;
+}
+
 interface RaceSocketState {
   connected: boolean;
   registered: boolean;
@@ -74,6 +80,7 @@ interface RaceSocketState {
   lastAnswerResult: AnswerResult | null;
   finished: RaceFinished | null;
   error: string | null;
+  chatMessages: ChatMessage[];
 }
 
 const initialState: RaceSocketState = {
@@ -88,6 +95,7 @@ const initialState: RaceSocketState = {
   lastAnswerResult: null,
   finished: null,
   error: null,
+  chatMessages: [],
 };
 
 function wsUrl(): string {
@@ -148,6 +156,15 @@ export function useRaceSocket() {
           case "race_finished":
             setState((s) => ({ ...s, finished: msg as RaceFinished }));
             break;
+          case "chat_message":
+            setState((s) => ({
+              ...s,
+              chatMessages: [
+                ...s.chatMessages.slice(-99),
+                { fromName: msg.fromName, text: msg.text, at: msg.at } as ChatMessage,
+              ],
+            }));
+            break;
           case "error":
             setState((s) => ({ ...s, error: msg.message }));
             break;
@@ -157,7 +174,7 @@ export function useRaceSocket() {
       ws.onclose = () => {
         wsRef.current = null;
         if (closed) return;
-        setState((s) => ({ ...initialState, error: s.race && !s.finished ? "Connection lost." : null }));
+        setState((s) => ({ ...initialState, chatMessages: s.chatMessages, error: s.race && !s.finished ? "Connection lost." : null }));
         retryTimer = setTimeout(connect, 2000);
       };
     };
@@ -196,6 +213,7 @@ export function useRaceSocket() {
     (questionIndex: number, optionIndex: number) => sendMsg({ type: "answer", questionIndex, optionIndex }),
     [sendMsg],
   );
+  const sendChat = useCallback((text: string) => sendMsg({ type: "chat", text }), [sendMsg]);
   const clearError = useCallback(() => setState((s) => ({ ...s, error: null })), []);
   const resetRace = useCallback(
     () => setState((s) => ({ ...s, race: null, opponentProgress: null, lastAnswerResult: null, finished: null })),
@@ -209,6 +227,7 @@ export function useRaceSocket() {
     cancelChallenge,
     acceptChallenge,
     sendAnswer,
+    sendChat,
     clearError,
     resetRace,
   };

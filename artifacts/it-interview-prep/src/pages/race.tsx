@@ -1,13 +1,14 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useLocation, useSearch } from "wouter";
 import { useListCourses } from "@workspace/api-client-react";
-import { useRaceSocket, type Level, type RaceStart, type RaceFinished } from "@/lib/race-socket";
+import { useRaceSocket, type Level, type RaceStart, type RaceFinished, type ChatMessage } from "@/lib/race-socket";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   Swords, Loader2, CheckCircle2, XCircle, Timer, Trophy, Users, Zap, Flag, ChevronRight,
+  MessageCircle, Send, X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -88,7 +89,7 @@ function NameEntry({
           <div className="inline-flex items-center justify-center p-4 rounded-full bg-primary/10 text-primary mb-2 mx-auto">
             <Swords size={32} />
           </div>
-          <CardTitle className="text-2xl">Enter the Race Arena</CardTitle>
+          <CardTitle className="text-2xl">Enter the Challenge Arena</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-muted-foreground text-center text-sm">
@@ -108,6 +109,93 @@ function NameEntry({
           </Button>
         </CardContent>
       </Card>
+    </div>
+  );
+}
+
+/* ---------- Chat panel ---------- */
+
+function ChatPanel({
+  messages,
+  myName,
+  onSend,
+  compact = false,
+}: {
+  messages: ChatMessage[];
+  myName: string;
+  onSend: (text: string) => void;
+  compact?: boolean;
+}) {
+  const [draft, setDraft] = useState("");
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const submit = () => {
+    const t = draft.trim();
+    if (!t) return;
+    onSend(t);
+    setDraft("");
+  };
+
+  return (
+    <div className={cn("flex flex-col border-2 rounded-2xl overflow-hidden bg-card shadow-lg", compact ? "h-64" : "h-80")}>
+      {/* Header */}
+      <div className="flex items-center gap-2 px-4 py-3 border-b bg-muted/30">
+        <MessageCircle size={16} className="text-primary" />
+        <span className="font-bold text-sm">Lobby Chat</span>
+        {messages.length > 0 && (
+          <span className="ml-auto text-xs text-muted-foreground">{messages.length} message{messages.length !== 1 ? "s" : ""}</span>
+        )}
+      </div>
+
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto p-3 space-y-2 scroll-smooth">
+        {messages.length === 0 ? (
+          <p className="text-xs text-muted-foreground text-center py-6">
+            No messages yet. Say hi to the lobby!
+          </p>
+        ) : (
+          messages.map((m, i) => {
+            const isMe = m.fromName === myName;
+            return (
+              <div key={i} className={cn("flex gap-2 items-end", isMe && "flex-row-reverse")}>
+                <div
+                  className={cn(
+                    "max-w-[80%] px-3 py-2 rounded-2xl text-sm leading-snug",
+                    isMe
+                      ? "bg-primary text-white rounded-br-sm"
+                      : "bg-muted text-foreground rounded-bl-sm",
+                  )}
+                >
+                  {!isMe && (
+                    <span className="block text-[10px] font-bold text-primary mb-0.5">{m.fromName}</span>
+                  )}
+                  {m.text}
+                </div>
+              </div>
+            );
+          })
+        )}
+        <div ref={bottomRef} />
+      </div>
+
+      {/* Input */}
+      <div className="flex gap-2 p-3 border-t bg-muted/20">
+        <Input
+          placeholder="Type a message…"
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && submit()}
+          className="h-9 text-sm rounded-xl"
+          maxLength={200}
+        />
+        <Button size="icon" className="h-9 w-9 rounded-xl shrink-0" onClick={submit} disabled={!draft.trim()}>
+          <Send size={15} />
+        </Button>
+      </div>
     </div>
   );
 }
@@ -140,10 +228,10 @@ function Lobby({
     <div className="w-full max-w-5xl mx-auto py-12 px-4">
       <div className="text-center mb-10">
         <h1 className="text-4xl font-extrabold tracking-tight mb-3 flex items-center justify-center gap-3">
-          <Swords className="text-primary" size={36} /> Race Arena
+          <Swords className="text-primary" size={36} /> Challenge Arena
         </h1>
         <p className="text-muted-foreground text-lg">
-          Racing as <span className="font-bold text-foreground">{myName}</span> — challenge a player and answer the
+          Playing as <span className="font-bold text-foreground">{myName}</span> — challenge a player and answer the
           same questions head-to-head in real time.
         </p>
       </div>
@@ -235,7 +323,7 @@ function Lobby({
           </CardContent>
         </Card>
 
-        <div className="space-y-8">
+        <div className="space-y-6">
           {/* Incoming challenges */}
           <Card className="shadow-lg border-2">
             <CardHeader>
@@ -270,7 +358,15 @@ function Lobby({
           {/* Online players */}
           <Card className="shadow-lg border-2">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2"><Users size={20} className="text-primary" /> Players Online</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Users size={20} className="text-primary" />
+                Players Online
+                {socket.players.length > 0 && (
+                  <Badge variant="secondary" className="ml-auto font-mono text-xs">
+                    {socket.players.length} in arena
+                  </Badge>
+                )}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {otherPlayers.length === 0 ? (
@@ -298,6 +394,11 @@ function Lobby({
             </CardContent>
           </Card>
         </div>
+      </div>
+
+      {/* Chat panel — full width below the two-column layout */}
+      <div className="mt-8">
+        <ChatPanel messages={socket.chatMessages} myName={myName} onSend={socket.sendChat} />
       </div>
     </div>
   );

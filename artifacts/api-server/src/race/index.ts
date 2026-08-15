@@ -69,6 +69,10 @@ const players = new Map<string, Player>();
 const challenges = new Map<string, Challenge>();
 const races = new Map<string, Race>();
 
+export function getOnlineCount(): number {
+  return [...players.values()].filter((p) => p.name).length;
+}
+
 let nextId = 1;
 function genId(prefix: string): string {
   return `${prefix}_${Date.now().toString(36)}_${(nextId++).toString(36)}`;
@@ -102,6 +106,13 @@ function broadcastLobby(): void {
   const snapshot = JSON.stringify(lobbySnapshot());
   for (const p of players.values()) {
     if (p.ws.readyState === WebSocket.OPEN) p.ws.send(snapshot);
+  }
+}
+
+function broadcastChat(fromName: string, text: string): void {
+  const msg = JSON.stringify({ type: "chat_message", fromName, text, at: Date.now() });
+  for (const p of players.values()) {
+    if (p.ws.readyState === WebSocket.OPEN) p.ws.send(msg);
   }
 }
 
@@ -474,6 +485,14 @@ function handleMessage(player: Player, raw: string): void {
       if (race.participants.every((p) => p.done)) {
         finishRace(race);
       }
+      break;
+    }
+
+    case "chat": {
+      if (!player.name) return;
+      const text = typeof msg.text === "string" ? msg.text.trim().slice(0, 200) : "";
+      if (!text) return;
+      broadcastChat(player.name, text);
       break;
     }
 
