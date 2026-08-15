@@ -1,0 +1,9 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "Dn9RDPMcbYXyfHlY75Pnk"
+uri = "file://artifacts/marketing-video/public/audio/bg_music.mp3"
+type = "audio"
+title = "energetic synthwave background music"
+description = "Generated music: Driving electronic synthwave instrumental, 120 BPM, punchy bass, energetic arpeggiated synths, building tension and hype. Perfect for a fast-paced tech product promo. Patient intro, …"
