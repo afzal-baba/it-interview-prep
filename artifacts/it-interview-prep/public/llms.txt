@@ -1,0 +1,10 @@
+# TechInterviewPrep
+
+> Free IT interview practice platform with 600 hand-crafted questions across 20 technologies including Oracle, AWS, Java, Python, Linux, Docker, and more.
+
+## Pages
+
+- /: Home — browse 20 IT courses and start practicing
+- /about: About TechInterviewPrep — features, badge system, and course list
+- /leaderboard: Global leaderboard of top scorers by course and difficulty
+- /race: Real-time challenge mode — race head-to-head against another player

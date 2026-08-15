@@ -19,6 +19,13 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Static links for crawler discovery; hidden after React hydration -->
+    <nav aria-hidden="true" style="display:none">
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/leaderboard">Leaderboard</a>
+      <a href="/race">Race</a>
+    </nav>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
