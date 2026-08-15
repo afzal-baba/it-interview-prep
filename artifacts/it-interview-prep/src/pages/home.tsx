@@ -12,26 +12,48 @@ import { Search, X, ArrowLeft, Timer } from "lucide-react";
 
 // ─── Accent colors ────────────────────────────────────────────────────────────
 const SLUG_ACCENT: Record<string, string> = {
-  oracle:       "#f0748a",
-  sap:          "#8f7bf0",
-  java:         "#f0b84f",
-  python:       "#5be3d8",
-  aws:          "#f0a35c",
-  linux:        "#6fd3f0",
-  "docker-k8s": "#5be3d8",
-  javascript:   "#f0b84f",
-  cybersecurity:"#f0748a",
-  sql:          "#8f7bf0",
-  networking:   "#6fd3f0",
-  azure:        "#6fd3f0",
-  git:          "#f0a35c",
-  terraform:    "#8f7bf0",
-  cicd:         "#f0a35c",
-  sre:          "#5be3d8",
-  ansible:      "#f0748a",
-  gcp:          "#f0b84f",
-  typescript:   "#5be3d8",
-  bash:         "#f0b84f",
+  // original 20
+  oracle:          "#f0748a",
+  sap:             "#8f7bf0",
+  java:            "#f0b84f",
+  python:          "#5be3d8",
+  aws:             "#f0a35c",
+  linux:           "#6fd3f0",
+  "docker-k8s":    "#5be3d8",
+  javascript:      "#f0b84f",
+  cybersecurity:   "#f0748a",
+  sql:             "#8f7bf0",
+  networking:      "#6fd3f0",
+  azure:           "#6fd3f0",
+  git:             "#f0a35c",
+  terraform:       "#8f7bf0",
+  cicd:            "#f0a35c",
+  sre:             "#5be3d8",
+  ansible:         "#f0748a",
+  gcp:             "#f0b84f",
+  typescript:      "#5be3d8",
+  bash:            "#f0b84f",
+  // new 20
+  react:           "#5be3d8",
+  nodejs:          "#6fd3f0",
+  django:          "#5be3d8",
+  "spring-boot":   "#f0b84f",
+  mongodb:         "#6fd3f0",
+  redis:           "#f0748a",
+  postgresql:      "#6fd3f0",
+  "machine-learning": "#f0b84f",
+  kafka:           "#f0748a",
+  elasticsearch:   "#f0a35c",
+  "data-warehouse":"#5be3d8",
+  virtualization:  "#6fd3f0",
+  "testing-qa":    "#8f7bf0",
+  graphql:         "#f0748a",
+  "jira-agile":    "#f0a35c",
+  fastapi:         "#5be3d8",
+  rabbitmq:        "#f0748a",
+  "deep-learning": "#8f7bf0",
+  vault:           "#f0b84f",
+  "vue-angular":   "#6fd3f0",
 };
 const FALLBACK = ["#f0748a","#8f7bf0","#f0b84f","#5be3d8","#f0a35c","#6fd3f0"];
 const getAccent = (course: Course, idx: number) =>
@@ -367,6 +389,7 @@ export default function Home() {
     return courses.filter(
       (c) =>
         c.name.toLowerCase().includes(q) ||
+        c.slug.toLowerCase().includes(q) ||
         (c.description ?? "").toLowerCase().includes(q),
     );
   }, [courses, search]);
@@ -487,7 +510,7 @@ export default function Home() {
                   <input
                     type="text"
                     className="cin-search-input"
-                    placeholder="Search courses… e.g. Docker, Python, AWS"
+                    placeholder="Search courses… e.g. Docker, React, Kafka, Vault"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     style={{
@@ -515,8 +538,8 @@ export default function Home() {
                 style={{ display: "flex", gap: 48, flexWrap: "wrap", justifyContent: "center", marginTop: 52, animation: "cin-slideUp 0.7s ease-out 0.6s both" }}
               >
                 {[
-                  { val: "20", label: "Technologies" },
-                  { val: "600+", label: "Questions" },
+                  { val: "40", label: "Technologies" },
+                  { val: "1200+", label: "Questions" },
                   { val: "4", label: "Badge Tiers" },
                 ].map(({ val, label }) => (
                   <div key={label} style={{ textAlign: "center" }}>
