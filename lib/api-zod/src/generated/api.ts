@@ -68,10 +68,12 @@ export const ListQuestionsResponse = zod.array(ListQuestionsResponseItem)
 /**
  * @summary Start a new quiz session
  */
+export const createSessionBodyTimedModeDefault = false;
+
 export const CreateSessionBody = zod.object({
   "courseId": zod.number().int(),
   "level": zod.enum(['beginner', 'intermediate', 'advanced']),
-  "timedMode": zod.boolean().optional().default(false)
+  "timedMode": zod.boolean().default(createSessionBodyTimedModeDefault)
 })
 
 export const CreateSessionResponse = zod.object({
@@ -89,13 +91,15 @@ export const SubmitSessionParams = zod.object({
   "sessionId": zod.coerce.number().int()
 })
 
+export const submitSessionBodyTimedModeDefault = false;
+
 export const SubmitSessionBody = zod.object({
   "answers": zod.array(zod.object({
   "questionId": zod.number().int(),
   "selectedOptionIndex": zod.number().int(),
-  "timeTakenMs": zod.number().int().optional()
+  "timeTakenMs": zod.number().int().optional().describe('Time taken to answer in milliseconds (for timed mode)')
 })),
-  "timedMode": zod.boolean().optional().default(false)
+  "timedMode": zod.boolean().default(submitSessionBodyTimedModeDefault)
 })
 
 export const SubmitSessionResponse = zod.object({
@@ -112,8 +116,8 @@ export const SubmitSessionResponse = zod.object({
   "isCorrect": zod.boolean(),
   "explanation": zod.string().nullable()
 })),
-  "timeBonus": zod.number().int().optional(),
-  "timedMode": zod.boolean().optional()
+  "timeBonus": zod.number().int().optional().describe('Bonus points earned from answering quickly in timed mode'),
+  "timedMode": zod.boolean().optional().describe('Whether this session was played in timed mode')
 })
 
 
@@ -125,10 +129,7 @@ export const listLeaderboardQueryLimitDefault = 20;
 export const ListLeaderboardQueryParams = zod.object({
   "courseId": zod.coerce.number().int().nullish(),
   "level": zod.enum(['beginner', 'intermediate', 'advanced']).nullish(),
-  "timedMode": zod.preprocess(
-    (v) => v === "true" ? true : v === "false" ? false : v,
-    zod.boolean().nullish()
-  ),
+  "timedMode": zod.coerce.boolean().nullish().describe('Filter by timed mode (true\/false\/null for all)'),
   "limit": zod.coerce.number().int().default(listLeaderboardQueryLimitDefault)
 })
 
@@ -143,8 +144,8 @@ export const ListLeaderboardResponseItem = zod.object({
   "percentage": zod.number(),
   "badges": zod.array(zod.string()),
   "createdAt": zod.coerce.date(),
-  "timedMode": zod.boolean().optional(),
-  "timeBonus": zod.number().int().optional()
+  "timedMode": zod.boolean().optional().describe('Whether this score was achieved in timed mode'),
+  "timeBonus": zod.number().int().optional().describe('Time bonus points earned')
 })
 export const ListLeaderboardResponse = zod.array(ListLeaderboardResponseItem)
 
@@ -153,7 +154,7 @@ export const ListLeaderboardResponse = zod.array(ListLeaderboardResponseItem)
  * @summary Save a player score to the leaderboard
  */
 export const CreateLeaderboardEntryBody = zod.object({
-  "sessionId": zod.number().int(),
+  "sessionId": zod.number().int().describe('The session ID whose server-computed result should be recorded'),
   "playerName": zod.string()
 })
 
@@ -168,8 +169,8 @@ export const CreateLeaderboardEntryResponse = zod.object({
   "percentage": zod.number(),
   "badges": zod.array(zod.string()),
   "createdAt": zod.coerce.date(),
-  "timedMode": zod.boolean().optional(),
-  "timeBonus": zod.number().int().optional()
+  "timedMode": zod.boolean().optional().describe('Whether this score was achieved in timed mode'),
+  "timeBonus": zod.number().int().optional().describe('Time bonus points earned')
 })
 
 

@@ -140,15 +140,6 @@ export interface LeaderboardEntry {
   timeBonus?: number;
 }
 
-export type LeaderboardEntryInputLevel = typeof LeaderboardEntryInputLevel[keyof typeof LeaderboardEntryInputLevel];
-
-
-export const LeaderboardEntryInputLevel = {
-  beginner: 'beginner',
-  intermediate: 'intermediate',
-  advanced: 'advanced',
-} as const;
-
 export interface LeaderboardEntryInput {
   /** The session ID whose server-computed result should be recorded */
   sessionId: number;
