@@ -1,3 +1,8 @@
 <svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="180" height="180" rx="36" fill="#FF3C00"/>
+  <!-- Background rounded rectangle using primary brand color -->
+  <rect width="180" height="180" rx="36" fill="#7C5CFC"/>
+  <!-- Terminal prompt: ">" chevron -->
+  <path d="M38 90 L72 62 L72 74 L54 90 L72 106 L72 118 Z" fill="white"/>
+  <!-- Terminal prompt: "_" underscore cursor -->
+  <rect x="84" y="106" width="58" height="12" rx="4" fill="white"/>
 </svg>
