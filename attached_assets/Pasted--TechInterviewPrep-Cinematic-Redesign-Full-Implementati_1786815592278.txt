@@ -1,0 +1,461 @@
+# TechInterviewPrep Cinematic Redesign - Full Implementation Prompt
+
+## Design Brief
+Create a **premium cinematic tech landing page** for TechInterviewPrep, a technical interview preparation platform. The design should feel like a high-end SaaS product with sophisticated animations, interactive elements, and a dark tech aesthetic.
+
+---
+
+## Color Palette
+
+```
+Primary Colors:
+- Background: #05070c (near-black with slight blue tint)
+- Surface (translucent): rgba(18,22,34,0.55)
+- Surface solid: #0d1120
+
+Accent Colors:
+- Cyan: #5be3d8 (primary tech accent)
+- Violet: #8f7bf0 (secondary accent)
+- Rose: #f0748a (card accent)
+- Amber: #f0b84f (card accent)
+- Orange: #f0a35c (AWS card)
+- Light Blue: #6fd3f0 (Linux card)
+
+Text Colors:
+- Primary: #eef1fa
+- Dim: #93a0bd
+- Faint: #545f7d
+
+Borders:
+- Soft: rgba(140,160,220,0.14)
+- Strong: rgba(140,180,255,0.32)
+```
+
+---
+
+## Typography
+
+**Display Font:** Inter (sans-serif)
+- Weights: 700, 800
+- Used for: Headlines, card titles, section heads
+
+**Mono Font:** JetBrains Mono
+- Weights: 400, 500, 600, 700, 800
+- Used for: Eyebrow text, stats, status pill, search prompt
+
+**Body Font:** Inter
+- Weight: 400, 500
+- Used for: Paragraph text, descriptions
+
+---
+
+## Background & Atmosphere
+
+### Animated Network Background
+- Canvas-based animated node network with ~90 nodes (responsive count)
+- Nodes drift slowly around the viewport
+- Connections draw between nearby nodes (140px range) with low opacity (0.15)
+- Node color: rgba(180,200,255,0.5)
+- Connection color: rgba(140,170,255,0.15)
+
+### Particle Flow System
+- ~40 floating particles that drift upward
+- Colors: cyan (#5be3d8) and violet (#8f7bf0), alternating
+- Particles spawn from bottom, fade as life increases
+- Light opacity (0.5) with blur effect
+- Regenerates particles as old ones fade
+
+### Glow Orbs (Static)
+- Positioned absolutely, fixed, blurred heavily (110px blur)
+- **Glow 1:** Violet glow, top-left (-220px top, -160px left), 640x640px
+  - `radial-gradient(circle, rgba(95,120,240,0.35), transparent 70%)`
+- **Glow 2:** Cyan glow, top-right (-100px top, -200px right), 560x560px
+  - `radial-gradient(circle, rgba(91,227,216,0.22), transparent 70%)`
+- **Glow 3:** Rose glow, bottom-left (bottom -260px, left 30%), 700x500px
+  - `radial-gradient(circle, rgba(240,116,138,0.14), transparent 70%)`
+
+### Vignette Overlay
+- Elliptical radial gradient
+- Transparent at center, fades to dark at edges
+- `radial-gradient(ellipse 1400px 900px at 50% 20%, transparent 40%, rgba(5,7,12,0.75) 100%)`
+
+### Film Grain Texture
+- Subtle SVG noise overlay
+- Opacity: 0.02
+- Mix-blend-mode: overlay
+- Creates subtle analog feel without distraction
+
+### Cursor-Tracking Glow
+- Fixed 240x240px radial gradient circle
+- Follows mouse position smoothly (lerp factor 0.1)
+- Violet tint: radial-gradient(circle, rgba(95,120,240,0.25), transparent 70%)
+- Blur: 60px
+- Opacity fades in/out when mouse enters/leaves viewport
+
+---
+
+## Navigation Bar
+
+**Structure:**
+- Flexbox row, space-between alignment
+- Padding: 24px 56px
+- Backdrop blur: 6px
+- Z-index: 5
+
+**Logo Section:**
+- Flex layout, gap: 11px
+- **Logo Mark:** 34x34px box with gradient background
+  - Background: linear-gradient(140deg, rgba(143,123,240,0.25), rgba(91,227,216,0.1))
+  - Border: 1px solid var(--border-strong)
+  - Content: "&gt;_" text in cyan
+  - Font: JetBrains Mono, 15px, 800 weight
+  - Box-shadow: 0 0 24px rgba(91,227,216,0.25)
+  - Animation: pulse 3s ease-in-out (0-50%: shadow 24px, 50%: shadow 36px)
+  - Border-radius: 9px
+- **Logo Text:** "TechInterviewPrep"
+  - First part: regular text
+  - "Prep" suffix: gradient text (cyan → violet)
+
+**Nav Links:**
+- Flex layout, gap: 38px
+- Font: 14px, 500 weight
+- Color: --text-dim, hover: --text
+- Active state: underline with gradient (cyan → violet), 2px height
+- Smooth transitions: 0.2s
+
+**Status Pill:**
+- Display: flex, gap: 8px
+- Background: var(--surface) with backdrop blur 10px
+- Border: 1px solid var(--border)
+- Padding: 8px 15px, border-radius: 20px
+- Font: JetBrains Mono, 12px
+- Contains: green dot (6x6px with cyan box-shadow 0 0 10px)
+- Animation: pulse-subtle 2.5s (opacity 1 → 0.85 → 1)
+
+**Animations:**
+- Nav slides down on load: `slideDown 0.7s ease-out 0.1s`
+
+---
+
+## Hero Section
+
+**Layout:**
+- Centered column flex layout
+- Max-width: 1000px
+- Padding: 120px 32px 90px
+- Text-align: center
+- Z-index: 5
+
+**Eyebrow:**
+- Inline-flex, gap: 10px
+- Font: JetBrains Mono, 12.5px, uppercase, letter-spacing: 0.18em
+- Color: cyan
+- Border: 1px solid var(--border)
+- Padding: 8px 16px
+- Border-radius: 20px
+- Background: var(--surface) with backdrop-blur 10px
+- Contains: blinking dot (5x5px, cyan with glow)
+- Animation: slideUp 0.6s ease-out 0.2s
+- Dot animation: blink 2s ease-in-out (opacity 1 → 0.5 → 1)
+
+**Headline (h1):**
+- Font: Inter, 72px, 800 weight
+- Line-height: 1.04
+- Letter-spacing: -0.035em
+- Margin-bottom: 26px
+- Two lines:
+  - Line 1: "Ace your next" (white text)
+  - Line 2: "technical interview" (gradient text: white 20% → cyan 55% → violet 85%)
+- Animation: slideUp 0.7s ease-out 0.3s
+
+**Subtitle (p.sub):**
+- Font: 18px, line-height: 1.65
+- Color: --text-dim
+- Max-width: 560px
+- Margin-bottom: 44px
+- Animation: slideUp 0.7s ease-out 0.4s
+
+**Search Box:**
+- Flex layout, gap: 12px
+- Background: var(--surface) with backdrop-blur 14px
+- Border: 1px solid var(--border), transitions to --border-strong on focus
+- Padding: 17px 22px
+- Border-radius: 14px
+- Width: 100% max 540px
+- Box-shadow: 0 20px 60px -20px rgba(0,0,0,0.6)
+- Focus state: adds 4px outline 0 0 0 rgba(95,120,240,0.12)
+- Contains: search icon (SVG, 16x16px), input field, kbd "/" hint
+- Animation: slideUp 0.7s ease-out 0.5s
+
+**Stats Row:**
+- Flex layout, gap: 48px
+- Flex-wrap, justify-content center
+- Contains 3 stat blocks (Technologies, Questions, Tiers)
+- Each stat:
+  - Bold number in gradient (white → cyan): font-family mono, 26px, 700 weight
+  - Label below: uppercase, 12.5px, color --text-faint, letter-spacing 0.04em
+- Animation: slideUp 0.7s ease-out 0.6s
+
+**Shared Animation (slideUp):**
+```
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+```
+
+---
+
+## Section Header
+
+**Layout:**
+- Display: flex
+- Align-items: flex-end
+- Justify-content: space-between
+- Margin-bottom: 36px
+
+**Title (h2):**
+- Font: Inter, 30px, 800 weight
+- Letter-spacing: -0.02em
+- Text: "Available courses"
+
+**Count:**
+- Font: JetBrains Mono, 13px
+- Color: --text-faint
+- Text: "6 modules · 180 questions"
+
+---
+
+## Course Cards Grid
+
+**Grid Container:**
+- Display: grid
+- Grid-template-columns: repeat(3, 1fr)
+- Gap: 20px
+- Responsive: 2 columns at 980px, 1 column at 620px
+
+**Card Component:**
+
+**Base Styles:**
+- Background: var(--surface) with backdrop-blur 14px
+- Border: 1px solid var(--border)
+- Padding: 28px
+- Border-radius: 16px
+- Position: relative
+- Overflow: hidden
+- Cursor: pointer
+
+**Initial State:**
+- Opacity: 0
+- Animation: cardSlide 0.6s ease-out forwards
+- Staggered delays: card 1: 0.5s, card 2: 0.55s, ... card 6: 0.75s
+
+**cardSlide Animation:**
+```
+@keyframes cardSlide {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+```
+
+**Hover State:**
+- Transform: translateY(-8px)
+- Border-color: transparent
+- Box-shadow: 0 25px 80px -20px rgba(0,0,0,0.7)
+- Background: rgba(18,22,34,0.75)
+
+**Pseudo-elements:**
+
+**::before (Gradient Border):**
+- Positioned absolute, inset 0
+- Padding: 1px
+- Background: linear-gradient(140deg, var(--accent), transparent 45%)
+- Uses mask to create border effect
+- Opacity: 0, transitions to 1 on hover over 0.25s
+
+**::after (Glow Bloom):**
+- Positioned absolute, top -40%, left -40%, width 180%, height 180%
+- Background: radial-gradient(circle at center, var(--accent) 0%, transparent 60%)
+- Filter: blur(50px)
+- Opacity: 0, transitions to 0.12 on hover over 0.35s
+
+**Card Content:**
+
+**Top Section (card-top):**
+- Flex layout, space-between
+- Margin-bottom: 20px
+- Position: relative, z-index: 2
+
+**Card Icon:**
+- 42x42px box, border-radius 10px
+- Background: rgba(255,255,255,0.03)
+- Border: 1px solid var(--border)
+- Font: JetBrains Mono, 14px, 800 weight
+- Color: var(--accent)
+- Box-shadow: 0 0 16px rgba(accent-color, 0.15)
+- Content: 2-letter abbreviation (Oc, Sp, Jv, Py, Aw, Lx)
+
+**Question Count Badge:**
+- Font: JetBrains Mono, 11px
+- Color: --text-faint
+- Border: 1px solid var(--border)
+- Padding: 4px 10px
+- Border-radius: 20px
+- Content: "30 Qs"
+
+**Title (card h3):**
+- Font: 19px, 700 weight
+- Letter-spacing: -0.01em
+- Margin-bottom: 10px
+- Position: relative, z-index: 2
+
+**Description (card p):**
+- Font: 13.5px
+- Line-height: 1.65
+- Color: --text-dim
+- Margin-bottom: 22px
+- Min-height: 64px (ensures consistent card height)
+- Position: relative, z-index: 2
+
+**Footer (card-foot):**
+- Flex layout, space-between
+- Font: JetBrains Mono, 11.5px
+- Position: relative, z-index: 2
+
+**Difficulty Section:**
+- Flex layout, gap: 7px
+- Color: --text-faint
+- Contains: 3 difficulty dots + label text
+- Dots: 5x5px circles, border-radius 50%
+  - Default: background --border
+  - Active (.on): background var(--accent), box-shadow 0 0 8px var(--accent)
+  - On hover: shadow increases to 0 0 12px
+
+**Start Link:**
+- Flex layout, gap: 5px
+- Color: --text-faint
+- Transitions: color 0.2s, gap 0.2s
+- On card hover: color changes to var(--accent), gap increases to 9px
+- Content: "start →"
+
+**Card Accent Colors (via CSS custom property --accent):**
+- Oracle: #f0748a (rose)
+- SAP: #8f7bf0 (violet)
+- Java: #f0b84f (amber)
+- Python: #5be3d8 (cyan)
+- AWS: #f0a35c (orange)
+- Linux: #6fd3f0 (light blue)
+
+---
+
+## JavaScript Functionality
+
+### Network Background Animation
+- Canvas element: `<canvas id="net"></canvas>`
+- Node count: ~90 base, scales down on smaller screens
+- Each node has: x, y, vx (velocity x), vy (velocity y), radius
+- Nodes bounce off viewport edges
+- Connections drawn when nodes within 140px
+- Runs on requestAnimationFrame loop
+- Respects prefers-reduced-motion setting
+
+### Particle Flow System
+- Canvas element: `<canvas id="particles"></canvas>`
+- ~40 particles at any time
+- Particles: x, y, vx, vy, life, maxLife, size, hue (180 or 260)
+- Spawn at bottom, drift upward with slight gravity upward
+- Life/maxLife determines opacity gradient
+- Regenerate when old particles fade
+- Runs on requestAnimationFrame loop
+- Respects prefers-reduced-motion setting
+
+### Cursor-Tracking Glow
+- Element: `<div id="cursor-glow"></div>`
+- Listeners: mousemove, mouseleave
+- On move: update targetX/targetY, show glow
+- On leave: hide glow
+- Smooth lerp: mouseX += (targetX - mouseX) * 0.1
+- Updates on requestAnimationFrame
+- Position follows cursor with slight lag for premium feel
+
+### Scroll Parallax
+- Listen to scroll events with passive: true
+- Classes: `.parallax-1` elements
+- Update CSS custom property `--offset` based on scrollY * 0.3
+- Creates depth effect as user scrolls
+
+---
+
+## Responsive Breakpoints
+
+**Tablet (980px):**
+- Grid: repeat(2, 1fr)
+- Nav: hidden links (desktop only)
+- Padding: reduced to 24px
+- h1: 48px
+
+**Mobile (620px):**
+- Grid: 1fr (single column)
+- h1: 36px
+- Stats row: gap reduced to 28px
+
+---
+
+## Accessibility & Motion
+
+- **Prefers Reduced Motion:** All animations disabled
+  - `@media (prefers-reduced-motion: reduce)`
+  - Animation-duration: 0.01ms
+  - Transition-duration: 0.01ms
+- **Focus States:** Navigation links and interactive elements have clear focus
+- **Contrast:** Text meets WCAG AA standards
+
+---
+
+## Technical Stack
+
+**Frontend:**
+- HTML5 semantic structure
+- CSS3 with custom properties (variables)
+- Vanilla JavaScript (no frameworks)
+- Canvas API for animations
+- SVG for icons
+
+**Performance Optimizations:**
+- Canvas rendering for network/particles (GPU accelerated)
+- RequestAnimationFrame for smooth animations
+- Debounced resize handlers
+- Passive event listeners
+- Backdrop-filter on minimal elements
+
+**Browser Support:**
+- Chrome/Edge 88+
+- Firefox 85+
+- Safari 15+
+- Mobile browsers (iOS Safari 15+, Chrome Android)
+
+---
+
+## Implementation Tips for Replit
+
+1. **HTML Structure:** Create semantic HTML with proper nesting
+2. **CSS:** Use CSS custom properties for colors, makes tweaking easy
+3. **Canvas Setup:** Initialize canvas sizing on load and resize
+4. **Animation Loop:** Use single RAF (requestAnimationFrame) for each canvas
+5. **Performance:** Monitor FPS, consider reducing particle/node count on low-end devices
+6. **Testing:** Test on mobile viewport, check reduced-motion preference
+7. **Fonts:** Use Google Fonts CDN (already imported in head)
+
+---
+
+## Design Philosophy
+
+This design prioritizes **premium feel through restraint**:
+- Dark background shows contrast without overwhelming
+- Animations are purposeful, not gratuitous
+- Motion blur and glow create depth without distraction
+- Color is used selectively (mostly for interaction)
+- Typography hierarchy is clear and intentional
+- Every animation has a reason (cinematic entrance, interactive feedback, ambient motion)
+
+The result is a landing page that feels **alive, sophisticated, and expensive** without being gaudy.

@@ -25,9 +25,9 @@ const queryClient = new QueryClient();
 
 function Router() {
   return (
-    <div className="min-h-[100dvh] flex flex-col bg-background relative selection:bg-primary/20">
+    <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', background: 'var(--cin-bg)', position: 'relative' }}>
       <Navbar />
-      <main className="flex-1 flex flex-col relative z-10">
+      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative' }}>
         <RoutedErrorBoundary>
           <Switch>
             <Route path="/" component={Home} />
@@ -40,12 +40,6 @@ function Router() {
           </Switch>
         </RoutedErrorBoundary>
       </main>
-      
-      {/* Decorative background effects */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-[1000px] h-[1000px] bg-primary/5 rounded-full blur-3xl -translate-y-1/2"></div>
-        <div className="absolute bottom-0 right-1/4 w-[800px] h-[800px] bg-accent/5 rounded-full blur-3xl translate-y-1/3"></div>
-      </div>
     </div>
   );
 }

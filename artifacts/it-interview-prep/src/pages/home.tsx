@@ -1,14 +1,356 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
-import { useListCourses, useCreateSession, SessionInputLevel, Course } from "@workspace/api-client-react";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
+import {
+  useListCourses,
+  useCreateSession,
+  SessionInputLevel,
+  type Course,
+} from "@workspace/api-client-react";
 import { useQuizState } from "@/lib/quiz-context";
-import * as Icons from "react-icons/si";
-import { Timer, Zap, Search, X } from "lucide-react";
+import * as SiIcons from "react-icons/si";
+import { Search, X, ArrowLeft, Timer } from "lucide-react";
 
+// ─── Accent colors ────────────────────────────────────────────────────────────
+const SLUG_ACCENT: Record<string, string> = {
+  oracle:       "#f0748a",
+  sap:          "#8f7bf0",
+  java:         "#f0b84f",
+  python:       "#5be3d8",
+  aws:          "#f0a35c",
+  linux:        "#6fd3f0",
+  "docker-k8s": "#5be3d8",
+  javascript:   "#f0b84f",
+  cybersecurity:"#f0748a",
+  sql:          "#8f7bf0",
+  networking:   "#6fd3f0",
+  azure:        "#6fd3f0",
+  git:          "#f0a35c",
+  terraform:    "#8f7bf0",
+  cicd:         "#f0a35c",
+  sre:          "#5be3d8",
+  ansible:      "#f0748a",
+  gcp:          "#f0b84f",
+  typescript:   "#5be3d8",
+  bash:         "#f0b84f",
+};
+const FALLBACK = ["#f0748a","#8f7bf0","#f0b84f","#5be3d8","#f0a35c","#6fd3f0"];
+const getAccent = (course: Course, idx: number) =>
+  SLUG_ACCENT[course.slug] ?? FALLBACK[idx % FALLBACK.length];
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getCourseIcon = (name: string): React.ComponentType<any> | null =>
+  (SiIcons as Record<string, unknown>)[name] as React.ComponentType<any> ?? null;
+
+// ─── NetworkCanvas ────────────────────────────────────────────────────────────
+function NetworkCanvas() {
+  const ref = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const canvas = ref.current!;
+    const ctx = canvas.getContext("2d")!;
+    let raf: number;
+    interface Node { x: number; y: number; vx: number; vy: number; r: number }
+    let nodes: Node[] = [];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const count = Math.min(90, Math.floor((canvas.width * canvas.height) / 16000));
+      nodes = Array.from({ length: count }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        r: Math.random() * 1.5 + 0.5,
+      }));
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d < 140) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(140,170,255,${0.15 * (1 - d / 140)})`;
+            ctx.lineWidth = 0.5;
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+      for (const n of nodes) {
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(180,200,255,0.5)";
+        ctx.fill();
+        n.x += n.vx; n.y += n.vy;
+        if (n.x < 0 || n.x > canvas.width)  n.vx *= -1;
+        if (n.y < 0 || n.y > canvas.height) n.vy *= -1;
+      }
+      raf = requestAnimationFrame(draw);
+    }
+
+    resize();
+    draw();
+    let t: ReturnType<typeof setTimeout>;
+    const onResize = () => { clearTimeout(t); t = setTimeout(resize, 200); };
+    window.addEventListener("resize", onResize);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", onResize);
+      clearTimeout(t);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={ref}
+      style={{ position: "fixed", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0 }}
+    />
+  );
+}
+
+// ─── ParticleCanvas ───────────────────────────────────────────────────────────
+function ParticleCanvas() {
+  const ref = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const canvas = ref.current!;
+    const ctx = canvas.getContext("2d")!;
+    let raf: number;
+    interface P { x: number; y: number; vx: number; vy: number; life: number; maxLife: number; size: number; cyan: boolean }
+    let particles: P[] = [];
+
+    const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+
+    const spawn = (): P => ({
+      x: Math.random() * canvas.width,
+      y: canvas.height + 10,
+      vx: (Math.random() - 0.5) * 0.8,
+      vy: -(Math.random() * 1 + 0.5),
+      life: 0,
+      maxLife: 120 + Math.random() * 80,
+      size: Math.random() * 3 + 1,
+      cyan: Math.random() > 0.5,
+    });
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles = particles
+        .map((p) => {
+          const a = Math.sin((p.life / p.maxLife) * Math.PI) * 0.45;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = p.cyan ? `rgba(91,227,216,${a})` : `rgba(143,123,240,${a})`;
+          ctx.fill();
+          return { ...p, x: p.x + p.vx, y: p.y + p.vy, life: p.life + 1 };
+        })
+        .map((p) => (p.life >= p.maxLife ? spawn() : p));
+      raf = requestAnimationFrame(draw);
+    }
+
+    resize();
+    for (let i = 0; i < 40; i++) {
+      const p = spawn();
+      p.y = Math.random() * canvas.height;
+      p.life = Math.random() * p.maxLife;
+      particles.push(p);
+    }
+    draw();
+    window.addEventListener("resize", resize);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
+  }, []);
+
+  return (
+    <canvas
+      ref={ref}
+      style={{ position: "fixed", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 1 }}
+    />
+  );
+}
+
+// ─── CursorGlow ───────────────────────────────────────────────────────────────
+function CursorGlow() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const el = ref.current!;
+    let mx = 0, my = 0, px = 0, py = 0, visible = false, raf: number;
+    const move = (e: MouseEvent) => {
+      mx = e.clientX; my = e.clientY;
+      if (!visible) { el.style.opacity = "1"; visible = true; }
+    };
+    const leave = () => { el.style.opacity = "0"; visible = false; };
+    const animate = () => {
+      px += (mx - px) * 0.1; py += (my - py) * 0.1;
+      el.style.transform = `translate(${px - 120}px,${py - 120}px)`;
+      raf = requestAnimationFrame(animate);
+    };
+    window.addEventListener("mousemove", move);
+    window.addEventListener("mouseleave", leave);
+    raf = requestAnimationFrame(animate);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("mousemove", move);
+      window.removeEventListener("mouseleave", leave);
+    };
+  }, []);
+  return (
+    <div
+      ref={ref}
+      style={{
+        position: "fixed", top: 0, left: 0, width: 240, height: 240, borderRadius: "50%",
+        background: "radial-gradient(circle, rgba(95,120,240,0.25), transparent 70%)",
+        filter: "blur(60px)", pointerEvents: "none", zIndex: 2, opacity: 0,
+        transition: "opacity 0.3s",
+      }}
+    />
+  );
+}
+
+// ─── CourseCard ───────────────────────────────────────────────────────────────
+function CourseCard({
+  course, accent, idx, onClick,
+}: {
+  course: Course; accent: string; idx: number; onClick: () => void;
+}) {
+  const [hovered, setHovered] = useState(false);
+  const Icon = getCourseIcon(course.icon);
+  const { beginner, intermediate, advanced } = course.questionCounts;
+  const totalQs = beginner + intermediate + advanced;
+
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      aria-label={`Start ${course.name}`}
+      onClick={onClick}
+      onKeyDown={(e) => e.key === "Enter" && onClick()}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        position: "relative",
+        background: hovered ? "rgba(18,22,34,0.80)" : "var(--cin-surface)",
+        backdropFilter: "blur(14px)",
+        border: `1px solid ${hovered ? "transparent" : "var(--cin-border)"}`,
+        padding: 28,
+        borderRadius: 16,
+        cursor: "pointer",
+        overflow: "hidden",
+        transform: hovered ? "translateY(-8px)" : "translateY(0)",
+        boxShadow: hovered
+          ? `0 25px 80px -20px rgba(0,0,0,0.7), inset 0 0 0 1px ${accent}50`
+          : "none",
+        transition: "transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease",
+        opacity: 0,
+        animation: `cin-cardSlide 0.4s ease-out ${idx * 0.05}s both`,
+        outline: "none",
+      }}
+    >
+      {/* Glow bloom */}
+      <div
+        style={{
+          position: "absolute", top: "-40%", left: "-40%", width: "180%", height: "180%",
+          background: `radial-gradient(circle at center, ${accent} 0%, transparent 60%)`,
+          filter: "blur(50px)",
+          opacity: hovered ? 0.12 : 0,
+          transition: "opacity 0.35s ease",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Top row */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20, position: "relative", zIndex: 2 }}>
+        <div
+          style={{
+            width: 42, height: 42, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center",
+            background: "rgba(255,255,255,0.03)", border: "1px solid var(--cin-border)",
+            boxShadow: `0 0 16px ${accent}28`,
+          }}
+        >
+          {Icon
+            ? <Icon size={22} style={{ color: accent }} />
+            : (
+              <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800, color: accent }}>
+                {course.name.slice(0, 2).toUpperCase()}
+              </span>
+            )}
+        </div>
+        <span
+          style={{
+            fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "var(--cin-faint)",
+            border: "1px solid var(--cin-border)", padding: "4px 10px", borderRadius: 20,
+          }}
+        >
+          {totalQs} Qs
+        </span>
+      </div>
+
+      {/* Title */}
+      <h3
+        style={{
+          fontFamily: "'Inter',sans-serif", fontSize: 19, fontWeight: 700,
+          letterSpacing: "-0.01em", marginBottom: 10, color: "var(--cin-text)",
+          position: "relative", zIndex: 2, lineHeight: 1.3,
+        }}
+      >
+        {course.name}
+      </h3>
+
+      {/* Description */}
+      <p
+        style={{
+          fontSize: 13.5, lineHeight: 1.65, color: "var(--cin-dim)",
+          marginBottom: 22, minHeight: 64, position: "relative", zIndex: 2,
+        }}
+      >
+        {course.description}
+      </p>
+
+      {/* Footer */}
+      <div
+        style={{
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5,
+          position: "relative", zIndex: 2,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cin-faint)" }}>
+          {[beginner > 0, intermediate > 0, advanced > 0].map((on, i) => (
+            <span
+              key={i}
+              style={{
+                width: 5, height: 5, borderRadius: "50%",
+                background: on ? accent : "rgba(140,160,220,0.14)",
+                boxShadow: on ? `0 0 8px ${accent}` : "none",
+                display: "inline-block",
+              }}
+            />
+          ))}
+          <span style={{ marginLeft: 3 }}>3 levels</span>
+        </div>
+        <span
+          style={{
+            color: hovered ? accent : "var(--cin-faint)",
+            transition: "color 0.2s, gap 0.2s",
+            display: "flex", alignItems: "center",
+            gap: hovered ? 9 : 5,
+          }}
+        >
+          start →
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// ─── Film grain data URI ──────────────────────────────────────────────────────
+const GRAIN = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E`;
+
+// ─── Home ─────────────────────────────────────────────────────────────────────
 export default function Home() {
   const { data: courses, isLoading } = useListCourses();
   const [, setLocation] = useLocation();
@@ -31,7 +373,6 @@ export default function Home() {
 
   const handleStart = (level: SessionInputLevel) => {
     if (!selectedCourse) return;
-
     createSession.mutate(
       { data: { courseId: selectedCourse.id, level, timedMode: timedModeEnabled } },
       {
@@ -44,211 +385,346 @@ export default function Home() {
     );
   };
 
-  if (isLoading) {
-    return (
-      <div className="w-full flex-1 flex items-center justify-center">
-        <div className="animate-pulse flex flex-col items-center gap-4">
-          <div className="h-12 w-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-muted-foreground font-medium">Loading courses...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="w-full max-w-5xl mx-auto py-12 px-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="text-center mb-12 space-y-4">
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">
-          Ace Your Next Technical Interview
-        </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Choose a technology, select your difficulty, and answer realistic interview questions under pressure.
-        </p>
+    <>
+      {/* ── Atmosphere ── */}
+      <NetworkCanvas />
+      <ParticleCanvas />
+      <CursorGlow />
+
+      {/* Static glow orbs */}
+      <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
+        <div style={{ position: "absolute", top: -220, left: -160, width: 640, height: 640, borderRadius: "50%", background: "radial-gradient(circle, rgba(95,120,240,0.35), transparent 70%)", filter: "blur(110px)" }} />
+        <div style={{ position: "absolute", top: -100, right: -200, width: 560, height: 560, borderRadius: "50%", background: "radial-gradient(circle, rgba(91,227,216,0.22), transparent 70%)", filter: "blur(110px)" }} />
+        <div style={{ position: "absolute", bottom: -260, left: "30%", width: 700, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(240,116,138,0.14), transparent 70%)", filter: "blur(110px)" }} />
       </div>
 
-      {!selectedCourse ? (
-        <>
-          {/* Search bar */}
-          <div className="relative max-w-md mx-auto mb-8">
-            <Search
-              size={18}
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
-            />
-            <Input
-              placeholder="Search courses… e.g. Docker, Python, AWS"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="h-12 pl-10 pr-10 text-base rounded-xl"
-            />
-            {search && (
-              <button
-                onClick={() => setSearch("")}
-                aria-label="Clear search"
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+      {/* Vignette */}
+      <div style={{ position: "fixed", inset: 0, background: "radial-gradient(ellipse 1400px 900px at 50% 20%, transparent 40%, rgba(5,7,12,0.75) 100%)", pointerEvents: "none", zIndex: 3 }} />
+
+      {/* Film grain */}
+      <div style={{ position: "fixed", inset: 0, backgroundImage: `url("${GRAIN}")`, opacity: 0.02, mixBlendMode: "overlay", pointerEvents: "none", zIndex: 4 }} />
+
+      {/* ── Page content ── */}
+      <div style={{ position: "relative", zIndex: 5, color: "var(--cin-text)", minHeight: "calc(100vh - 75px)" }}>
+        {isLoading ? (
+          <div style={{ minHeight: "70vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+              <div style={{ width: 40, height: 40, border: "2px solid var(--cin-cyan)", borderTopColor: "transparent", borderRadius: "50%", animation: "cin-spin 0.8s linear infinite" }} />
+              <p style={{ color: "var(--cin-dim)", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>Loading courses…</p>
+            </div>
+          </div>
+        ) : selectedCourse ? (
+          <LevelSelector
+            course={selectedCourse}
+            courses={courses ?? []}
+            timedMode={timedModeEnabled}
+            setTimedMode={setTimedModeEnabled}
+            onBack={() => setSelectedCourse(null)}
+            onStart={handleStart}
+            loading={createSession.isPending}
+          />
+        ) : (
+          <div style={{ maxWidth: 1100, margin: "0 auto", padding: "96px 32px 80px" }}>
+
+            {/* ── Hero ── */}
+            <div style={{ textAlign: "center", marginBottom: 80, display: "flex", flexDirection: "column", alignItems: "center" }}>
+
+              {/* Eyebrow */}
+              <div
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 10,
+                  fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5,
+                  textTransform: "uppercase", letterSpacing: "0.18em",
+                  color: "var(--cin-cyan)", border: "1px solid var(--cin-border)",
+                  padding: "8px 16px", borderRadius: 20,
+                  background: "var(--cin-surface)", backdropFilter: "blur(10px)",
+                  marginBottom: 28, animation: "cin-slideUp 0.6s ease-out 0.2s both",
+                }}
               >
-                <X size={16} />
-              </button>
+                <span style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--cin-cyan)", boxShadow: "0 0 8px var(--cin-cyan)", animation: "cin-blink 2s ease-in-out infinite", display: "inline-block", flexShrink: 0 }} />
+                Technical Interview Platform
+              </div>
+
+              {/* Headline */}
+              <h1
+                className="cin-hero-heading"
+                style={{
+                  fontFamily: "'Inter',sans-serif", fontWeight: 800,
+                  fontSize: 72, lineHeight: 1.04, letterSpacing: "-0.035em",
+                  marginBottom: 26, maxWidth: 900,
+                  animation: "cin-slideUp 0.7s ease-out 0.3s both",
+                }}
+              >
+                <span style={{ color: "var(--cin-text)", display: "block" }}>Ace your next</span>
+                <span style={{ display: "block", background: "linear-gradient(90deg, #fff 20%, var(--cin-cyan) 55%, var(--cin-violet) 85%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                  technical interview
+                </span>
+              </h1>
+
+              {/* Subtitle */}
+              <p
+                style={{
+                  fontSize: 18, lineHeight: 1.65, color: "var(--cin-dim)",
+                  maxWidth: 560, marginBottom: 44,
+                  animation: "cin-slideUp 0.7s ease-out 0.4s both",
+                }}
+              >
+                Choose a technology, select your difficulty, and answer realistic interview questions under pressure.
+              </p>
+
+              {/* Search box */}
+              <div style={{ width: "100%", maxWidth: 540, animation: "cin-slideUp 0.7s ease-out 0.5s both" }}>
+                <div
+                  style={{
+                    display: "flex", alignItems: "center", gap: 12,
+                    background: "var(--cin-surface)", backdropFilter: "blur(14px)",
+                    border: "1px solid var(--cin-border)", padding: "15px 20px", borderRadius: 14,
+                    boxShadow: "0 20px 60px -20px rgba(0,0,0,0.6)",
+                  }}
+                >
+                  <Search size={16} style={{ color: "var(--cin-faint)", flexShrink: 0 }} />
+                  <input
+                    type="text"
+                    className="cin-search-input"
+                    placeholder="Search courses… e.g. Docker, Python, AWS"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    style={{
+                      flex: 1, background: "transparent", border: "none", outline: "none",
+                      color: "var(--cin-text)", fontFamily: "'JetBrains Mono',monospace", fontSize: 13.5,
+                    }}
+                  />
+                  {search ? (
+                    <button
+                      onClick={() => setSearch("")}
+                      aria-label="Clear search"
+                      style={{ background: "none", border: "none", cursor: "pointer", color: "var(--cin-faint)", display: "flex", padding: 0, flexShrink: 0 }}
+                    >
+                      <X size={15} />
+                    </button>
+                  ) : (
+                    <kbd style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "var(--cin-faint)", border: "1px solid var(--cin-border)", padding: "2px 7px", borderRadius: 5, flexShrink: 0 }}>/</kbd>
+                  )}
+                </div>
+              </div>
+
+              {/* Stats row */}
+              <div
+                className="cin-stats-row"
+                style={{ display: "flex", gap: 48, flexWrap: "wrap", justifyContent: "center", marginTop: 52, animation: "cin-slideUp 0.7s ease-out 0.6s both" }}
+              >
+                {[
+                  { val: "20", label: "Technologies" },
+                  { val: "600+", label: "Questions" },
+                  { val: "4", label: "Badge Tiers" },
+                ].map(({ val, label }) => (
+                  <div key={label} style={{ textAlign: "center" }}>
+                    <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 26, fontWeight: 700, background: "linear-gradient(90deg, #fff, var(--cin-cyan))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                      {val}
+                    </div>
+                    <div style={{ fontSize: 12.5, textTransform: "uppercase", letterSpacing: "0.04em", color: "var(--cin-faint)", marginTop: 4 }}>
+                      {label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ── Section header ── */}
+            <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 36, flexWrap: "wrap", gap: 8 }}>
+              <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: 30, fontWeight: 800, letterSpacing: "-0.02em", color: "var(--cin-text)" }}>
+                Available courses
+              </h2>
+              <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "var(--cin-faint)" }}>
+                {filteredCourses.length} {filteredCourses.length === 1 ? "module" : "modules"} ·{" "}
+                {filteredCourses.reduce((s, c) => s + c.questionCounts.beginner + c.questionCounts.intermediate + c.questionCounts.advanced, 0)} questions
+              </span>
+            </div>
+
+            {/* ── Grid / empty state ── */}
+            {filteredCourses.length === 0 ? (
+              <div style={{ textAlign: "center", padding: "80px 0", color: "var(--cin-faint)" }}>
+                <Search size={40} style={{ margin: "0 auto 16px", opacity: 0.3, display: "block" }} />
+                <p style={{ fontSize: 18, fontWeight: 500, color: "var(--cin-dim)", marginBottom: 12 }}>No courses match "{search}"</p>
+                <button
+                  onClick={() => setSearch("")}
+                  style={{ background: "none", border: "none", cursor: "pointer", color: "var(--cin-cyan)", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, textDecoration: "underline", padding: 0 }}
+                >
+                  Clear search
+                </button>
+              </div>
+            ) : (
+              <div className="cin-grid">
+                {filteredCourses.map((course, idx) => (
+                  <CourseCard
+                    key={course.id}
+                    course={course}
+                    accent={getAccent(course, idx)}
+                    idx={idx}
+                    onClick={() => setSelectedCourse(course)}
+                  />
+                ))}
+              </div>
             )}
           </div>
+        )}
+      </div>
+    </>
+  );
+}
 
-          {filteredCourses.length === 0 ? (
-            <div className="text-center py-20 text-muted-foreground">
-              <Search size={40} className="mx-auto mb-4 opacity-30" />
-              <p className="text-lg font-medium">No courses match "{search}"</p>
-              <button onClick={() => setSearch("")} className="mt-2 text-primary text-sm hover:underline">
-                Clear search
-              </button>
-            </div>
-          ) : (
-            <>
-              {search && (
-                <p className="text-sm text-muted-foreground text-center mb-4">
-                  {filteredCourses.length} course{filteredCourses.length !== 1 ? "s" : ""} found
-                </p>
-              )}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredCourses.map((course, i) => {
-                  const IconComponent = (Icons as any)[course.icon] || Icons.SiCodecademy;
+// ─── Level Selector ───────────────────────────────────────────────────────────
+function LevelSelector({
+  course, courses, timedMode, setTimedMode, onBack, onStart, loading,
+}: {
+  course: Course;
+  courses: Course[];
+  timedMode: boolean;
+  setTimedMode: (v: boolean) => void;
+  onBack: () => void;
+  onStart: (level: SessionInputLevel) => void;
+  loading: boolean;
+}) {
+  const accent = getAccent(course, courses.findIndex((c) => c.id === course.id));
+  const Icon = getCourseIcon(course.icon);
 
-                  return (
-                    <Card
-                      key={course.id}
-                      className="group cursor-pointer hover:border-primary hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-                      onClick={() => setSelectedCourse(course)}
-                      style={{ animationDelay: `${i * 60}ms` }}
-                    >
-                      <CardHeader>
-                        <div className="flex justify-between items-start mb-2">
-                          <div className="p-3 rounded-xl bg-secondary group-hover:bg-primary group-hover:text-white transition-colors">
-                            <IconComponent size={28} />
-                          </div>
-                          <Badge variant="outline" className="font-mono bg-background">
-                            {course.questionCounts.beginner +
-                              course.questionCounts.intermediate +
-                              course.questionCounts.advanced}{" "}
-                            Qs
-                          </Badge>
-                        </div>
-                        <CardTitle className="text-2xl mt-4">{course.name}</CardTitle>
-                        <CardDescription className="text-base">{course.description}</CardDescription>
-                      </CardHeader>
-                    </Card>
-                  );
-                })}
-              </div>
-            </>
-          )}
-        </>
-      ) : (
-        <div className="max-w-2xl mx-auto animate-in zoom-in-95 duration-300">
-          <Button
-            variant="ghost"
-            className="mb-6 -ml-4 text-muted-foreground"
-            onClick={() => setSelectedCourse(null)}
+  return (
+    <div style={{ minHeight: "calc(100vh - 75px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 32 }}>
+      <div
+        style={{
+          maxWidth: 540, width: "100%",
+          background: "var(--cin-surface)", backdropFilter: "blur(20px)",
+          border: "1px solid var(--cin-border)", borderRadius: 24, padding: 40,
+          animation: "cin-slideUp 0.5s ease-out both",
+          boxShadow: `0 40px 120px -30px rgba(0,0,0,0.8), inset 0 0 0 1px ${accent}20`,
+        }}
+      >
+        {/* Back */}
+        <BackButton onClick={onBack} />
+
+        {/* Course header */}
+        <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 32 }}>
+          <div
+            style={{
+              width: 56, height: 56, borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center",
+              background: "rgba(255,255,255,0.03)", border: "1px solid var(--cin-border)",
+              boxShadow: `0 0 24px ${accent}30`,
+            }}
           >
-            ← Back to courses
-          </Button>
-
-          <div className="dark-panel rounded-3xl p-8 md:p-12 relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none">
-              {(() => {
-                const IconComponent = (Icons as any)[selectedCourse.icon] || Icons.SiCodecademy;
-                return <IconComponent size={200} />;
-              })()}
-            </div>
-
-            <div className="relative z-10">
-              <h2 className="text-3xl font-bold mb-2">{selectedCourse.name} Interview</h2>
-              <p className="text-gray-400 mb-6 text-lg">Select your experience level to begin.</p>
-
-              {/* Timed Mode Toggle */}
-              <button
-                onClick={() => setTimedModeEnabled((prev) => !prev)}
-                className={`w-full mb-8 p-5 rounded-2xl border-2 transition-all duration-300 flex items-center justify-between group ${
-                  timedModeEnabled
-                    ? "border-orange-500/70 bg-orange-500/15 text-white"
-                    : "border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 text-white"
-                }`}
-              >
-                <div className="flex items-center gap-4">
-                  <div
-                    className={`p-2.5 rounded-xl transition-colors ${timedModeEnabled ? "bg-orange-500/30 text-orange-400" : "bg-white/10 text-gray-400 group-hover:text-white"}`}
-                  >
-                    <Timer size={22} />
-                  </div>
-                  <div className="text-left">
-                    <h3
-                      className={`text-lg font-bold transition-colors ${timedModeEnabled ? "text-orange-400" : "text-white group-hover:text-primary"}`}
-                    >
-                      Timed Mode
-                    </h3>
-                    <p className="text-gray-400 text-sm mt-0.5">30s per question · Speed bonuses · High stakes</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  {timedModeEnabled && (
-                    <span className="flex items-center gap-1 text-xs font-bold text-orange-400 bg-orange-500/20 px-2.5 py-1 rounded-full border border-orange-500/30">
-                      <Zap size={11} /> ON
-                    </span>
-                  )}
-                  <div
-                    className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${timedModeEnabled ? "bg-orange-500" : "bg-white/20"}`}
-                  >
-                    <div
-                      className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all duration-300 ${timedModeEnabled ? "left-6" : "left-0.5"}`}
-                    />
-                  </div>
-                </div>
-              </button>
-
-              <div className="space-y-4">
-                <LevelButton
-                  level="beginner"
-                  title="Beginner"
-                  desc="Core concepts and syntax."
-                  count={selectedCourse.questionCounts.beginner}
-                  onClick={() => handleStart(SessionInputLevel.beginner)}
-                  loading={createSession.isPending}
-                />
-                <LevelButton
-                  level="intermediate"
-                  title="Intermediate"
-                  desc="Architecture, best practices, and standard APIs."
-                  count={selectedCourse.questionCounts.intermediate}
-                  onClick={() => handleStart(SessionInputLevel.intermediate)}
-                  loading={createSession.isPending}
-                />
-                <LevelButton
-                  level="advanced"
-                  title="Advanced"
-                  desc="Performance, internal mechanics, and complex scenarios."
-                  count={selectedCourse.questionCounts.advanced}
-                  onClick={() => handleStart(SessionInputLevel.advanced)}
-                  loading={createSession.isPending}
-                />
-              </div>
-            </div>
+            {Icon
+              ? <Icon size={28} style={{ color: accent }} />
+              : <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 18, fontWeight: 800, color: accent }}>{course.name.slice(0, 2).toUpperCase()}</span>}
+          </div>
+          <div>
+            <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: 24, fontWeight: 800, letterSpacing: "-0.02em", color: "var(--cin-text)", marginBottom: 4 }}>
+              {course.name}
+            </h2>
+            <p style={{ fontSize: 13, color: "var(--cin-dim)" }}>Select your difficulty level</p>
           </div>
         </div>
-      )}
+
+        {/* Timed mode toggle */}
+        <button
+          onClick={() => setTimedMode(!timedMode)}
+          style={{
+            width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
+            padding: "14px 18px", marginBottom: 20, borderRadius: 12,
+            background: timedMode ? `${accent}18` : "rgba(255,255,255,0.02)",
+            border: `1px solid ${timedMode ? `${accent}60` : "var(--cin-border)"}`,
+            cursor: "pointer", transition: "all 0.2s", textAlign: "left",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <Timer size={16} style={{ color: timedMode ? accent : "var(--cin-faint)", flexShrink: 0 }} />
+            <div>
+              <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, fontWeight: 600, color: timedMode ? "var(--cin-text)" : "var(--cin-dim)" }}>Timed Mode</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "var(--cin-faint)", marginTop: 2 }}>Earn bonus points for quick answers</div>
+            </div>
+          </div>
+          <div style={{ width: 40, height: 22, borderRadius: 11, background: timedMode ? accent : "rgba(140,160,220,0.2)", position: "relative", transition: "background 0.2s", flexShrink: 0 }}>
+            <div style={{ position: "absolute", top: 3, left: timedMode ? 20 : 3, width: 16, height: 16, borderRadius: "50%", background: "#fff", transition: "left 0.2s", boxShadow: "0 1px 4px rgba(0,0,0,0.3)" }} />
+          </div>
+        </button>
+
+        {/* Level buttons */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {([
+            { level: SessionInputLevel.beginner,     title: "Beginner",     desc: "Core concepts and syntax.", count: course.questionCounts.beginner },
+            { level: SessionInputLevel.intermediate, title: "Intermediate", desc: "Architecture and best practices.", count: course.questionCounts.intermediate },
+            { level: SessionInputLevel.advanced,     title: "Advanced",     desc: "Performance and complex scenarios.", count: course.questionCounts.advanced },
+          ] as const).map(({ level, title, desc, count }) => (
+            <LevelButton
+              key={level}
+              title={title}
+              desc={desc}
+              count={count}
+              accent={accent}
+              loading={loading}
+              onClick={() => onStart(level)}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
 
-function LevelButton({ level, title, desc, count, onClick, loading }: any) {
+function BackButton({ onClick }: { onClick: () => void }) {
+  const [h, setH] = useState(false);
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setH(true)}
+      onMouseLeave={() => setH(false)}
+      style={{
+        display: "flex", alignItems: "center", gap: 8,
+        background: "none", border: "none", cursor: "pointer",
+        color: h ? "var(--cin-text)" : "var(--cin-dim)",
+        fontFamily: "'JetBrains Mono',monospace", fontSize: 12,
+        marginBottom: 32, padding: 0, transition: "color 0.2s",
+      }}
+    >
+      <ArrowLeft size={14} />
+      Back to courses
+    </button>
+  );
+}
+
+function LevelButton({
+  title, desc, count, accent, loading, onClick,
+}: {
+  title: string; desc: string; count: number; accent: string; loading: boolean; onClick: () => void;
+}) {
+  const [h, setH] = useState(false);
   return (
     <button
       onClick={onClick}
       disabled={loading || count === 0}
-      className="w-full text-left p-6 rounded-2xl border-2 border-white/10 bg-white/5 hover:bg-white/10 hover:border-primary/50 transition-all group flex items-center justify-between disabled:opacity-50 disabled:cursor-not-allowed"
+      onMouseEnter={() => setH(true)}
+      onMouseLeave={() => setH(false)}
+      style={{
+        width: "100%", textAlign: "left", padding: "20px 22px", borderRadius: 14,
+        background: h ? `${accent}14` : "rgba(255,255,255,0.02)",
+        border: `1px solid ${h ? `${accent}55` : "var(--cin-border)"}`,
+        cursor: loading || count === 0 ? "not-allowed" : "pointer",
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        opacity: count === 0 ? 0.45 : 1, transition: "all 0.2s",
+      }}
     >
       <div>
-        <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors">{title}</h3>
-        <p className="text-gray-400 text-sm mt-1">{desc}</p>
+        <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, fontWeight: 700, color: h ? "var(--cin-text)" : "var(--cin-dim)", marginBottom: 4, transition: "color 0.2s" }}>
+          {title}
+        </h3>
+        <p style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: "var(--cin-faint)" }}>{desc}</p>
       </div>
-      <div className="text-right">
-        <span className="block text-2xl font-mono font-bold text-white">{count}</span>
-        <span className="text-xs text-gray-500 font-mono uppercase tracking-wider">Questions</span>
+      <div style={{ textAlign: "right", flexShrink: 0, marginLeft: 16 }}>
+        <span style={{ display: "block", fontFamily: "'JetBrains Mono',monospace", fontSize: 22, fontWeight: 700, color: h ? accent : "var(--cin-text)", transition: "color 0.2s" }}>
+          {count}
+        </span>
+        <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 10, color: "var(--cin-faint)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          Questions
+        </span>
       </div>
     </button>
   );
