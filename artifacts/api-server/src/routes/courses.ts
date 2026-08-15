@@ -12,6 +12,9 @@ const router: IRouter = Router();
 
 // GET /courses
 router.get("/courses", async (req, res): Promise<void> => {
+  // Disable caching so icon/content changes are always reflected immediately
+  res.set("Cache-Control", "no-store");
+
   const courses = await db.select().from(coursesTable).orderBy(coursesTable.id);
 
   // Get question counts per course per level
