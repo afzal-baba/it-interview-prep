@@ -26,6 +26,12 @@ export function Navbar() {
           >
             Leaderboard
           </Link>
+          <Link 
+            href="/race" 
+            className={`transition-colors ${location === '/race' ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+          >
+            Race
+          </Link>
         </div>
       </div>
     </nav>

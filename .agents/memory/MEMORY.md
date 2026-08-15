@@ -1,0 +1,1 @@
+- [WebSocket routing](websocket-routing.md) — proxy keeps the `/api` prefix; attach WS upgrades at the full prefixed path on the shared HTTP server.

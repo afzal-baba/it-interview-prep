@@ -18,6 +18,7 @@ import Home from '@/pages/home';
 import Quiz from '@/pages/quiz';
 import Result from '@/pages/result';
 import Leaderboard from '@/pages/leaderboard';
+import Race from '@/pages/race';
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ function Router() {
             <Route path="/quiz" component={Quiz} />
             <Route path="/result" component={Result} />
             <Route path="/leaderboard" component={Leaderboard} />
+            <Route path="/race" component={Race} />
             <Route component={NotFound} />
           </Switch>
         </RoutedErrorBoundary>

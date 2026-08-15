@@ -1,11 +1,14 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { useListLeaderboard, useGetLeaderboardStats, useListCourses, getListLeaderboardQueryKey, getGetLeaderboardStatsQueryKey } from "@workspace/api-client-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, Medal, Users, Target, Activity, Loader2, Timer, Zap } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Trophy, Medal, Users, Target, Activity, Loader2, Timer, Zap, Swords } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function Leaderboard() {
+  const [, setLocation] = useLocation();
   const [courseFilter, setCourseFilter] = useState<number | null>(null);
   const [levelFilter, setLevelFilter] = useState<any>(null);
   const [timedFilter, setTimedFilter] = useState<boolean | null>(null);
@@ -36,9 +39,12 @@ export default function Leaderboard() {
     <div className="w-full max-w-6xl mx-auto py-12 px-4">
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">Global Leaderboard</h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-6">
           See how you stack up against other developers around the world.
         </p>
+        <Button size="lg" className="rounded-xl" onClick={() => setLocation("/race")}>
+          <Swords className="mr-2 h-5 w-5" /> Race a Random Opponent
+        </Button>
       </div>
 
       {/* Stats row */}
@@ -137,19 +143,20 @@ export default function Leaderboard() {
                 <th className="px-6 py-4">Mode</th>
                 <th className="px-6 py-4 text-right">Score</th>
                 <th className="px-6 py-4">Badges</th>
+                <th className="px-6 py-4"></th>
               </tr>
             </thead>
             <tbody className="divide-y">
               {boardLoading ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center">
+                  <td colSpan={8} className="px-6 py-12 text-center">
                     <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto mb-2" />
                     <p className="text-muted-foreground font-medium">Loading rankings...</p>
                   </td>
                 </tr>
               ) : leaderboard?.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-muted-foreground">
+                  <td colSpan={8} className="px-6 py-12 text-center text-muted-foreground">
                     No entries found for these filters. Be the first!
                   </td>
                 </tr>
@@ -200,6 +207,16 @@ export default function Leaderboard() {
                           </Badge>
                         ))}
                       </div>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="rounded-lg font-bold"
+                        onClick={() => setLocation(`/race?opponent=${encodeURIComponent(entry.playerName)}`)}
+                      >
+                        <Swords className="mr-1.5 h-4 w-4" /> Challenge
+                      </Button>
                     </td>
                   </tr>
                 ))
