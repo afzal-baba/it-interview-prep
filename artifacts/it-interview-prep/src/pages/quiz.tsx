@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation } from "wouter";
 import { 
   useListQuestions, 
@@ -10,11 +10,13 @@ import { useQuizState } from "@/lib/quiz-context";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, XCircle, ChevronRight, Loader2, Send } from "lucide-react";
+import { CheckCircle2, XCircle, ChevronRight, Loader2, Send, Timer, Zap } from "lucide-react";
+
+const QUESTION_TIME_LIMIT_MS = 30_000;
 
 export default function Quiz() {
   const [, setLocation] = useLocation();
-  const { currentSession, setResult } = useQuizState();
+  const { currentSession, setResult, timedMode } = useQuizState();
   const submitSession = useSubmitSession();
 
   const { data: questions, isLoading } = useListQuestions(
@@ -29,9 +31,14 @@ export default function Quiz() {
   );
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<AnswerInput[]>([]);
+  const [answers, setAnswers] = useState<(AnswerInput & { timeTakenMs?: number })[]>([]);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isRevealed, setIsRevealed] = useState(false);
+
+  // Timer state
+  const [timeRemaining, setTimeRemaining] = useState(QUESTION_TIME_LIMIT_MS);
+  const questionStartTime = useRef<number>(Date.now());
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Redirect if no session
   useEffect(() => {
@@ -39,6 +46,57 @@ export default function Quiz() {
       setLocation("/");
     }
   }, [currentSession, setLocation]);
+
+  // Reset and start timer when question changes
+  useEffect(() => {
+    if (!timedMode || isRevealed) return;
+    setTimeRemaining(QUESTION_TIME_LIMIT_MS);
+    questionStartTime.current = Date.now();
+
+    timerRef.current = setInterval(() => {
+      const elapsed = Date.now() - questionStartTime.current;
+      const remaining = Math.max(0, QUESTION_TIME_LIMIT_MS - elapsed);
+      setTimeRemaining(remaining);
+    }, 100);
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [currentIndex, timedMode, isRevealed]);
+
+  // Auto-submit when timer hits 0 (timeout = wrong answer)
+  const handleTimeoutRef = useRef<(() => void) | null>(null);
+
+  const handleSelect = useCallback((idx: number, timeTakenMs?: number) => {
+    if (isRevealed) return;
+    if (timerRef.current) clearInterval(timerRef.current);
+
+    const elapsed = timeTakenMs ?? (Date.now() - questionStartTime.current);
+
+    setSelectedOption(idx);
+    setIsRevealed(true);
+
+    const currentQ = questions?.[currentIndex];
+    if (currentQ) {
+      setAnswers(prev => [...prev, {
+        questionId: currentQ.id,
+        selectedOptionIndex: idx,
+        timeTakenMs: timedMode ? elapsed : undefined,
+      }]);
+    }
+  }, [isRevealed, questions, currentIndex, timedMode]);
+
+  // Store latest handleSelect in ref for timer callback
+  handleTimeoutRef.current = () => {
+    if (!isRevealed) {
+      handleSelect(-1, QUESTION_TIME_LIMIT_MS);
+    }
+  };
+
+  useEffect(() => {
+    if (!timedMode || timeRemaining > 0 || isRevealed) return;
+    handleTimeoutRef.current?.();
+  }, [timeRemaining, timedMode, isRevealed]);
 
   if (!currentSession || isLoading || !questions) {
     return (
@@ -54,20 +112,19 @@ export default function Quiz() {
   const currentQ = questions[currentIndex];
   const isLastQuestion = currentIndex === questions.length - 1;
   const progress = ((currentIndex) / questions.length) * 100;
+  const timerProgress = (timeRemaining / QUESTION_TIME_LIMIT_MS) * 100;
+  const timerSeconds = Math.ceil(timeRemaining / 1000);
+  const isTimerCritical = timeRemaining < 10_000; // < 10s
+  const isTimedOut = timedMode && timeRemaining === 0;
 
-  const handleSelect = (idx: number) => {
-    if (isRevealed) return;
-    setSelectedOption(idx);
-    setIsRevealed(true);
-    setAnswers(prev => [...prev, { questionId: currentQ.id, selectedOptionIndex: idx }]);
-  };
+  const isCorrect = selectedOption !== null && selectedOption === currentQ.correctOptionIndex;
 
   const handleNext = () => {
     if (isLastQuestion) {
       submitSession.mutate(
         { 
           sessionId: currentSession.id, 
-          data: { answers } 
+          data: { answers, timedMode }
         },
         {
           onSuccess: (result) => {
@@ -83,15 +140,18 @@ export default function Quiz() {
     }
   };
 
-  const isCorrect = selectedOption === currentQ.correctOptionIndex;
-
   return (
     <div className="w-full max-w-4xl mx-auto py-8 px-4 flex flex-col min-h-[calc(100vh-80px)]">
       {/* Header Stats */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6">
         <div className="space-y-1">
-          <div className="text-sm font-mono text-muted-foreground uppercase tracking-wider">
+          <div className="text-sm font-mono text-muted-foreground uppercase tracking-wider flex items-center gap-2">
             {currentSession.level} Level
+            {timedMode && (
+              <span className="flex items-center gap-1 text-xs font-bold text-orange-500 bg-orange-500/10 px-2 py-0.5 rounded-full border border-orange-500/20">
+                <Zap size={10} /> TIMED
+              </span>
+            )}
           </div>
           <div className="font-bold text-xl">Question {currentIndex + 1} of {questions.length}</div>
         </div>
@@ -100,7 +160,34 @@ export default function Quiz() {
         </Badge>
       </div>
 
-      <Progress value={progress} className="mb-12 h-3" />
+      <Progress value={progress} className="mb-4 h-3" />
+
+      {/* Countdown Timer Bar */}
+      {timedMode && (
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-1.5">
+            <div className={`flex items-center gap-1.5 text-sm font-mono font-bold ${isTimerCritical ? 'text-red-500' : 'text-orange-500'}`}>
+              <Timer size={14} />
+              {isTimedOut ? 'Time\'s up!' : `${timerSeconds}s`}
+            </div>
+            {!isRevealed && (
+              <div className="text-xs text-muted-foreground font-mono">Time remaining</div>
+            )}
+          </div>
+          <div className="h-2.5 w-full rounded-full bg-muted overflow-hidden">
+            <div
+              className={`h-full rounded-full transition-all duration-100 ${
+                isTimerCritical
+                  ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'
+                  : timerProgress > 60
+                  ? 'bg-orange-400'
+                  : 'bg-orange-500'
+              }`}
+              style={{ width: `${timerProgress}%` }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Main Question Card */}
       <div className="flex-1 flex flex-col">
@@ -158,7 +245,7 @@ export default function Quiz() {
           {isRevealed && (
             <div className={`mt-auto p-6 rounded-xl border-2 mb-8 animate-in slide-in-from-top-4 fade-in ${isCorrect ? 'border-success/30 bg-success/10' : 'border-destructive/30 bg-destructive/10'}`}>
               <h4 className={`font-bold mb-2 flex items-center gap-2 ${isCorrect ? 'text-success' : 'text-destructive'}`}>
-                {isCorrect ? 'Correct!' : 'Incorrect.'}
+                {isTimedOut ? '⏱ Time\'s up! Question marked wrong.' : isCorrect ? 'Correct!' : 'Incorrect.'}
               </h4>
               <p className="text-white/80 leading-relaxed">
                 {currentQ.explanation || "No explanation provided for this question."}

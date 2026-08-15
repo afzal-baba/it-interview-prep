@@ -6,22 +6,25 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useQuizState } from "@/lib/quiz-context";
 import * as Icons from "react-icons/si";
+import { Timer, Zap } from "lucide-react";
 
 export default function Home() {
   const { data: courses, isLoading } = useListCourses();
   const [, setLocation] = useLocation();
-  const { setSession } = useQuizState();
+  const { setSession, setTimedMode } = useQuizState();
   const createSession = useCreateSession();
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [timedModeEnabled, setTimedModeEnabled] = useState(false);
   
   const handleStart = (level: SessionInputLevel) => {
     if (!selectedCourse) return;
     
     createSession.mutate(
-      { data: { courseId: selectedCourse.id, level } },
+      { data: { courseId: selectedCourse.id, level, timedMode: timedModeEnabled } },
       {
         onSuccess: (session) => {
           setSession(session);
+          setTimedMode(timedModeEnabled);
           setLocation("/quiz");
         }
       }
@@ -100,7 +103,39 @@ export default function Home() {
             
             <div className="relative z-10">
               <h2 className="text-3xl font-bold mb-2">{selectedCourse.name} Interview</h2>
-              <p className="text-gray-400 mb-10 text-lg">Select your experience level to begin.</p>
+              <p className="text-gray-400 mb-6 text-lg">Select your experience level to begin.</p>
+
+              {/* Timed Mode Toggle */}
+              <button
+                onClick={() => setTimedModeEnabled(prev => !prev)}
+                className={`w-full mb-8 p-5 rounded-2xl border-2 transition-all duration-300 flex items-center justify-between group ${
+                  timedModeEnabled
+                    ? 'border-orange-500/70 bg-orange-500/15 text-white'
+                    : 'border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 text-white'
+                }`}
+              >
+                <div className="flex items-center gap-4">
+                  <div className={`p-2.5 rounded-xl transition-colors ${timedModeEnabled ? 'bg-orange-500/30 text-orange-400' : 'bg-white/10 text-gray-400 group-hover:text-white'}`}>
+                    <Timer size={22} />
+                  </div>
+                  <div className="text-left">
+                    <h3 className={`text-lg font-bold transition-colors ${timedModeEnabled ? 'text-orange-400' : 'text-white group-hover:text-primary'}`}>
+                      Timed Mode
+                    </h3>
+                    <p className="text-gray-400 text-sm mt-0.5">30s per question · Speed bonuses · High stakes</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  {timedModeEnabled && (
+                    <span className="flex items-center gap-1 text-xs font-bold text-orange-400 bg-orange-500/20 px-2.5 py-1 rounded-full border border-orange-500/30">
+                      <Zap size={11} /> ON
+                    </span>
+                  )}
+                  <div className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${timedModeEnabled ? 'bg-orange-500' : 'bg-white/20'}`}>
+                    <div className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all duration-300 ${timedModeEnabled ? 'left-6' : 'left-0.5'}`} />
+                  </div>
+                </div>
+              </button>
               
               <div className="space-y-4">
                 <LevelButton 

@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express";
 import { eq, desc, sql, and } from "drizzle-orm";
-import { db, leaderboardTable, coursesTable } from "@workspace/db";
+import { db, leaderboardTable, coursesTable, sessionsTable } from "@workspace/db";
 import {
   ListLeaderboardQueryParams,
   ListLeaderboardResponse,
@@ -10,6 +10,15 @@ import {
 } from "@workspace/api-zod";
 
 const router: IRouter = Router();
+
+function computeBadges(percentage: number): string[] {
+  const badges: string[] = [];
+  if (percentage >= 50) badges.push("Bronze");
+  if (percentage >= 70) badges.push("Silver");
+  if (percentage >= 85) badges.push("Gold");
+  if (percentage >= 95) badges.push("Platinum");
+  return badges;
+}
 
 // GET /leaderboard/stats  — must come before /leaderboard to avoid param capture
 router.get("/leaderboard/stats", async (req, res): Promise<void> => {
@@ -63,11 +72,12 @@ router.get("/leaderboard", async (req, res): Promise<void> => {
     return;
   }
 
-  const { courseId, level, limit } = parsed.data;
+  const { courseId, level, timedMode, limit } = parsed.data;
 
   const conditions = [];
   if (courseId != null) conditions.push(eq(leaderboardTable.courseId, courseId));
   if (level != null) conditions.push(eq(leaderboardTable.level, level));
+  if (timedMode != null) conditions.push(eq(leaderboardTable.timedMode, timedMode));
 
   const rows = await db
     .select({
@@ -80,6 +90,8 @@ router.get("/leaderboard", async (req, res): Promise<void> => {
       totalQuestions: leaderboardTable.totalQuestions,
       percentage: leaderboardTable.percentage,
       badges: leaderboardTable.badges,
+      timedMode: leaderboardTable.timedMode,
+      timeBonus: leaderboardTable.timeBonus,
       createdAt: leaderboardTable.createdAt,
     })
     .from(leaderboardTable)
@@ -97,6 +109,7 @@ router.get("/leaderboard", async (req, res): Promise<void> => {
 });
 
 // POST /leaderboard
+// Accepts sessionId + playerName; all score data is derived server-side from the session record
 router.post("/leaderboard", async (req, res): Promise<void> => {
   const parsed = CreateLeaderboardEntryBody.safeParse(req.body);
   if (!parsed.success) {
@@ -104,14 +117,56 @@ router.post("/leaderboard", async (req, res): Promise<void> => {
     return;
   }
 
-  const { playerName, courseId, level, score, totalQuestions, percentage, badges } = parsed.data;
+  const { sessionId, playerName } = parsed.data;
+
+  // Look up the completed session to get server-computed results
+  const sessions = await db
+    .select()
+    .from(sessionsTable)
+    .where(eq(sessionsTable.id, sessionId))
+    .limit(1);
+
+  if (sessions.length === 0) {
+    res.status(404).json({ error: "Session not found" });
+    return;
+  }
+
+  const session = sessions[0];
+
+  if (!session.completedAt) {
+    res.status(400).json({ error: "Session has not been completed yet" });
+    return;
+  }
+
+  // All score/mode/bonus values come from the server-computed session record
+  const score = session.score ?? 0;
+  const timeBonus = session.timeBonus ?? 0;
+  const timedMode = session.timedMode;
+  const percentage = session.percentage ?? 0;
+  const totalQuestions = session.totalQuestions ?? 0;
+  const badges = computeBadges(percentage);
 
   const [entry] = await db
     .insert(leaderboardTable)
-    .values({ playerName, courseId, level, score, totalQuestions, percentage: Math.round(percentage), badges })
+    .values({
+      playerName,
+      courseId: session.courseId,
+      level: session.level,
+      score,
+      totalQuestions,
+      percentage,
+      badges,
+      timedMode,
+      timeBonus,
+      sessionId: session.id,
+    })
     .returning();
 
-  const course = await db.select().from(coursesTable).where(eq(coursesTable.id, entry.courseId)).limit(1);
+  const course = await db
+    .select()
+    .from(coursesTable)
+    .where(eq(coursesTable.id, entry.courseId))
+    .limit(1);
 
   res.status(201).json(CreateLeaderboardEntryResponse.parse({
     id: entry.id,
@@ -123,6 +178,8 @@ router.post("/leaderboard", async (req, res): Promise<void> => {
     totalQuestions: entry.totalQuestions,
     percentage: entry.percentage,
     badges: (entry.badges as string[]) ?? [],
+    timedMode: entry.timedMode,
+    timeBonus: entry.timeBonus,
     createdAt: entry.createdAt,
   }));
 });

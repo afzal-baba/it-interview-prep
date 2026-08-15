@@ -76,15 +76,19 @@ export const SessionInputLevel = {
 export interface SessionInput {
   courseId: number;
   level: SessionInputLevel;
+  timedMode?: boolean;
 }
 
 export interface AnswerInput {
   questionId: number;
   selectedOptionIndex: number;
+  /** Time taken to answer in milliseconds (for timed mode) */
+  timeTakenMs?: number;
 }
 
 export interface SessionSubmission {
   answers: AnswerInput[];
+  timedMode?: boolean;
 }
 
 export interface QuestionResult {
@@ -104,6 +108,10 @@ export interface SessionResult {
   percentage: number;
   badges: string[];
   questionResults: QuestionResult[];
+  /** Bonus points earned from answering quickly in timed mode */
+  timeBonus?: number;
+  /** Whether this session was played in timed mode */
+  timedMode?: boolean;
 }
 
 export type LeaderboardEntryLevel = typeof LeaderboardEntryLevel[keyof typeof LeaderboardEntryLevel];
@@ -126,6 +134,10 @@ export interface LeaderboardEntry {
   percentage: number;
   badges: string[];
   createdAt: string;
+  /** Whether this score was achieved in timed mode */
+  timedMode?: boolean;
+  /** Time bonus points earned */
+  timeBonus?: number;
 }
 
 export type LeaderboardEntryInputLevel = typeof LeaderboardEntryInputLevel[keyof typeof LeaderboardEntryInputLevel];
@@ -138,13 +150,9 @@ export const LeaderboardEntryInputLevel = {
 } as const;
 
 export interface LeaderboardEntryInput {
+  /** The session ID whose server-computed result should be recorded */
+  sessionId: number;
   playerName: string;
-  courseId: number;
-  level: LeaderboardEntryInputLevel;
-  score: number;
-  totalQuestions: number;
-  percentage: number;
-  badges: string[];
 }
 
 export type LeaderboardStatsBadgeCounts = {
@@ -186,6 +194,11 @@ courseId?: number | null;
  * @nullable
  */
 level?: ListLeaderboardLevel;
+/**
+ * Filter by timed mode (true/false/null for all)
+ * @nullable
+ */
+timedMode?: boolean | null;
 limit?: number;
 };
 

@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useListLeaderboard, useGetLeaderboardStats, useListCourses, getListLeaderboardQueryKey, getGetLeaderboardStatsQueryKey } from "@workspace/api-client-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, Medal, Users, Target, Activity, Loader2 } from "lucide-react";
+import { Trophy, Medal, Users, Target, Activity, Loader2, Timer, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function Leaderboard() {
   const [courseFilter, setCourseFilter] = useState<number | null>(null);
   const [levelFilter, setLevelFilter] = useState<any>(null);
+  const [timedFilter, setTimedFilter] = useState<boolean | null>(null);
 
   const { data: courses } = useListCourses();
   
@@ -19,14 +20,17 @@ export default function Leaderboard() {
     { 
       courseId: courseFilter,
       level: levelFilter,
+      timedMode: timedFilter,
       limit: 50
     },
     {
       query: {
-        queryKey: getListLeaderboardQueryKey({ courseId: courseFilter, level: levelFilter, limit: 50 })
+        queryKey: getListLeaderboardQueryKey({ courseId: courseFilter, level: levelFilter, timedMode: timedFilter, limit: 50 })
       }
     }
   );
+
+  const hasFilters = courseFilter !== null || levelFilter !== null || timedFilter !== null;
 
   return (
     <div className="w-full max-w-6xl mx-auto py-12 px-4">
@@ -72,11 +76,48 @@ export default function Leaderboard() {
           <option value="intermediate">Intermediate</option>
           <option value="advanced">Advanced</option>
         </select>
+
+        {/* Timed Mode filter buttons */}
+        <div className="flex items-center gap-2 ml-1">
+          <button
+            onClick={() => setTimedFilter(null)}
+            className={cn(
+              "h-10 px-4 rounded-xl border text-sm font-medium transition-all",
+              timedFilter === null
+                ? "bg-primary text-white border-primary"
+                : "bg-background border-border hover:border-primary/50"
+            )}
+          >
+            All
+          </button>
+          <button
+            onClick={() => setTimedFilter(false)}
+            className={cn(
+              "h-10 px-4 rounded-xl border text-sm font-medium transition-all",
+              timedFilter === false
+                ? "bg-primary text-white border-primary"
+                : "bg-background border-border hover:border-primary/50"
+            )}
+          >
+            Standard
+          </button>
+          <button
+            onClick={() => setTimedFilter(true)}
+            className={cn(
+              "h-10 px-4 rounded-xl border text-sm font-medium transition-all flex items-center gap-1.5",
+              timedFilter === true
+                ? "bg-orange-500 text-white border-orange-500"
+                : "bg-background border-border hover:border-orange-400/50 text-orange-600"
+            )}
+          >
+            <Timer size={13} /> Timed
+          </button>
+        </div>
         
-        {(courseFilter || levelFilter) && (
+        {hasFilters && (
           <button 
             className="text-sm text-primary font-bold hover:underline"
-            onClick={() => { setCourseFilter(null); setLevelFilter(null); }}
+            onClick={() => { setCourseFilter(null); setLevelFilter(null); setTimedFilter(null); }}
           >
             Clear Filters
           </button>
@@ -93,6 +134,7 @@ export default function Leaderboard() {
                 <th className="px-6 py-4">Player</th>
                 <th className="px-6 py-4">Course</th>
                 <th className="px-6 py-4">Level</th>
+                <th className="px-6 py-4">Mode</th>
                 <th className="px-6 py-4 text-right">Score</th>
                 <th className="px-6 py-4">Badges</th>
               </tr>
@@ -100,14 +142,14 @@ export default function Leaderboard() {
             <tbody className="divide-y">
               {boardLoading ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center">
+                  <td colSpan={7} className="px-6 py-12 text-center">
                     <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto mb-2" />
                     <p className="text-muted-foreground font-medium">Loading rankings...</p>
                   </td>
                 </tr>
               ) : leaderboard?.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-muted-foreground">
+                  <td colSpan={7} className="px-6 py-12 text-center text-muted-foreground">
                     No entries found for these filters. Be the first!
                   </td>
                 </tr>
@@ -130,6 +172,20 @@ export default function Leaderboard() {
                       )}>
                         {entry.level}
                       </Badge>
+                    </td>
+                    <td className="px-6 py-4">
+                      {entry.timedMode ? (
+                        <span className="flex items-center gap-1 text-xs font-bold text-orange-500 bg-orange-50 border border-orange-200 px-2 py-0.5 rounded-full w-fit">
+                          <Timer size={10} /> Timed
+                          {(entry.timeBonus ?? 0) > 0 && (
+                            <span className="text-orange-400 ml-0.5 flex items-center gap-0.5">
+                              <Zap size={9} />+{entry.timeBonus}
+                            </span>
+                          )}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-muted-foreground font-medium">Standard</span>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-right font-mono font-bold text-lg">
                       <span className={entry.percentage >= 85 ? 'text-success' : ''}>

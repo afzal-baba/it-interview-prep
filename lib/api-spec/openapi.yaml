@@ -147,6 +147,12 @@ paths:
           schema:
             type: ["string", "null"]
             enum: [beginner, intermediate, advanced]
+        - name: timedMode
+          in: query
+          required: false
+          schema:
+            type: ["boolean", "null"]
+          description: Filter by timed mode (true/false/null for all)
         - name: limit
           in: query
           required: false
@@ -276,6 +282,9 @@ components:
         level:
           type: string
           enum: [beginner, intermediate, advanced]
+        timedMode:
+          type: boolean
+          default: false
 
     AnswerInput:
       type: object
@@ -285,6 +294,9 @@ components:
           type: integer
         selectedOptionIndex:
           type: integer
+        timeTakenMs:
+          type: integer
+          description: Time taken to answer in milliseconds (for timed mode)
 
     SessionSubmission:
       type: object
@@ -294,6 +306,9 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/AnswerInput"
+        timedMode:
+          type: boolean
+          default: false
 
     SessionResult:
       type: object
@@ -317,6 +332,12 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/QuestionResult"
+        timeBonus:
+          type: integer
+          description: Bonus points earned from answering quickly in timed mode
+        timedMode:
+          type: boolean
+          description: Whether this session was played in timed mode
 
     QuestionResult:
       type: object
@@ -361,28 +382,22 @@ components:
         createdAt:
           type: string
           format: date-time
+        timedMode:
+          type: boolean
+          description: Whether this score was achieved in timed mode
+        timeBonus:
+          type: integer
+          description: Time bonus points earned
 
     LeaderboardEntryInput:
       type: object
-      required: [playerName, courseId, level, score, totalQuestions, percentage, badges]
+      required: [sessionId, playerName]
       properties:
+        sessionId:
+          type: integer
+          description: The session ID whose server-computed result should be recorded
         playerName:
           type: string
-        courseId:
-          type: integer
-        level:
-          type: string
-          enum: [beginner, intermediate, advanced]
-        score:
-          type: integer
-        totalQuestions:
-          type: integer
-        percentage:
-          type: number
-        badges:
-          type: array
-          items:
-            type: string
 
     LeaderboardStats:
       type: object

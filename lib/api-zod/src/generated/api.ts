@@ -70,7 +70,8 @@ export const ListQuestionsResponse = zod.array(ListQuestionsResponseItem)
  */
 export const CreateSessionBody = zod.object({
   "courseId": zod.number().int(),
-  "level": zod.enum(['beginner', 'intermediate', 'advanced'])
+  "level": zod.enum(['beginner', 'intermediate', 'advanced']),
+  "timedMode": zod.boolean().optional().default(false)
 })
 
 export const CreateSessionResponse = zod.object({
@@ -91,8 +92,10 @@ export const SubmitSessionParams = zod.object({
 export const SubmitSessionBody = zod.object({
   "answers": zod.array(zod.object({
   "questionId": zod.number().int(),
-  "selectedOptionIndex": zod.number().int()
-}))
+  "selectedOptionIndex": zod.number().int(),
+  "timeTakenMs": zod.number().int().optional()
+})),
+  "timedMode": zod.boolean().optional().default(false)
 })
 
 export const SubmitSessionResponse = zod.object({
@@ -108,7 +111,9 @@ export const SubmitSessionResponse = zod.object({
   "correctOptionIndex": zod.number().int(),
   "isCorrect": zod.boolean(),
   "explanation": zod.string().nullable()
-}))
+})),
+  "timeBonus": zod.number().int().optional(),
+  "timedMode": zod.boolean().optional()
 })
 
 
@@ -120,6 +125,10 @@ export const listLeaderboardQueryLimitDefault = 20;
 export const ListLeaderboardQueryParams = zod.object({
   "courseId": zod.coerce.number().int().nullish(),
   "level": zod.enum(['beginner', 'intermediate', 'advanced']).nullish(),
+  "timedMode": zod.preprocess(
+    (v) => v === "true" ? true : v === "false" ? false : v,
+    zod.boolean().nullish()
+  ),
   "limit": zod.coerce.number().int().default(listLeaderboardQueryLimitDefault)
 })
 
@@ -133,7 +142,9 @@ export const ListLeaderboardResponseItem = zod.object({
   "totalQuestions": zod.number().int(),
   "percentage": zod.number(),
   "badges": zod.array(zod.string()),
-  "createdAt": zod.coerce.date()
+  "createdAt": zod.coerce.date(),
+  "timedMode": zod.boolean().optional(),
+  "timeBonus": zod.number().int().optional()
 })
 export const ListLeaderboardResponse = zod.array(ListLeaderboardResponseItem)
 
@@ -142,13 +153,8 @@ export const ListLeaderboardResponse = zod.array(ListLeaderboardResponseItem)
  * @summary Save a player score to the leaderboard
  */
 export const CreateLeaderboardEntryBody = zod.object({
-  "playerName": zod.string(),
-  "courseId": zod.number().int(),
-  "level": zod.enum(['beginner', 'intermediate', 'advanced']),
-  "score": zod.number().int(),
-  "totalQuestions": zod.number().int(),
-  "percentage": zod.number(),
-  "badges": zod.array(zod.string())
+  "sessionId": zod.number().int(),
+  "playerName": zod.string()
 })
 
 export const CreateLeaderboardEntryResponse = zod.object({
@@ -161,7 +167,9 @@ export const CreateLeaderboardEntryResponse = zod.object({
   "totalQuestions": zod.number().int(),
   "percentage": zod.number(),
   "badges": zod.array(zod.string()),
-  "createdAt": zod.coerce.date()
+  "createdAt": zod.coerce.date(),
+  "timedMode": zod.boolean().optional(),
+  "timeBonus": zod.number().int().optional()
 })
 
 

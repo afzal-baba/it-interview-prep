@@ -9,15 +9,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, ArrowRight, Home, CheckCircle2, XCircle, Award } from "lucide-react";
+import { Trophy, ArrowRight, Home, CheckCircle2, XCircle, Award, Zap, Timer } from "lucide-react";
 
 const formSchema = z.object({
   playerName: z.string().min(2, "Name must be at least 2 characters").max(30),
 });
 
 export default function Result() {
-  const [location, setLocation] = useLocation();
-  const { sessionResult, currentSession } = useQuizState();
+  const [, setLocation] = useLocation();
+  const { sessionResult, currentSession, timedMode } = useQuizState();
   const createLeaderboardEntry = useCreateLeaderboardEntry();
 
   const {
@@ -36,16 +36,14 @@ export default function Result() {
 
   if (!sessionResult || !currentSession) return null;
 
+  const timeBonus = sessionResult.timeBonus ?? 0;
+  const baseScore = sessionResult.score - timeBonus;
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     await createLeaderboardEntry.mutateAsync({
       data: {
+        sessionId: sessionResult.sessionId,
         playerName: values.playerName,
-        courseId: currentSession.courseId,
-        level: currentSession.level as any,
-        score: sessionResult.score,
-        totalQuestions: sessionResult.totalQuestions,
-        percentage: sessionResult.percentage,
-        badges: sessionResult.badges,
       }
     });
   };
@@ -65,6 +63,12 @@ export default function Result() {
           <Trophy size={48} strokeWidth={1.5} />
         </div>
         <h1 className="text-4xl font-extrabold tracking-tight mb-4">Interview Complete</h1>
+        {timedMode && (
+          <div className="inline-flex items-center gap-2 text-orange-500 font-bold bg-orange-500/10 px-4 py-1.5 rounded-full border border-orange-500/20 mb-4">
+            <Timer size={16} />
+            Timed Mode
+          </div>
+        )}
         <p className="text-xl text-muted-foreground">Here is how you performed.</p>
       </div>
 
@@ -75,9 +79,27 @@ export default function Result() {
             <div className={`text-6xl font-black font-mono tracking-tighter mb-2 ${getScoreColor(sessionResult.percentage)}`}>
               {Math.round(sessionResult.percentage)}%
             </div>
-            <p className="text-lg font-medium text-foreground mb-6">
+            <p className="text-lg font-medium text-foreground mb-4">
               {sessionResult.correctCount} out of {sessionResult.totalQuestions} correct
             </p>
+
+            {/* Score breakdown for timed mode */}
+            {timedMode && (
+              <div className="w-full mb-6 space-y-2 text-sm bg-background/50 rounded-xl p-4 border">
+                <div className="flex justify-between text-muted-foreground">
+                  <span>Base score</span>
+                  <span className="font-mono font-bold">{baseScore} pts</span>
+                </div>
+                <div className="flex justify-between text-orange-500">
+                  <span className="flex items-center gap-1"><Zap size={12} /> Speed bonus</span>
+                  <span className="font-mono font-bold">+{timeBonus} pts</span>
+                </div>
+                <div className="border-t pt-2 flex justify-between font-bold text-foreground">
+                  <span>Total score</span>
+                  <span className="font-mono">{sessionResult.score} pts</span>
+                </div>
+              </div>
+            )}
             
             {sessionResult.badges.length > 0 ? (
               <div className="space-y-3 w-full">

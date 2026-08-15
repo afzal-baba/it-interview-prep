@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { eq } from "drizzle-orm";
+import { eq, and, inArray } from "drizzle-orm";
 import { db, sessionsTable, questionsTable } from "@workspace/db";
 import {
   CreateSessionBody,
@@ -11,6 +11,9 @@ import {
 
 const router: IRouter = Router();
 
+const QUESTION_TIME_LIMIT_MS = 30_000; // 30 seconds per question
+const MAX_TIME_BONUS_PER_QUESTION = 10; // up to 10 bonus points per correct answer
+
 function computeBadges(percentage: number): string[] {
   const badges: string[] = [];
   if (percentage >= 50) badges.push("Bronze");
@@ -18,6 +21,15 @@ function computeBadges(percentage: number): string[] {
   if (percentage >= 85) badges.push("Gold");
   if (percentage >= 95) badges.push("Platinum");
   return badges;
+}
+
+function computeTimedBonus(elapsedMs: number, totalQuestions: number): number {
+  // Server-authoritative: use total session elapsed time vs total allowed time
+  const totalAllowedMs = totalQuestions * QUESTION_TIME_LIMIT_MS;
+  const maxTotalBonus = totalQuestions * MAX_TIME_BONUS_PER_QUESTION;
+  // Bonus proportional to time saved; 0 if over time
+  const timeSavedMs = Math.max(0, totalAllowedMs - elapsedMs);
+  return Math.round(maxTotalBonus * (timeSavedMs / totalAllowedMs));
 }
 
 // POST /sessions
@@ -28,11 +40,11 @@ router.post("/sessions", async (req, res): Promise<void> => {
     return;
   }
 
-  const { courseId, level } = parsed.data;
+  const { courseId, level, timedMode } = parsed.data;
 
   const [session] = await db
     .insert(sessionsTable)
-    .values({ courseId, level })
+    .values({ courseId, level, timedMode: timedMode ?? false })
     .returning();
 
   res.status(201).json(CreateSessionResponse.parse({
@@ -67,16 +79,39 @@ router.post("/sessions/:sessionId/submit", async (req, res): Promise<void> => {
     return;
   }
 
-  // Fetch the questions referenced in the answers
-  const questionIds = answers.map((a) => a.questionId);
-  const questions = await db
+  const session = sessions[0];
+
+  // Enforce single submission
+  if (session.completedAt !== null) {
+    res.status(409).json({ error: "Session has already been submitted" });
+    return;
+  }
+
+  // Capture server-side elapsed time immediately
+  const elapsedMs = Date.now() - session.startedAt.getTime();
+
+  // timedMode is authoritative from the stored session record
+  const timedMode = session.timedMode;
+
+  // Fetch only questions belonging to this session's course and level
+  const validQuestions = await db
     .select()
     .from(questionsTable)
-    .where(eq(questionsTable.id, questionIds[0])); // fallback — we'll do it properly below
+    .where(
+      and(
+        eq(questionsTable.courseId, session.courseId),
+        eq(questionsTable.level, session.level)
+      )
+    );
+  const validQuestionIds = new Set(validQuestions.map((q) => q.id));
+  const questionMap = new Map(validQuestions.map((q) => [q.id, q]));
 
-  // Fetch all referenced questions
-  const allQuestions = await db.select().from(questionsTable);
-  const questionMap = new Map(allQuestions.map((q) => [q.id, q]));
+  // Validate all submitted question IDs belong to this session
+  const invalidIds = answers.filter((a) => !validQuestionIds.has(a.questionId));
+  if (invalidIds.length > 0) {
+    res.status(400).json({ error: "One or more question IDs do not belong to this session's course/level" });
+    return;
+  }
 
   let correctCount = 0;
   const questionResults = answers.map((a) => {
@@ -93,14 +128,24 @@ router.post("/sessions/:sessionId/submit", async (req, res): Promise<void> => {
   });
 
   const totalQuestions = answers.length;
-  const score = correctCount * 10;
+  // Time bonus uses server-measured elapsed time — client timings are ignored
+  const timeBonus = timedMode ? computeTimedBonus(elapsedMs, totalQuestions) : 0;
+  const baseScore = correctCount * 10;
+  const score = baseScore + timeBonus;
   const percentage = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
   const badges = computeBadges(percentage);
 
-  // Mark session as completed
+  // Mark session as completed and persist server-computed results
   await db
     .update(sessionsTable)
-    .set({ completedAt: new Date() })
+    .set({
+      completedAt: new Date(),
+      score,
+      timeBonus,
+      correctCount,
+      totalQuestions,
+      percentage,
+    })
     .where(eq(sessionsTable.id, sessionId));
 
   res.json(SubmitSessionResponse.parse({
@@ -111,6 +156,8 @@ router.post("/sessions/:sessionId/submit", async (req, res): Promise<void> => {
     percentage,
     badges,
     questionResults,
+    timeBonus,
+    timedMode,
   }));
 });
 

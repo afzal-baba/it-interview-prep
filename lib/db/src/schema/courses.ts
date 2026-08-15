@@ -1,4 +1,4 @@
-import { pgTable, serial, text, integer, timestamp, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, integer, timestamp, jsonb, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
@@ -26,8 +26,15 @@ export const sessionsTable = pgTable("sessions", {
   id: serial("id").primaryKey(),
   courseId: integer("course_id").notNull().references(() => coursesTable.id),
   level: text("level", { enum: ["beginner", "intermediate", "advanced"] }).notNull(),
+  timedMode: boolean("timed_mode").default(false).notNull(),
   startedAt: timestamp("started_at").defaultNow().notNull(),
   completedAt: timestamp("completed_at"),
+  // Server-computed results stored at submission time
+  score: integer("score"),
+  timeBonus: integer("time_bonus"),
+  correctCount: integer("correct_count"),
+  totalQuestions: integer("total_questions"),
+  percentage: integer("percentage"),
 });
 
 export const leaderboardTable = pgTable("leaderboard", {
@@ -39,6 +46,9 @@ export const leaderboardTable = pgTable("leaderboard", {
   totalQuestions: integer("total_questions").notNull(),
   percentage: integer("percentage").notNull(),
   badges: jsonb("badges").$type<string[]>().notNull().default([]),
+  timedMode: boolean("timed_mode").default(false).notNull(),
+  timeBonus: integer("time_bonus").default(0).notNull(),
+  sessionId: integer("session_id").references(() => sessionsTable.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
