@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "IT Interview Prep"
+description = "An interactive IT interview prep platform where users select a technology (Oracle, SAP, Java, etc.), pick a difficulty level (Beginner/Intermediate/Advanced), and answer multiple-choice questions in a simulated interview format. The app tracks scores, awards badges for achievements, and shows a leaderboard of top scorers."
+version = "1.0.0"
+id = "artifacts/it-interview-prep"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18422
+
+[services.development]
+run = "pnpm --filter @workspace/it-interview-prep run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/it-interview-prep", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/it-interview-prep/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18422"
+BASE_PATH = "/"

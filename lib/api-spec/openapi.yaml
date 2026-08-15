@@ -3,13 +3,22 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: IT Interview Prep API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: courses
+    description: IT course catalog
+  - name: questions
+    description: Interview questions per course and level
+  - name: sessions
+    description: Quiz sessions
+  - name: leaderboard
+    description: Leaderboard and scoring
+
 paths:
   /healthz:
     get:
@@ -24,6 +33,166 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /courses:
+    get:
+      operationId: listCourses
+      tags: [courses]
+      summary: List all available IT courses
+      responses:
+        "200":
+          description: List of courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Course"
+
+  /courses/{courseId}/questions:
+    get:
+      operationId: listQuestions
+      tags: [questions]
+      summary: Get interview questions for a course and difficulty level
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: level
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [beginner, intermediate, advanced]
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: List of questions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Question"
+        "404":
+          description: Course not found
+
+  /sessions:
+    post:
+      operationId: createSession
+      tags: [sessions]
+      summary: Start a new quiz session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SessionInput"
+      responses:
+        "201":
+          description: Session created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Session"
+
+  /sessions/{sessionId}/submit:
+    post:
+      operationId: submitSession
+      tags: [sessions]
+      summary: Submit answers and get result
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SessionSubmission"
+      responses:
+        "200":
+          description: Quiz result with score and badges
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionResult"
+        "404":
+          description: Session not found
+
+  /leaderboard:
+    get:
+      operationId: listLeaderboard
+      tags: [leaderboard]
+      summary: Get top scorers leaderboard
+      parameters:
+        - name: courseId
+          in: query
+          required: false
+          schema:
+            type: ["integer", "null"]
+        - name: level
+          in: query
+          required: false
+          schema:
+            type: ["string", "null"]
+            enum: [beginner, intermediate, advanced]
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+      responses:
+        "200":
+          description: Leaderboard entries ordered by score desc
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LeaderboardEntry"
+    post:
+      operationId: createLeaderboardEntry
+      tags: [leaderboard]
+      summary: Save a player score to the leaderboard
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LeaderboardEntryInput"
+      responses:
+        "201":
+          description: Entry saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeaderboardEntry"
+
+  /leaderboard/stats:
+    get:
+      operationId: getLeaderboardStats
+      tags: [leaderboard]
+      summary: Get aggregated leaderboard statistics
+      responses:
+        "200":
+          description: Stats summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeaderboardStats"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +203,208 @@ components:
       required:
         - status
 
+    Course:
+      type: object
+      required: [id, name, slug, description, icon, questionCounts]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        icon:
+          type: string
+        questionCounts:
+          type: object
+          required: [beginner, intermediate, advanced]
+          properties:
+            beginner:
+              type: integer
+            intermediate:
+              type: integer
+            advanced:
+              type: integer
+
+    Question:
+      type: object
+      required: [id, courseId, level, text, options, correctOptionIndex]
+      properties:
+        id:
+          type: integer
+        courseId:
+          type: integer
+        level:
+          type: string
+          enum: [beginner, intermediate, advanced]
+        text:
+          type: string
+        options:
+          type: array
+          items:
+            type: string
+          minItems: 4
+          maxItems: 4
+        correctOptionIndex:
+          type: integer
+        explanation:
+          type: ["string", "null"]
+
+    Session:
+      type: object
+      required: [id, courseId, level, startedAt]
+      properties:
+        id:
+          type: integer
+        courseId:
+          type: integer
+        level:
+          type: string
+          enum: [beginner, intermediate, advanced]
+        startedAt:
+          type: string
+          format: date-time
+
+    SessionInput:
+      type: object
+      required: [courseId, level]
+      properties:
+        courseId:
+          type: integer
+        level:
+          type: string
+          enum: [beginner, intermediate, advanced]
+
+    AnswerInput:
+      type: object
+      required: [questionId, selectedOptionIndex]
+      properties:
+        questionId:
+          type: integer
+        selectedOptionIndex:
+          type: integer
+
+    SessionSubmission:
+      type: object
+      required: [answers]
+      properties:
+        answers:
+          type: array
+          items:
+            $ref: "#/components/schemas/AnswerInput"
+
+    SessionResult:
+      type: object
+      required: [sessionId, score, totalQuestions, correctCount, percentage, badges, questionResults]
+      properties:
+        sessionId:
+          type: integer
+        score:
+          type: integer
+        totalQuestions:
+          type: integer
+        correctCount:
+          type: integer
+        percentage:
+          type: number
+        badges:
+          type: array
+          items:
+            type: string
+        questionResults:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionResult"
+
+    QuestionResult:
+      type: object
+      required: [questionId, selectedOptionIndex, correctOptionIndex, isCorrect, explanation]
+      properties:
+        questionId:
+          type: integer
+        selectedOptionIndex:
+          type: integer
+        correctOptionIndex:
+          type: integer
+        isCorrect:
+          type: boolean
+        explanation:
+          type: ["string", "null"]
+
+    LeaderboardEntry:
+      type: object
+      required: [id, playerName, courseId, courseName, level, score, totalQuestions, percentage, badges, createdAt]
+      properties:
+        id:
+          type: integer
+        playerName:
+          type: string
+        courseId:
+          type: integer
+        courseName:
+          type: string
+        level:
+          type: string
+          enum: [beginner, intermediate, advanced]
+        score:
+          type: integer
+        totalQuestions:
+          type: integer
+        percentage:
+          type: number
+        badges:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    LeaderboardEntryInput:
+      type: object
+      required: [playerName, courseId, level, score, totalQuestions, percentage, badges]
+      properties:
+        playerName:
+          type: string
+        courseId:
+          type: integer
+        level:
+          type: string
+          enum: [beginner, intermediate, advanced]
+        score:
+          type: integer
+        totalQuestions:
+          type: integer
+        percentage:
+          type: number
+        badges:
+          type: array
+          items:
+            type: string
+
+    LeaderboardStats:
+      type: object
+      required: [totalAttempts, avgPercentage, topScore, topScorer, badgeCounts]
+      properties:
+        totalAttempts:
+          type: integer
+        avgPercentage:
+          type: number
+        topScore:
+          type: integer
+        topScorer:
+          type: ["string", "null"]
+        badgeCounts:
+          type: object
+          required: [bronze, silver, gold, platinum]
+          properties:
+            bronze:
+              type: integer
+            silver:
+              type: integer
+            gold:
+              type: integer
+            platinum:
+              type: integer
