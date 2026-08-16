@@ -88,7 +88,7 @@ export default function About() {
       {/* Stats */}
       <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { value: "20", label: "Courses" },
+          { value: "40", label: "Courses" },
           { value: "1200+", label: "Questions" },
           { value: "3", label: "Difficulty Tiers" },
           { value: "∞", label: "Rematches" },
