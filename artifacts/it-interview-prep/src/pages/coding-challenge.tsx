@@ -395,6 +395,19 @@ function saveScore(s: number) { try { localStorage.setItem("codelab-score", Stri
 function loadCompleted(): Set<string> { try { return new Set(JSON.parse(localStorage.getItem("codelab-completed") ?? "[]")); } catch { return new Set(); } }
 function saveCompleted(s: Set<string>) { try { localStorage.setItem("codelab-completed", JSON.stringify([...s])); } catch { /* noop */ } }
 
+// ── Answer persistence helpers ────────────────────────────────────────────────
+
+function answersKey(title: string) { return `codelab-answers:${title}`; }
+function loadAnswers(title: string, tasks: ChallengeTask[]): string[] {
+  try {
+    const stored = JSON.parse(localStorage.getItem(answersKey(title)) ?? "null");
+    if (Array.isArray(stored) && stored.length === tasks.length) return stored as string[];
+  } catch { /* noop */ }
+  return tasks.map((t) => PLACEHOLDER[t.type]);
+}
+function saveAnswers(title: string, answers: string[]) { try { localStorage.setItem(answersKey(title), JSON.stringify(answers)); } catch { /* noop */ } }
+function clearAnswers(title: string) { try { localStorage.removeItem(answersKey(title)); } catch { /* noop */ } }
+
 // ── Challenge URL helpers ─────────────────────────────────────────────────────
 
 const VALID_TYPES = new Set(["sql", "python", "javascript", "architecture"]);
@@ -715,12 +728,22 @@ export default function CodingChallenge() {
   const [linkCopied, setLinkCopied] = useState(false);
 
   // Challenge state
-  const [answers, setAnswers] = useState<string[]>(() => flattenTasks(urlChallenge ?? DEFAULT_CHALLENGE).map((t) => PLACEHOLDER[t.type]));
+  const [answers, setAnswers] = useState<string[]>(() => {
+    const c = urlChallenge ?? DEFAULT_CHALLENGE;
+    return loadAnswers(c.title, flattenTasks(c));
+  });
   const [activeTab, setActiveTab] = useState(0);
   const [assessing, setAssessing] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => { document.title = view === "pick" ? "Code Lab — TechInterviewPrep" : `${challenge.title} — TechInterviewPrep`; }, [view, challenge.title]);
+
+  // Debounced answer persistence
+  useEffect(() => {
+    if (view !== "challenge") return;
+    const timer = setTimeout(() => saveAnswers(challenge.title, answers), 500);
+    return () => clearTimeout(timer);
+  }, [answers, challenge.title, view]);
 
   function pickTech(slug: string) {
     const ch = TECH_CHALLENGES[slug];
@@ -730,7 +753,7 @@ export default function CodingChallenge() {
     setActiveTechSlug(slug);
     setIsCustomURL(false);
     setShareUrl("");
-    setAnswers(ch.tasks.map((t) => PLACEHOLDER[t.type]));
+    setAnswers(loadAnswers(c.title, ch.tasks));
     setActiveTab(0);
     setAssessing(false);
     setView("challenge");
@@ -742,7 +765,7 @@ export default function CodingChallenge() {
     setActiveTechSlug(null);
     setIsCustomURL(true);
     setShareUrl(url);
-    setAnswers(flattenTasks(c).map((t) => PLACEHOLDER[t.type]));
+    setAnswers(loadAnswers(c.title, flattenTasks(c)));
     setActiveTab(0);
     setAssessing(false);
     setView("challenge");
@@ -777,6 +800,11 @@ export default function CodingChallenge() {
 
   function handleAnswer(flatIdx: number, val: string) {
     setAnswers((prev) => { const n = [...prev]; n[flatIdx] = val; return n; });
+  }
+
+  function handleClearAnswers() {
+    clearAnswers(challenge.title);
+    setAnswers(allTasks.map((t) => PLACEHOLDER[t.type]));
   }
 
   // ── Pick view ────────────────────────────────────────────────────────────
@@ -846,6 +874,12 @@ export default function CodingChallenge() {
                   {linkCopied ? "✓ Copied!" : "🔗 Copy link"}
                 </button>
               )}
+              <button onClick={handleClearAnswers}
+                style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 600, color: "var(--cin-dim)", background: "none", border: "1px solid var(--cin-border)", padding: "8px 14px", borderRadius: 8, cursor: "pointer", transition: "all 0.2s" }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = "#f0748a"; e.currentTarget.style.borderColor = "#f0748a60"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = "var(--cin-dim)"; e.currentTarget.style.borderColor = "var(--cin-border)"; }}>
+                🗑 Clear answers
+              </button>
               <button onClick={() => setShowModal(true)}
                 style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 700, color: "var(--cin-bg)", background: "linear-gradient(90deg,var(--cin-cyan),var(--cin-violet))", border: "none", padding: "8px 16px", borderRadius: 8, cursor: "pointer" }}>
                 ✏️ {isCustomURL ? "Edit challenge" : "Create challenge"}
