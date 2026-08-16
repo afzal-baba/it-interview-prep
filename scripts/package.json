@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "@workspace/db": "workspace:*",
-    "drizzle-orm": "catalog:"
+    "drizzle-orm": "catalog:",
+    "openai": "^4.98.0",
+    "p-limit": "^6.2.0"
   },
   "devDependencies": {
     "@types/node": "catalog:",

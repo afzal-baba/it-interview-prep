@@ -382,6 +382,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderRadius: 14,
     padding: 14,
+    minHeight: 64,
   },
   optionIndex: {
     width: 28,
