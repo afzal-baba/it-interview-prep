@@ -11,10 +11,11 @@ import {
   Inter_700Bold,
   useFonts,
 } from '@expo-google-fonts/inter';
-import { Stack } from 'expo-router';
+import { Stack, router } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { setBaseUrl } from '@workspace/api-client-react';
 import { QuizProvider } from '@/contexts/QuizContext';
+import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 
 // Set API base URL so Expo bundles reach the shared API server.
 setBaseUrl(`https://${process.env.EXPO_PUBLIC_DOMAIN}`);
@@ -29,8 +30,22 @@ const queryClient = new QueryClient({
 });
 
 function RootLayoutNav() {
+  const { playerName, isLoading } = useAuth();
+
+  useEffect(() => {
+    if (!isLoading) {
+      if (!playerName) {
+        router.replace('/login');
+      } else {
+        // If the user is on the login screen and already has a name, go home
+        router.replace('/');
+      }
+    }
+  }, [isLoading, playerName]);
+
   return (
     <Stack>
+      <Stack.Screen name="login" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="quiz" options={{ headerShown: false, animation: 'slide_from_bottom' }} />
       <Stack.Screen name="result" options={{ headerShown: false, animation: 'slide_from_bottom' }} />
@@ -57,15 +72,17 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <ErrorBoundary>
-        <QueryClientProvider client={queryClient}>
-          <QuizProvider>
-            <GestureHandlerRootView style={{ flex: 1 }}>
-              <KeyboardProvider>
-                <RootLayoutNav />
-              </KeyboardProvider>
-            </GestureHandlerRootView>
-          </QuizProvider>
-        </QueryClientProvider>
+        <AuthProvider>
+          <QueryClientProvider client={queryClient}>
+            <QuizProvider>
+              <GestureHandlerRootView style={{ flex: 1 }}>
+                <KeyboardProvider>
+                  <RootLayoutNav />
+                </KeyboardProvider>
+              </GestureHandlerRootView>
+            </QuizProvider>
+          </QueryClientProvider>
+        </AuthProvider>
       </ErrorBoundary>
     </SafeAreaProvider>
   );

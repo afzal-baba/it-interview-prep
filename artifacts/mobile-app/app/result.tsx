@@ -18,6 +18,7 @@ import { router } from 'expo-router';
 import { useCreateLeaderboardEntry } from '@workspace/api-client-react';
 import { useQuizContext } from '@/contexts/QuizContext';
 import { useColors } from '@/hooks/useColors';
+import { useAuth } from '@/contexts/AuthContext';
 
 const BADGE_META: Record<string, { color: string; icon: string; label: string }> = {
   Platinum: { color: '#e0c9ff', icon: 'diamond-outline', label: 'Platinum' },
@@ -41,9 +42,10 @@ export default function ResultScreen() {
 
   const { result, selectedCourse, timedMode, setSession, setResult } = useQuizContext();
   const createEntry = useCreateLeaderboardEntry();
+  const { playerName: storedName } = useAuth();
 
   const [showSaveModal, setShowSaveModal] = useState(false);
-  const [playerName, setPlayerName] = useState('');
+  const [playerName, setPlayerName] = useState(storedName ?? '');
   const [saved, setSaved] = useState(false);
 
   if (!result) {
