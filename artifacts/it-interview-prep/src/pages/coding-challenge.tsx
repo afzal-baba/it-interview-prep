@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense, useEffect } from "react";
+import { useState, lazy, Suspense, useEffect, useRef, useCallback } from "react";
 import { useLocation } from "wouter";
 
 const MonacoEditor = lazy(() => import("@monaco-editor/react"));
@@ -20,6 +20,7 @@ export interface Challenge {
   tasks?: ChallengeTask[];
   tabs?: ChallengeTab[];
   instructions?: string;
+  durationMinutes?: number;
 }
 interface TechChallenge {
   title: string;
@@ -462,7 +463,7 @@ const PLACEHOLDER: Record<ChallengeTask["type"], string> = {
 };
 
 const TEMPLATE_JSON = JSON.stringify(
-  { title: "My Interview Challenge", description: "Complete the tasks below.", tabs: [
+  { title: "My Interview Challenge", description: "Complete the tasks below.", durationMinutes: 45, tabs: [
     { name: "Tab One", technologies: ["Python"], tasks: [{ type: "python", prompt: "Write a function that…" }] },
     { name: "Tab Two", technologies: ["SQL"],    tasks: [{ type: "sql", prompt: "Write a query to…" }] },
   ], instructions: "Select a tab and complete the task." }, null, 2
@@ -670,7 +671,7 @@ function CreateChallengeModal({ onClose, onLoad }: { onClose: () => void; onLoad
           <div>
             <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, fontWeight: 700, color: "var(--cin-cyan)", letterSpacing: "0.1em", textTransform: "uppercase" }}>● Interviewer Tool</span>
             <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: 22, fontWeight: 700, color: "var(--cin-text)", margin: "8px 0 4px" }}>Create a custom challenge</h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "var(--cin-dim)", margin: 0 }}>Paste your JSON. Supports flat <code style={{ color: "var(--cin-cyan)", fontSize: 11 }}>tasks</code> and tabbed <code style={{ color: "var(--cin-cyan)", fontSize: 11 }}>tabs</code> format.</p>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "var(--cin-dim)", margin: 0 }}>Paste your JSON. Supports flat <code style={{ color: "var(--cin-cyan)", fontSize: 11 }}>tasks</code> and tabbed <code style={{ color: "var(--cin-cyan)", fontSize: 11 }}>tabs</code> format. Add <code style={{ color: "var(--cin-cyan)", fontSize: 11 }}>durationMinutes</code> for a countdown timer.</p>
           </div>
           <button onClick={onClose} style={{ background: "none", border: "none", color: "var(--cin-dim)", fontSize: 20, cursor: "pointer", padding: "2px 6px" }}>×</button>
         </div>
@@ -736,6 +737,13 @@ export default function CodingChallenge() {
   const [assessing, setAssessing] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
+  // Countdown timer state
+  const [timerSecondsLeft, setTimerSecondsLeft] = useState<number | null>(null);
+  const [timerPaused, setTimerPaused] = useState(false);
+  const [timerExpired, setTimerExpired] = useState(false);
+  const timerIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timerEndRef = useRef<number | null>(null); // absolute epoch ms when timer expires
+
   useEffect(() => { document.title = view === "pick" ? "Code Lab — TechInterviewPrep" : `${challenge.title} — TechInterviewPrep`; }, [view, challenge.title]);
 
   // Debounced answer persistence
@@ -744,6 +752,90 @@ export default function CodingChallenge() {
     const timer = setTimeout(() => saveAnswers(challenge.title, answers), 500);
     return () => clearTimeout(timer);
   }, [answers, challenge.title, view]);
+
+  // Initialise (or reset) timer when challenge changes or view changes to "challenge"
+  useEffect(() => {
+    // Clear any existing interval
+    if (timerIntervalRef.current) { clearInterval(timerIntervalRef.current); timerIntervalRef.current = null; }
+    if (view !== "challenge" || !challenge.durationMinutes) {
+      setTimerSecondsLeft(null);
+      setTimerPaused(false);
+      setTimerExpired(false);
+      timerEndRef.current = null;
+      return;
+    }
+    const totalSeconds = challenge.durationMinutes * 60;
+    setTimerSecondsLeft(totalSeconds);
+    setTimerPaused(false);
+    setTimerExpired(false);
+    timerEndRef.current = Date.now() + totalSeconds * 1000;
+
+    timerIntervalRef.current = setInterval(() => {
+      if (!timerEndRef.current) return;
+      const remaining = Math.max(0, Math.round((timerEndRef.current - Date.now()) / 1000));
+      setTimerSecondsLeft(remaining);
+      if (remaining === 0) {
+        if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+        setTimerExpired(true);
+      }
+    }, 500);
+
+    return () => { if (timerIntervalRef.current) clearInterval(timerIntervalRef.current); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [challenge.title, challenge.durationMinutes, view]);
+
+  // Auto-submit when timer expires
+  useEffect(() => {
+    if (!timerExpired) return;
+    // Give the UI one render to show "Time's up!" before transitioning
+    const t = setTimeout(() => {
+      if (activeTechSlug) { setAssessing(true); }
+      else { setView("pick"); window.history.replaceState(null, "", window.location.pathname); }
+    }, 1800);
+    return () => clearTimeout(t);
+  }, [timerExpired, activeTechSlug]);
+
+  const handleTimerPause = useCallback(() => {
+    if (timerExpired || timerSecondsLeft === null) return;
+    if (!timerPaused) {
+      // Pause: freeze the remaining time
+      if (timerIntervalRef.current) { clearInterval(timerIntervalRef.current); timerIntervalRef.current = null; }
+      setTimerPaused(true);
+    } else {
+      // Resume: recalculate end time from current remaining seconds
+      const newEnd = Date.now() + (timerSecondsLeft ?? 0) * 1000;
+      timerEndRef.current = newEnd;
+      timerIntervalRef.current = setInterval(() => {
+        if (!timerEndRef.current) return;
+        const remaining = Math.max(0, Math.round((timerEndRef.current - Date.now()) / 1000));
+        setTimerSecondsLeft(remaining);
+        if (remaining === 0) {
+          if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+          setTimerExpired(true);
+        }
+      }, 500);
+      setTimerPaused(false);
+    }
+  }, [timerPaused, timerExpired, timerSecondsLeft]);
+
+  const handleTimerReset = useCallback(() => {
+    if (!challenge.durationMinutes) return;
+    if (timerIntervalRef.current) { clearInterval(timerIntervalRef.current); timerIntervalRef.current = null; }
+    const totalSeconds = challenge.durationMinutes * 60;
+    timerEndRef.current = Date.now() + totalSeconds * 1000;
+    setTimerSecondsLeft(totalSeconds);
+    setTimerPaused(false);
+    setTimerExpired(false);
+    timerIntervalRef.current = setInterval(() => {
+      if (!timerEndRef.current) return;
+      const remaining = Math.max(0, Math.round((timerEndRef.current - Date.now()) / 1000));
+      setTimerSecondsLeft(remaining);
+      if (remaining === 0) {
+        if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+        setTimerExpired(true);
+      }
+    }, 500);
+  }, [challenge.durationMinutes]);
 
   function pickTech(slug: string) {
     const ch = TECH_CHALLENGES[slug];
@@ -911,6 +1003,71 @@ export default function CodingChallenge() {
               <span style={{ color: "var(--cin-cyan)", fontWeight: 600 }}>Instructions: </span>{challenge.instructions}
             </div>
           )}
+
+          {/* Countdown timer — only when durationMinutes is set */}
+          {timerSecondsLeft !== null && (() => {
+            const total = (challenge.durationMinutes ?? 0) * 60;
+            const pct = total > 0 ? (timerSecondsLeft / total) * 100 : 0;
+            const isAmber = pct <= 25 && pct > 10;
+            const isRed   = pct <= 10;
+            const timerColor = timerExpired ? "#f0748a" : isRed ? "#f0748a" : isAmber ? "#f0b84f" : "var(--cin-cyan)";
+            const barColor  = timerExpired ? "#f0748a" : isRed ? "#f0748a" : isAmber ? "#f0b84f" : "var(--cin-cyan)";
+            const mins = Math.floor(timerSecondsLeft / 60);
+            const secs = timerSecondsLeft % 60;
+            const mmss = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+            return (
+              <div style={{ marginTop: 18, background: "var(--cin-surface)", border: `1px solid ${timerColor}40`, borderRadius: 12, padding: "12px 18px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <span style={{ fontSize: 14 }}>{timerExpired ? "⏱" : timerPaused ? "⏸" : "⏱"}</span>
+                    <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 20, fontWeight: 800, color: timerColor, letterSpacing: "0.05em", transition: "color 0.4s" }}>
+                      {timerExpired ? "Time's up!" : mmss}
+                    </span>
+                    {timerPaused && !timerExpired && (
+                      <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 10, color: "#f0b84f", background: "rgba(240,184,79,0.12)", border: "1px solid rgba(240,184,79,0.3)", borderRadius: 5, padding: "2px 8px", letterSpacing: "0.06em" }}>PAUSED</span>
+                    )}
+                    {isRed && !timerExpired && (
+                      <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 10, color: "#f0748a", background: "rgba(240,116,138,0.12)", border: "1px solid rgba(240,116,138,0.3)", borderRadius: 5, padding: "2px 8px", letterSpacing: "0.06em", animation: "cin-blink 1s step-start infinite" }}>CRITICAL</span>
+                    )}
+                  </div>
+                  {!timerExpired && (
+                    <div style={{ display: "flex", gap: 6 }}>
+                      <button
+                        onClick={handleTimerPause}
+                        title={timerPaused ? "Resume timer" : "Pause timer"}
+                        style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, fontWeight: 600, color: "var(--cin-dim)", background: "none", border: "1px solid var(--cin-border)", borderRadius: 7, padding: "4px 12px", cursor: "pointer", transition: "all 0.2s" }}
+                        onMouseEnter={(e) => { e.currentTarget.style.color = "var(--cin-text)"; e.currentTarget.style.borderColor = "var(--cin-border-strong)"; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = "var(--cin-dim)"; e.currentTarget.style.borderColor = "var(--cin-border)"; }}
+                      >
+                        {timerPaused ? "▶ Resume" : "⏸ Pause"}
+                      </button>
+                      <button
+                        onClick={handleTimerReset}
+                        title="Reset timer"
+                        style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, fontWeight: 600, color: "var(--cin-dim)", background: "none", border: "1px solid var(--cin-border)", borderRadius: 7, padding: "4px 12px", cursor: "pointer", transition: "all 0.2s" }}
+                        onMouseEnter={(e) => { e.currentTarget.style.color = "var(--cin-text)"; e.currentTarget.style.borderColor = "var(--cin-border-strong)"; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = "var(--cin-dim)"; e.currentTarget.style.borderColor = "var(--cin-border)"; }}
+                      >
+                        ↺ Reset
+                      </button>
+                    </div>
+                  )}
+                </div>
+                {/* Progress bar */}
+                <div style={{ height: 4, background: "var(--cin-border)", borderRadius: 4, overflow: "hidden" }}>
+                  <div style={{
+                    height: "100%",
+                    width: `${pct}%`,
+                    background: barColor,
+                    borderRadius: 4,
+                    transition: "width 0.5s linear, background 0.4s",
+                    boxShadow: isRed && !timerExpired ? `0 0 8px ${barColor}80` : undefined,
+                  }} />
+                </div>
+                <style>{`@keyframes cin-blink{0%,100%{opacity:1}50%{opacity:0.3}}`}</style>
+              </div>
+            );
+          })()}
         </div>
 
         {/* Tab bar */}
