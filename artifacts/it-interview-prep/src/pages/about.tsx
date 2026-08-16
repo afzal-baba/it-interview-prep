@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   Terminal, BookOpen, Trophy, Swords, Timer, Zap, Users, Star, CheckCircle2, Code2,
 } from "lucide-react";
+import { TOTAL_COURSES, TOTAL_QUESTIONS_DISPLAY, QUESTIONS_PER_COURSE } from "@/lib/platform-stats";
 
 const COURSES = [
   "Oracle DB", "SAP", "Java", "Python", "AWS", "Linux",
@@ -15,8 +16,8 @@ const COURSES = [
 const FEATURES = [
   {
     icon: <BookOpen size={24} />,
-    title: "1200+ Hand-Crafted Questions",
-    desc: "30 questions per course across Beginner, Intermediate, and Advanced tiers — all written by practising engineers.",
+    title: `${TOTAL_QUESTIONS_DISPLAY} Hand-Crafted Questions`,
+    desc: `${QUESTIONS_PER_COURSE} questions per course across Beginner, Intermediate, and Advanced tiers — all written by practising engineers.`,
   },
   {
     icon: <Timer size={24} />,
@@ -54,7 +55,7 @@ const BADGE_TIERS = [
 
 export default function About() {
   useEffect(() => {
-    document.title = "About TechInterviewPrep — 1200+ Questions, 40 Topics, Free";
+    document.title = `About TechInterviewPrep — ${TOTAL_QUESTIONS_DISPLAY} Questions, ${TOTAL_COURSES} Topics, Free`;
   }, []);
 
   return (
@@ -70,7 +71,7 @@ export default function About() {
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
           TechInterviewPrep is a free, open practice platform built by engineers for engineers. 
-          We cover 20 core technologies — from cloud infrastructure to scripting languages — 
+          We cover {TOTAL_COURSES} technologies — from cloud infrastructure to scripting languages — 
           with real questions, instant feedback, and competitive real-time challenges to keep you sharp.
         </p>
         <div className="flex flex-wrap justify-center gap-3 pt-2">
@@ -88,8 +89,8 @@ export default function About() {
       {/* Stats */}
       <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { value: "40", label: "Courses" },
-          { value: "1200+", label: "Questions" },
+          { value: String(TOTAL_COURSES), label: "Courses" },
+          { value: TOTAL_QUESTIONS_DISPLAY, label: "Questions" },
           { value: "3", label: "Difficulty Tiers" },
           { value: "∞", label: "Rematches" },
         ].map((s) => (
@@ -135,8 +136,8 @@ export default function About() {
 
       {/* Courses list */}
       <section>
-        <h2 className="text-3xl font-extrabold tracking-tight mb-2 text-center">All 20 Courses</h2>
-        <p className="text-muted-foreground text-center mb-8">Each course has 30 questions split evenly across Beginner, Intermediate, and Advanced.</p>
+        <h2 className="text-3xl font-extrabold tracking-tight mb-2 text-center">All {TOTAL_COURSES} Courses</h2>
+        <p className="text-muted-foreground text-center mb-8">Each course has {QUESTIONS_PER_COURSE} questions split evenly across Beginner, Intermediate, and Advanced.</p>
         <div className="flex flex-wrap gap-2 justify-center">
           {COURSES.map((c) => (
             <span key={c} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border bg-card text-sm font-medium shadow-sm">
@@ -151,7 +152,7 @@ export default function About() {
         <h2 className="text-3xl font-extrabold tracking-tight mb-8 text-center">How It Works</h2>
         <ol className="space-y-4 max-w-2xl mx-auto">
           {[
-            ["Pick a course", "Browse 40 technologies and select the one you're practising for."],
+            ["Pick a course", `Browse ${TOTAL_COURSES} technologies and select the one you're practising for.`],
             ["Choose difficulty", "Beginner, Intermediate, or Advanced — each with 10 real questions."],
             ["Answer & learn", "Every answer reveals an instant explanation to cement the concept."],
             ["Earn your badge", "Score ≥ 50% for Bronze and aim for Platinum at 95%+."],

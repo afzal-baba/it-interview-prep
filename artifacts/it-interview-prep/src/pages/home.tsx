@@ -7,6 +7,7 @@ import {
   type Course,
 } from "@workspace/api-client-react";
 import { useQuizState } from "@/lib/quiz-context";
+import { TOTAL_COURSES, TOTAL_QUESTIONS_DISPLAY, DIFFICULTY_TIERS } from "@/lib/platform-stats";
 import * as SiIcons from "react-icons/si";
 import { Search, X, ArrowLeft, Timer } from "lucide-react";
 
@@ -556,9 +557,9 @@ export default function Home() {
                 style={{ display: "flex", gap: 48, flexWrap: "wrap", justifyContent: "center", marginTop: 52, animation: "cin-slideUp 0.7s ease-out 0.6s both" }}
               >
                 {[
-                  { val: "40", label: "Technologies" },
-                  { val: "1200+", label: "Questions" },
-                  { val: "4", label: "Badge Tiers" },
+                  { val: String(TOTAL_COURSES), label: "Technologies" },
+                  { val: TOTAL_QUESTIONS_DISPLAY, label: "Questions" },
+                  { val: String(DIFFICULTY_TIERS + 1), label: "Badge Tiers" },
                 ].map(({ val, label }) => (
                   <div key={label} style={{ textAlign: "center" }}>
                     <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 26, fontWeight: 700, background: "linear-gradient(90deg, #fff, var(--cin-cyan))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
