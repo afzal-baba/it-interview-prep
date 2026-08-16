@@ -66,8 +66,13 @@ export default function ProfileScreen() {
   const [newName, setNewName] = useState(playerName ?? '');
   const [saving, setSaving] = useState(false);
 
+  // Include the user ID in the query key so each account has its own cache
+  // entry. This prevents account A's data from being shown to account B after
+  // a login switch.
+  const personalScoresKey = [...getListMyScoresQueryKey(), user?.id ?? ''] as const;
+
   const scoresQuery = useListMyScores({
-    query: { enabled: isAuthenticated, queryKey: getListMyScoresQueryKey() },
+    query: { enabled: isAuthenticated, queryKey: personalScoresKey },
   });
 
   const handleSave = async () => {

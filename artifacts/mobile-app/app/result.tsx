@@ -15,7 +15,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
-import { useCreateLeaderboardEntry } from '@workspace/api-client-react';
+import { useCreateLeaderboardEntry, getListMyScoresQueryKey } from '@workspace/api-client-react';
+import { queryClient } from '@/lib/queryClient';
 import { useQuizContext } from '@/contexts/QuizContext';
 import { useAuth as useAccountAuth } from '@/lib/auth';
 import { useColors } from '@/hooks/useColors';
@@ -76,6 +77,9 @@ export default function ResultScreen() {
           setSaved(true);
           setShowSaveModal(false);
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+          // Invalidate personal-score cache so Progress and Profile tabs
+          // show the newly saved entry immediately.
+          queryClient.invalidateQueries({ queryKey: getListMyScoresQueryKey() });
         },
       }
     );

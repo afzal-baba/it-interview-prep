@@ -9,6 +9,8 @@ import React, {
 import * as AuthSession from 'expo-auth-session';
 import * as SecureStore from 'expo-secure-store';
 import * as WebBrowser from 'expo-web-browser';
+import { getListMyScoresQueryKey } from '@workspace/api-client-react';
+import { queryClient } from '@/lib/queryClient';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -169,6 +171,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch {
     } finally {
       await SecureStore.deleteItemAsync(AUTH_TOKEN_KEY);
+      // Remove all personal-score cache entries so a subsequent login
+      // never sees the previous user's data.
+      queryClient.removeQueries({ queryKey: getListMyScoresQueryKey() });
       setUser(null);
     }
   }, []);
