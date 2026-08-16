@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -42,7 +42,13 @@ export default function ResultScreen() {
   const topPad = Platform.OS === 'web' ? 67 : insets.top;
   const botPad = Platform.OS === 'web' ? 34 : insets.bottom;
 
-  const { result, selectedCourse, timedMode, setSession, setResult } = useQuizContext();
+  const { result, selectedCourse, timedMode, setSession, setResult, clearPersistedProgress } = useQuizContext();
+
+  // Clear any saved in-progress quiz now that we have a completed result
+  useEffect(() => {
+    clearPersistedProgress();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const { user, isAuthenticated } = useAccountAuth();
   const createEntry = useCreateLeaderboardEntry();
   const { playerName: storedName } = useAuth();

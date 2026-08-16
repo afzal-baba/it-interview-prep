@@ -119,7 +119,7 @@ function LevelModal({ course, accent, visible, onClose }: LevelModalProps) {
   const colors = useColors();
   const insets = useSafeAreaInsets();
   const [timedMode, setTimedMode] = useState(false);
-  const { setSession, setTimedMode: setCtxTimedMode, setSelectedCourse } = useQuizContext();
+  const { setSession, setTimedMode: setCtxTimedMode, setSelectedCourse, clearPersistedProgress } = useQuizContext();
   const createSession = useCreateSession();
 
   const levels: { id: Difficulty; label: string; count: number }[] = [
@@ -128,8 +128,12 @@ function LevelModal({ course, accent, visible, onClose }: LevelModalProps) {
     { id: 'advanced', label: 'Advanced', count: course.questionCounts.advanced },
   ];
 
-  const handleStart = useCallback((level: Difficulty) => {
+  const handleStart = useCallback(async (level: Difficulty) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    // Await the clear so any stale saved progress is fully removed before the
+    // new session starts — prevents a race where an old AsyncStorage write
+    // arrives after the new session's first persistProgress call.
+    await clearPersistedProgress();
     createSession.mutate(
       { data: { courseId: course.id, level: level as SessionInputLevel, timedMode } },
       {
@@ -142,7 +146,7 @@ function LevelModal({ course, accent, visible, onClose }: LevelModalProps) {
         },
       }
     );
-  }, [course, timedMode, createSession, setSession, setCtxTimedMode, setSelectedCourse, onClose]);
+  }, [course, timedMode, createSession, setSession, setCtxTimedMode, setSelectedCourse, clearPersistedProgress, onClose]);
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
@@ -229,6 +233,7 @@ export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const [search, setSearch] = useState('');
   const [selectedCourse, setSelectedCourse] = useState<{ course: Course; accent: string } | null>(null);
+  const { savedProgress } = useQuizContext();
 
   const { data: courses, isLoading, isError, refetch } = useListCourses({
     query: { retry: 3, retryDelay: (n) => Math.min(1000 * 2 ** n, 8000), queryKey: getListCoursesQueryKey() },
@@ -333,6 +338,34 @@ export default function HomeScreen() {
           ]}
           showsVerticalScrollIndicator={false}
           scrollEnabled={filtered.length > 0}
+          ListHeaderComponent={
+            savedProgress ? (
+              <TouchableOpacity
+                style={[
+                  styles.resumeBanner,
+                  { backgroundColor: colors.accent + '18', borderColor: colors.accent + '45' },
+                ]}
+                onPress={() => router.push('/quiz')}
+                activeOpacity={0.8}
+              >
+                <View style={[styles.resumeIconBg, { backgroundColor: colors.accent + '25' }]}>
+                  <Ionicons name="play-circle-outline" size={22} color={colors.accent} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.resumeBannerTitle, { color: colors.accent }]}>
+                    Quiz in Progress
+                  </Text>
+                  <Text style={[styles.resumeBannerSub, { color: colors.mutedForeground }]}>
+                    {savedProgress.selectedCourse?.name ?? 'Tap to continue your quiz'}
+                    {savedProgress.selectedCourse
+                      ? ` · Q${savedProgress.nextIndex + 1} of next`
+                      : ''}
+                  </Text>
+                </View>
+                <Feather name="chevron-right" size={16} color={colors.accent} />
+              </TouchableOpacity>
+            ) : null
+          }
           ListEmptyComponent={
             <View style={styles.centered}>
               <Feather name="search" size={36} color={colors.mutedForeground} />
@@ -489,6 +522,25 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   retryText: { fontFamily: 'Inter_600SemiBold', fontSize: 14 },
+  // Resume banner
+  resumeBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    borderRadius: 14,
+    borderWidth: 1,
+    padding: 14,
+    marginBottom: 12,
+  },
+  resumeIconBg: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  resumeBannerTitle: { fontFamily: 'Inter_700Bold', fontSize: 14 },
+  resumeBannerSub: { fontFamily: 'Inter_400Regular', fontSize: 12, marginTop: 2 },
   // Modal
   modalOverlay: {
     flex: 1,
