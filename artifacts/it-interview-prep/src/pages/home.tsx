@@ -374,7 +374,9 @@ const GRAIN = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' widt
 
 // ─── Home ─────────────────────────────────────────────────────────────────────
 export default function Home() {
-  const { data: courses, isLoading } = useListCourses();
+  const { data: courses, isLoading, isError, refetch } = useListCourses({
+    query: { retry: 4, retryDelay: (n) => Math.min(1000 * 2 ** n, 10000) },
+  });
   const [, setLocation] = useLocation();
   const { setSession, setTimedMode } = useQuizState();
   const createSession = useCreateSession();
@@ -439,6 +441,18 @@ export default function Home() {
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
               <div style={{ width: 40, height: 40, border: "2px solid var(--cin-cyan)", borderTopColor: "transparent", borderRadius: "50%", animation: "cin-spin 0.8s linear infinite" }} />
               <p style={{ color: "var(--cin-dim)", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>Loading courses…</p>
+            </div>
+          </div>
+        ) : isError ? (
+          <div style={{ minHeight: "70vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, textAlign: "center" }}>
+              <p style={{ color: "var(--cin-dim)", fontFamily: "'JetBrains Mono',monospace", fontSize: 14 }}>Could not reach the server.</p>
+              <button
+                onClick={() => refetch()}
+                style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: "var(--cin-cyan)", background: "none", border: "1px solid var(--cin-cyan)", padding: "8px 20px", borderRadius: 8, cursor: "pointer" }}
+              >
+                Retry
+              </button>
             </div>
           </div>
         ) : selectedCourse ? (
@@ -542,8 +556,8 @@ export default function Home() {
                 style={{ display: "flex", gap: 48, flexWrap: "wrap", justifyContent: "center", marginTop: 52, animation: "cin-slideUp 0.7s ease-out 0.6s both" }}
               >
                 {[
-                  { val: "20", label: "Technologies" },
-                  { val: "600", label: "Questions" },
+                  { val: "40", label: "Technologies" },
+                  { val: "1200+", label: "Questions" },
                   { val: "4", label: "Badge Tiers" },
                 ].map(({ val, label }) => (
                   <div key={label} style={{ textAlign: "center" }}>

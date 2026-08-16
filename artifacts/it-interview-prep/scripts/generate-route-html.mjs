@@ -31,12 +31,12 @@ const BASE_URL = 'https://techinterviewprep.replit.app';
 
 const ROUTE_META = {
   '/about': {
-    title: 'About TechInterviewPrep — 600 Questions, 20 Technologies, Free',
+    title: 'About TechInterviewPrep — 1200+ Questions, 40 Technologies, Free',
     description:
-      'TechInterviewPrep offers 600 hand-crafted questions across 20 technology courses — Docker, AWS, Python, SQL, Kubernetes, and more. Earn Bronze to Platinum badges, climb the leaderboard, and race head-to-head in real-time.',
+      'TechInterviewPrep offers 1200+ hand-crafted questions across 40 technology courses — Docker, AWS, React, Kafka, Vault, and more. Earn Bronze to Platinum badges, climb the leaderboard, and race head-to-head in real-time.',
     ogTitle: 'About TechInterviewPrep — Free IT Interview Practice Platform',
     ogDescription:
-      '600 hand-crafted interview questions across 20 technologies. Timed mode, badge system, global leaderboard, and real-time challenge arena — all free.',
+      '1200+ hand-crafted interview questions across 40 technologies. Timed mode, badge system, global leaderboard, and real-time challenge arena — all free.',
     ogUrl: `${BASE_URL}/about`,
     canonical: `${BASE_URL}/about`,
   },

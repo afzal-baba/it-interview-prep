@@ -35,21 +35,21 @@ export const ROUTE_META: Record<string, RouteMeta> = {
   '/': {
     title: 'TechInterviewPrep — Ace Your Next Technical Interview',
     description:
-      'Master technical interviews with 600 hand-crafted questions across 20 technologies. Choose Docker, Python, AWS, TypeScript, and more — with timed mode and a real-time challenge arena.',
+      'Master technical interviews with 1200+ hand-crafted questions across 40 technologies. Choose Docker, Python, AWS, React, Kafka, and more — with timed mode and a real-time challenge arena.',
     ogTitle: 'TechInterviewPrep — Ace Your Next Technical Interview',
     ogDescription:
-      'Master technical interviews with 600 hand-crafted questions across 20 technologies. Timed mode, global leaderboard, and real-time head-to-head challenge arena.',
+      'Master technical interviews with 1200+ hand-crafted questions across 40 technologies. Timed mode, global leaderboard, and real-time head-to-head challenge arena.',
     ogUrl: `${BASE_URL}/`,
     canonical: `${BASE_URL}/`,
   },
 
   '/about': {
-    title: 'About TechInterviewPrep — 600 Questions, 20 Technologies, Free',
+    title: 'About TechInterviewPrep — 1200+ Questions, 40 Technologies, Free',
     description:
-      'TechInterviewPrep offers 600 hand-crafted questions across 20 technology courses — Docker, AWS, Python, SQL, Kubernetes, and more. Earn Bronze to Platinum badges, climb the leaderboard, and race head-to-head in real-time.',
+      'TechInterviewPrep offers 1200+ hand-crafted questions across 40 technology courses — Docker, AWS, React, Kafka, Vault, and more. Earn Bronze to Platinum badges, climb the leaderboard, and race head-to-head in real-time.',
     ogTitle: 'About TechInterviewPrep — Free IT Interview Practice Platform',
     ogDescription:
-      '600 hand-crafted interview questions across 20 technologies. Timed mode, badge system, global leaderboard, and real-time challenge arena — all free.',
+      '1200+ hand-crafted interview questions across 40 technologies. Timed mode, badge system, global leaderboard, and real-time challenge arena — all free.',
     ogUrl: `${BASE_URL}/about`,
     canonical: `${BASE_URL}/about`,
   },
@@ -60,7 +60,7 @@ export const ROUTE_META: Record<string, RouteMeta> = {
       'See the top IT interview practice scores from engineers worldwide on TechInterviewPrep. Filter by technology, level, or timed mode. Earn Gold and Platinum badges.',
     ogTitle: 'Global IT Interview Leaderboard — TechInterviewPrep',
     ogDescription:
-      'Top scores from engineers competing across Docker, Python, AWS, and 17 other technology tracks. Climb the ranks and earn badges.',
+      'Top scores from engineers competing across Docker, Python, AWS, React, Kafka, and 35 other technology tracks. Climb the ranks and earn badges.',
     ogUrl: `${BASE_URL}/leaderboard`,
     canonical: `${BASE_URL}/leaderboard`,
   },
