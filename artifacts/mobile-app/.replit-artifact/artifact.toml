@@ -1,0 +1,24 @@
+kind = "mobile"
+previewPath = "/mobile-app/"
+title = "IT Interview Prep — Mobile"
+description = "A mobile companion app for IT Interview Prep. Lets users browse 40 technology courses, start quizzes at beginner/intermediate/advanced level, answer multiple-choice questions with optional timed mode, and see their score with a badge on the results screen. Calls the same shared API server as the web app. Dark theme with cyan and violet accents to match the web experience."
+version = "1.0.0"
+id = "artifacts/mobile-app"
+router = "expo-domain"
+
+[[services]]
+name = "expo"
+ensurePreviewReachable = "/status"
+paths = [ "/mobile-app/" ]
+localPort = 24382
+
+[services.development]
+run = "pnpm --filter @workspace/mobile-app run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/mobile-app", "run", "build" ]
+run = [ "pnpm", "--filter", "@workspace/mobile-app", "run", "serve" ]
+
+[services.env]
+PORT = "24382"
+BASE_PATH = "/mobile-app/"
