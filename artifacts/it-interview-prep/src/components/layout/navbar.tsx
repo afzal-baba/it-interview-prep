@@ -21,6 +21,7 @@ const LINKS = [
   { href: "/", label: "Courses" },
   { href: "/leaderboard", label: "Leaderboard" },
   { href: "/race", label: "Challenge" },
+  { href: "/lab", label: "Code Lab" },
   { href: "/about", label: "About" },
 ];
 

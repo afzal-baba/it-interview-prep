@@ -20,6 +20,7 @@ import Result from '@/pages/result';
 import Leaderboard from '@/pages/leaderboard';
 import Race from '@/pages/race';
 import About from '@/pages/about';
+import CodingChallenge from '@/pages/coding-challenge';
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ function Router() {
             <Route path="/result" component={Result} />
             <Route path="/leaderboard" component={Leaderboard} />
             <Route path="/race" component={Race} />
+            <Route path="/lab" component={CodingChallenge} />
             <Route path="/about" component={About} />
             <Route component={NotFound} />
           </Switch>
