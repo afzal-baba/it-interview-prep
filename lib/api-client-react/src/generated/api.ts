@@ -222,8 +222,8 @@ export const getListQuestionsUrl = (courseId: number,
 
   Object.entries(params || {}).forEach(([key, value]) => {
 
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
+    if (value !== undefined && value !== null) {
+      normalizedParams.append(key, String(value))
     }
   });
 
@@ -453,8 +453,8 @@ export const getListLeaderboardUrl = (params?: ListLeaderboardParams,) => {
 
   Object.entries(params || {}).forEach(([key, value]) => {
 
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
+    if (value !== undefined && value !== null) {
+      normalizedParams.append(key, String(value))
     }
   });
 

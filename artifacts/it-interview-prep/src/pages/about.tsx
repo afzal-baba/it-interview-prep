@@ -15,7 +15,7 @@ const COURSES = [
 const FEATURES = [
   {
     icon: <BookOpen size={24} />,
-    title: "600 Hand-Crafted Questions",
+    title: "1200+ Hand-Crafted Questions",
     desc: "30 questions per course across Beginner, Intermediate, and Advanced tiers — all written by practising engineers.",
   },
   {
@@ -54,7 +54,7 @@ const BADGE_TIERS = [
 
 export default function About() {
   useEffect(() => {
-    document.title = "About TechInterviewPrep — 600 Questions, 20 Topics, Free";
+    document.title = "About TechInterviewPrep — 1200+ Questions, 40 Topics, Free";
   }, []);
 
   return (
@@ -89,7 +89,7 @@ export default function About() {
       <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { value: "20", label: "Courses" },
-          { value: "600", label: "Questions" },
+          { value: "1200+", label: "Questions" },
           { value: "3", label: "Difficulty Tiers" },
           { value: "∞", label: "Rematches" },
         ].map((s) => (
@@ -151,7 +151,7 @@ export default function About() {
         <h2 className="text-3xl font-extrabold tracking-tight mb-8 text-center">How It Works</h2>
         <ol className="space-y-4 max-w-2xl mx-auto">
           {[
-            ["Pick a course", "Browse 20 technologies and select the one you're practising for."],
+            ["Pick a course", "Browse 40 technologies and select the one you're practising for."],
             ["Choose difficulty", "Beginner, Intermediate, or Advanced — each with 10 real questions."],
             ["Answer & learn", "Every answer reveals an instant explanation to cement the concept."],
             ["Earn your badge", "Score ≥ 50% for Bronze and aim for Platinum at 95%+."],
