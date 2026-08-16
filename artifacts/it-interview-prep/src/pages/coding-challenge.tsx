@@ -396,6 +396,8 @@ function loadScore(): number { try { return Number(localStorage.getItem("codelab
 function saveScore(s: number) { try { localStorage.setItem("codelab-score", String(s)); } catch { /* noop */ } }
 function loadCompleted(): Set<string> { try { return new Set(JSON.parse(localStorage.getItem("codelab-completed") ?? "[]")); } catch { return new Set(); } }
 function saveCompleted(s: Set<string>) { try { localStorage.setItem("codelab-completed", JSON.stringify([...s])); } catch { /* noop */ } }
+function loadMultipliers(): Record<string, number> { try { return JSON.parse(localStorage.getItem("codelab-multipliers") ?? "{}"); } catch { return {}; } }
+function saveMultipliers(m: Record<string, number>) { try { localStorage.setItem("codelab-multipliers", JSON.stringify(m)); } catch { /* noop */ } }
 function loadPlayerName(): string { try { return localStorage.getItem("codelab-player-name") ?? ""; } catch { return ""; } }
 function savePlayerName(n: string) { try { localStorage.setItem("codelab-player-name", n); } catch { /* noop */ } }
 
@@ -606,10 +608,100 @@ function ScoreBump({ pts }: { pts: number }) {
 
 // ── Tech picker ───────────────────────────────────────────────────────────────
 
-function TechPicker({ score, completed, onSelect }: { score: number; completed: Set<string>; onSelect: (slug: string) => void }) {
-  const [filter, setFilter] = useState<string>("All");
+// ── TechCard — shared card for the picker grid ────────────────────────────────
+
+const DIFFICULTY_ORDER: Record<string, number> = { beginner: 0, intermediate: 1, advanced: 2 };
+
+function TechCard({ slug, completed, multipliers, onSelect, dimmed = false }: {
+  slug: string; completed: Set<string>; multipliers: Record<string, number>;
+  onSelect: (slug: string) => void; dimmed?: boolean;
+}) {
+  const ch = TECH_CHALLENGES[slug];
+  const accent = SLUG_ACCENT[slug] ?? "#5be3d8";
+  const done = completed.has(slug);
+  const mult = multipliers[slug];
+  // Badge for Recommended view
+  const practiceAgain = done && mult !== undefined && mult <= 0.6;
+  const mastered      = done && mult === 1.0;
+
+  return (
+    <button key={slug} onClick={() => onSelect(slug)}
+      style={{ textAlign: "left", background: dimmed ? "rgba(13,15,24,0.5)" : "var(--cin-surface)", border: `1px solid ${done ? accent + "50" : "var(--cin-border)"}`, borderRadius: 14, padding: "18px 18px 16px", cursor: "pointer", transition: "border-color 0.2s, transform 0.15s", position: "relative", opacity: dimmed ? 0.55 : 1 }}
+      onMouseEnter={(e) => { e.currentTarget.style.borderColor = accent + "70"; e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.opacity = "1"; }}
+      onMouseLeave={(e) => { e.currentTarget.style.borderColor = done ? accent + "50" : "var(--cin-border)"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.opacity = dimmed ? "0.55" : "1"; }}
+    >
+      {/* Status badge — top-right */}
+      {practiceAgain && (
+        <span style={{ position: "absolute", top: 10, right: 10, fontFamily: "'JetBrains Mono',monospace", fontSize: 9, fontWeight: 700, color: "#f0748a", background: "rgba(240,116,138,0.12)", border: "1px solid rgba(240,116,138,0.3)", borderRadius: 4, padding: "2px 6px", letterSpacing: "0.04em" }}>REVIEW</span>
+      )}
+      {mastered && !practiceAgain && (
+        <span style={{ position: "absolute", top: 10, right: 10, fontSize: 12, color: "#22c55e" }}>✓</span>
+      )}
+      {done && !practiceAgain && !mastered && (
+        <span style={{ position: "absolute", top: 10, right: 10, fontSize: 12, color: "#f0b84f" }}>~</span>
+      )}
+      <div style={{ width: 32, height: 4, borderRadius: 2, background: accent, marginBottom: 14 }} />
+      <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, fontWeight: 700, color: "var(--cin-text)", marginBottom: 6, lineHeight: 1.3 }}>{displayName(slug)}</div>
+      <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "var(--cin-dim)", marginBottom: 12, lineHeight: 1.5, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{ch.description}</div>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 10, color: DIFFICULTY_COLOR[ch.difficulty], background: `${DIFFICULTY_COLOR[ch.difficulty]}15`, border: `1px solid ${DIFFICULTY_COLOR[ch.difficulty]}30`, borderRadius: 4, padding: "2px 7px", letterSpacing: "0.04em" }}>{ch.difficulty}</span>
+        <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, fontWeight: 700, color: accent }}>{ch.points} pts</span>
+      </div>
+    </button>
+  );
+}
+
+function TechPicker({ score, completed, multipliers, onSelect }: {
+  score: number; completed: Set<string>; multipliers: Record<string, number>; onSelect: (slug: string) => void;
+}) {
   const slugs = Object.keys(TECH_CHALLENGES);
+
+  // Only show Recommended tab if user has completed at least one challenge
+  const showRecommended = completed.size > 0;
+  // Initialise filter lazily — factory runs once on mount.
+  const [filter, setFilter] = useState<string>(() => completed.size > 0 ? "Recommended" : "All");
+  // Track whether the user has explicitly clicked a tab (so server-hydration
+  // doesn't clobber their choice).
+  const userChoseFilter = useRef(false);
+
+  // When server progress arrives after mount and adds completions, switch to
+  // Recommended — but only if the user hasn't already picked a tab themselves.
+  useEffect(() => {
+    if (!userChoseFilter.current && completed.size > 0 && filter === "All") {
+      setFilter("Recommended");
+    }
+  }, [completed.size]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  function handleFilterChange(c: string) {
+    userChoseFilter.current = true;
+    setFilter(c);
+  }
+
   const categories = ["All", ...CATEGORY_ORDER.filter((c) => slugs.some((s) => TECH_CHALLENGES[s].category === c))];
+  const filterTabs = showRecommended ? ["Recommended", ...categories] : categories;
+
+  // ── Recommended sections ──────────────────────────────────────────────────
+  const practiceAgainSlugs = slugs.filter((s) => {
+    const m = multipliers[s];
+    return completed.has(s) && m !== undefined && m <= 0.6;
+  }).sort((a, b) => (multipliers[a] ?? 1) - (multipliers[b] ?? 1)); // worst first
+
+  const notStartedSlugs = slugs
+    .filter((s) => !completed.has(s))
+    .sort((a, b) => (DIFFICULTY_ORDER[TECH_CHALLENGES[a].difficulty] ?? 1) - (DIFFICULTY_ORDER[TECH_CHALLENGES[b].difficulty] ?? 1));
+
+  const masteredSlugs = slugs.filter((s) => completed.has(s) && multipliers[s] === 1.0);
+
+  // Completed but never rated (pre-feature local data or server-merged completions with no multiplier)
+  const unratedSlugs = slugs.filter((s) => completed.has(s) && multipliers[s] === undefined);
+
+  // Completed with an in-between rating (got most of it)
+  const partialSlugs = slugs.filter((s) => {
+    if (!completed.has(s)) return false;
+    const m = multipliers[s];
+    return m !== undefined && m > 0.6 && m < 1.0;
+  });
+
   const visible = filter === "All" ? slugs : slugs.filter((s) => TECH_CHALLENGES[s].category === filter);
 
   return (
@@ -635,40 +727,126 @@ function TechPicker({ score, completed, onSelect }: { score: number; completed: 
         </div>
       </div>
 
-      {/* Category filter */}
+      {/* Filter tabs */}
       <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 28 }}>
-        {categories.map((c) => (
-          <button key={c} onClick={() => setFilter(c)}
-            style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, fontWeight: filter === c ? 700 : 400, color: filter === c ? "var(--cin-bg)" : "var(--cin-dim)", background: filter === c ? "var(--cin-cyan)" : "none", border: `1px solid ${filter === c ? "var(--cin-cyan)" : "var(--cin-border)"}`, borderRadius: 20, padding: "5px 14px", cursor: "pointer", transition: "all 0.15s", letterSpacing: "0.04em" }}>
-            {c}
-          </button>
-        ))}
-      </div>
-
-      {/* Grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14 }}>
-        {visible.map((slug) => {
-          const ch = TECH_CHALLENGES[slug];
-          const accent = SLUG_ACCENT[slug] ?? "#5be3d8";
-          const done = completed.has(slug);
+        {filterTabs.map((c) => {
+          const isRec = c === "Recommended";
+          const isActive = filter === c;
           return (
-            <button key={slug} onClick={() => onSelect(slug)}
-              style={{ textAlign: "left", background: "var(--cin-surface)", border: `1px solid ${done ? accent + "50" : "var(--cin-border)"}`, borderRadius: 14, padding: "18px 18px 16px", cursor: "pointer", transition: "border-color 0.2s, transform 0.15s", position: "relative" }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = accent + "70"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = done ? accent + "50" : "var(--cin-border)"; e.currentTarget.style.transform = "translateY(0)"; }}
-            >
-              {done && <span style={{ position: "absolute", top: 10, right: 10, fontSize: 12, color: "#22c55e" }}>✓</span>}
-              <div style={{ width: 32, height: 4, borderRadius: 2, background: accent, marginBottom: 14 }} />
-              <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, fontWeight: 700, color: "var(--cin-text)", marginBottom: 6, lineHeight: 1.3 }}>{displayName(slug)}</div>
-              <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "var(--cin-dim)", marginBottom: 12, lineHeight: 1.5, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{ch.description}</div>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 10, color: DIFFICULTY_COLOR[ch.difficulty], background: `${DIFFICULTY_COLOR[ch.difficulty]}15`, border: `1px solid ${DIFFICULTY_COLOR[ch.difficulty]}30`, borderRadius: 4, padding: "2px 7px", letterSpacing: "0.04em" }}>{ch.difficulty}</span>
-                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, fontWeight: 700, color: accent }}>{ch.points} pts</span>
-              </div>
+            <button key={c}
+              style={{
+                fontFamily: "'JetBrains Mono',monospace", fontSize: 11,
+                fontWeight: isActive ? 700 : 400,
+                color: isActive ? "var(--cin-bg)" : isRec ? "var(--cin-cyan)" : "var(--cin-dim)",
+                background: isActive ? (isRec ? "linear-gradient(90deg,var(--cin-cyan),var(--cin-violet))" : "var(--cin-cyan)") : "none",
+                border: `1px solid ${isActive ? "transparent" : isRec ? "var(--cin-cyan)" : "var(--cin-border)"}`,
+                borderRadius: 20, padding: "5px 14px", cursor: "pointer", transition: "all 0.15s", letterSpacing: "0.04em",
+              }}
+              onClick={() => handleFilterChange(c)}>
+              {isRec ? "✦ Recommended" : c}
             </button>
           );
         })}
       </div>
+
+      {/* ── Recommended view ─────────────────────────────────────────────────── */}
+      {filter === "Recommended" && (
+        <div>
+          {/* Practice again section */}
+          {practiceAgainSlugs.length > 0 && (
+            <div style={{ marginBottom: 40 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+                <div style={{ width: 3, height: 18, borderRadius: 2, background: "#f0748a" }} />
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, fontWeight: 700, color: "#f0748a", letterSpacing: "0.08em", textTransform: "uppercase" }}>Practice again</span>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 10, color: "var(--cin-dim)" }}>— you rated yourself low here</span>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14 }}>
+                {practiceAgainSlugs.map((slug) => (
+                  <TechCard key={slug} slug={slug} completed={completed} multipliers={multipliers} onSelect={onSelect} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Not started section */}
+          {notStartedSlugs.length > 0 && (
+            <div style={{ marginBottom: 40 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+                <div style={{ width: 3, height: 18, borderRadius: 2, background: "var(--cin-cyan)" }} />
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, fontWeight: 700, color: "var(--cin-cyan)", letterSpacing: "0.08em", textTransform: "uppercase" }}>Not started</span>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 10, color: "var(--cin-dim)" }}>— sorted easiest first</span>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14 }}>
+                {notStartedSlugs.map((slug) => (
+                  <TechCard key={slug} slug={slug} completed={completed} multipliers={multipliers} onSelect={onSelect} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Partial (got most of it) section */}
+          {partialSlugs.length > 0 && (
+            <div style={{ marginBottom: 40 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+                <div style={{ width: 3, height: 18, borderRadius: 2, background: "#f0b84f" }} />
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, fontWeight: 700, color: "#f0b84f", letterSpacing: "0.08em", textTransform: "uppercase" }}>Partially done</span>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 10, color: "var(--cin-dim)" }}>— could be stronger</span>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14 }}>
+                {partialSlugs.map((slug) => (
+                  <TechCard key={slug} slug={slug} completed={completed} multipliers={multipliers} onSelect={onSelect} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Previously completed but not yet rated (legacy / server-hydrated history) */}
+          {unratedSlugs.length > 0 && (
+            <div style={{ marginBottom: 40 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+                <div style={{ width: 3, height: 18, borderRadius: 2, background: "var(--cin-dim)" }} />
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, fontWeight: 700, color: "var(--cin-dim)", letterSpacing: "0.08em", textTransform: "uppercase" }}>Previously completed</span>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 10, color: "var(--cin-dim)" }}>— no self-assessment recorded</span>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14 }}>
+                {unratedSlugs.map((slug) => (
+                  <TechCard key={slug} slug={slug} completed={completed} multipliers={multipliers} onSelect={onSelect} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Mastered section — de-emphasised */}
+          {masteredSlugs.length > 0 && (
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+                <div style={{ width: 3, height: 18, borderRadius: 2, background: "#22c55e" }} />
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, fontWeight: 700, color: "#22c55e", letterSpacing: "0.08em", textTransform: "uppercase" }}>Mastered</span>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 10, color: "var(--cin-dim)" }}>— nailed it ✓</span>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14 }}>
+                {masteredSlugs.map((slug) => (
+                  <TechCard key={slug} slug={slug} completed={completed} multipliers={multipliers} onSelect={onSelect} dimmed />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Empty state (no history yet — shouldn't normally show since tab is hidden) */}
+          {practiceAgainSlugs.length === 0 && notStartedSlugs.length === 0 && partialSlugs.length === 0 && unratedSlugs.length === 0 && masteredSlugs.length === 0 && (
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "var(--cin-dim)", textAlign: "center", marginTop: 40 }}>Complete a challenge to see recommendations.</p>
+          )}
+        </div>
+      )}
+
+      {/* ── Category / All view ──────────────────────────────────────────────── */}
+      {filter !== "Recommended" && (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14 }}>
+          {visible.map((slug) => (
+            <TechCard key={slug} slug={slug} completed={completed} multipliers={multipliers} onSelect={onSelect} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -753,6 +931,7 @@ export default function CodingChallenge() {
   // Persistent score
   const [score, setScore] = useState(loadScore);
   const [completed, setCompleted] = useState(loadCompleted);
+  const [multipliers, setMultipliers] = useState(loadMultipliers);
   const [bumpPts, setBumpPts] = useState<number | null>(null);
 
   // Player name for leaderboard submission
@@ -942,6 +1121,11 @@ export default function CodingChallenge() {
       setCompleted(newCompleted);
       saveCompleted(newCompleted);
 
+      // Store the self-assessment multiplier per slug for recommendations
+      const newMultipliers = { ...multipliers, [activeTechSlug]: mult };
+      setMultipliers(newMultipliers);
+      saveMultipliers(newMultipliers);
+
       // Persist full cumulative state to server so it survives browser clears (fire-and-forget)
       saveCodelabProgress.mutate({ totalScore: newScore, completedSlugs: [...newCompleted] });
 
@@ -1005,7 +1189,7 @@ export default function CodingChallenge() {
         {showModal && <CreateChallengeModal onClose={() => setShowModal(false)} onLoad={loadCustom} />}
         <div style={{ position: "relative" }}>
           {bumpPts && <ScoreBump pts={bumpPts} />}
-          <TechPicker score={score} completed={completed} onSelect={pickTech} />
+          <TechPicker score={score} completed={completed} multipliers={multipliers} onSelect={pickTech} />
           {/* Floating create button */}
           <div className="cin-fab" style={{ position: "fixed", bottom: 32, right: 32, zIndex: 10 }}>
             <button onClick={() => setShowModal(true)}
