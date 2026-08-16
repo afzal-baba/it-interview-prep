@@ -137,6 +137,7 @@ export const ListLeaderboardQueryParams = zod.object({
 export const ListLeaderboardResponseItem = zod.object({
   "id": zod.number().int(),
   "playerName": zod.string(),
+  "userId": zod.string().nullish().describe('ID of the authenticated user who posted this score, if any'),
   "courseId": zod.number().int(),
   "courseName": zod.string(),
   "level": zod.enum(['beginner', 'intermediate', 'advanced']),
@@ -162,6 +163,7 @@ export const CreateLeaderboardEntryBody = zod.object({
 export const CreateLeaderboardEntryResponse = zod.object({
   "id": zod.number().int(),
   "playerName": zod.string(),
+  "userId": zod.string().nullish().describe('ID of the authenticated user who posted this score, if any'),
   "courseId": zod.number().int(),
   "courseName": zod.string(),
   "level": zod.enum(['beginner', 'intermediate', 'advanced']),
@@ -172,6 +174,149 @@ export const CreateLeaderboardEntryResponse = zod.object({
   "createdAt": zod.coerce.date(),
   "timedMode": zod.boolean().optional().describe('Whether this score was achieved in timed mode'),
   "timeBonus": zod.number().int().optional().describe('Time bonus points earned')
+})
+
+
+/**
+ * @summary Get the currently authenticated user
+ */
+export const GetCurrentAuthUserHeader = zod.object({
+  "Authorization": zod.string().optional().describe('Opaque session token — `Bearer <sid>`.')
+})
+
+export const GetCurrentAuthUserResponse = zod.object({
+  "user": zod.union([zod.object({
+  "id": zod.string(),
+  "email": zod.string().nullable(),
+  "firstName": zod.string().nullable(),
+  "lastName": zod.string().nullable(),
+  "profileImageUrl": zod.string().nullable()
+}),zod.null()])
+})
+
+
+/**
+ * @summary Start the browser OIDC login flow
+ */
+export const BeginBrowserLoginQueryParams = zod.object({
+  "returnTo": zod.coerce.string().optional().describe('Relative path to redirect to after login (must start with `\/`). Defaults to `\/`.')
+})
+
+export const BeginBrowserLoginResponse = zod.void()
+
+
+/**
+ * @summary Complete the browser OIDC login flow
+ */
+export const HandleBrowserLoginCallbackQueryParams = zod.object({
+  "code": zod.coerce.string().optional(),
+  "state": zod.coerce.string().optional(),
+  "iss": zod.coerce.string().optional()
+})
+
+export const HandleBrowserLoginCallbackResponse = zod.void()
+
+
+/**
+ * @summary Clear the session and begin OIDC logout
+ */
+export const logoutBrowserSessionQueryReturnToDefault = `/`;
+
+export const LogoutBrowserSessionQueryParams = zod.object({
+  "returnTo": zod.coerce.string().default(logoutBrowserSessionQueryReturnToDefault)
+})
+
+export const LogoutBrowserSessionHeader = zod.object({
+  "Authorization": zod.string().optional().describe('Opaque session token — `Bearer <sid>`.')
+})
+
+export const LogoutBrowserSessionResponse = zod.void()
+
+
+/**
+ * @summary Exchange a mobile OIDC code for a session token
+ */
+
+
+
+
+
+
+
+export const ExchangeMobileAuthorizationCodeBody = zod.object({
+  "code": zod.string().min(1),
+  "code_verifier": zod.string().min(1),
+  "redirect_uri": zod.string().min(1),
+  "state": zod.string().min(1),
+  "nonce": zod.string().min(1).optional()
+})
+
+export const ExchangeMobileAuthorizationCodeResponse = zod.object({
+  "token": zod.string()
+})
+
+
+/**
+ * @summary Delete a mobile session token
+ */
+export const LogoutMobileSessionHeader = zod.object({
+  "Authorization": zod.string().optional().describe('Opaque session token — `Bearer <sid>`.')
+})
+
+export const LogoutMobileSessionResponse = zod.object({
+  "success": zod.literal(true)
+})
+
+
+/**
+ * @summary Get the authenticated user's personal score history
+ */
+export const ListMyScoresHeader = zod.object({
+  "Authorization": zod.string().optional().describe('Opaque session token — `Bearer <sid>`.')
+})
+
+export const ListMyScoresResponseItem = zod.object({
+  "id": zod.number().int(),
+  "playerName": zod.string(),
+  "userId": zod.string().nullish().describe('ID of the authenticated user who posted this score, if any'),
+  "courseId": zod.number().int(),
+  "courseName": zod.string(),
+  "level": zod.enum(['beginner', 'intermediate', 'advanced']),
+  "score": zod.number().int(),
+  "totalQuestions": zod.number().int(),
+  "percentage": zod.number(),
+  "badges": zod.array(zod.string()),
+  "createdAt": zod.coerce.date(),
+  "timedMode": zod.boolean().optional().describe('Whether this score was achieved in timed mode'),
+  "timeBonus": zod.number().int().optional().describe('Time bonus points earned')
+})
+export const ListMyScoresResponse = zod.array(ListMyScoresResponseItem)
+
+
+/**
+ * @summary Get Code Lab progress for the current anonymous session
+ */
+export const GetCodelabProgressResponse = zod.object({
+  "totalScore": zod.number().int(),
+  "completedSlugs": zod.array(zod.string())
+})
+
+
+/**
+ * @summary Save Code Lab progress for the current anonymous session
+ */
+export const saveCodelabProgressBodyTotalScoreMin = 0;
+
+
+
+export const SaveCodelabProgressBody = zod.object({
+  "totalScore": zod.number().int().min(saveCodelabProgressBodyTotalScoreMin),
+  "completedSlugs": zod.array(zod.string())
+})
+
+export const SaveCodelabProgressResponse = zod.object({
+  "totalScore": zod.number().int(),
+  "completedSlugs": zod.array(zod.string())
 })
 
 
@@ -210,28 +355,6 @@ export const ListCodelabLeaderboardResponseItem = zod.object({
   "challengesCompleted": zod.number().int()
 })
 export const ListCodelabLeaderboardResponse = zod.array(ListCodelabLeaderboardResponseItem)
-
-
-/**
- * @summary Get Code Lab progress for the current anonymous session
- */
-export const GetCodelabProgressResponse = zod.object({
-  "totalScore": zod.number().int(),
-  "completedSlugs": zod.array(zod.string()),
-})
-
-/**
- * @summary Save Code Lab progress for the current anonymous session
- */
-export const SaveCodelabProgressBody = zod.object({
-  "totalScore": zod.number().int().min(0),
-  "completedSlugs": zod.array(zod.string()),
-})
-
-export const SaveCodelabProgressResponse = zod.object({
-  "totalScore": zod.number().int(),
-  "completedSlugs": zod.array(zod.string()),
-})
 
 
 /**

@@ -1127,7 +1127,7 @@ export default function CodingChallenge() {
       saveMultipliers(newMultipliers);
 
       // Persist full cumulative state to server so it survives browser clears (fire-and-forget)
-      saveCodelabProgress.mutate({ totalScore: newScore, completedSlugs: [...newCompleted] });
+      saveCodelabProgress.mutate({ data: { totalScore: newScore, completedSlugs: [...newCompleted] } });
 
       // Submit to leaderboard API (fire-and-forget)
       if (name && pts > 0) {

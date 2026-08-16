@@ -13,12 +13,16 @@ import {
 } from '@expo-google-fonts/inter';
 import { Stack, router } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { setBaseUrl } from '@workspace/api-client-react';
+import * as SecureStore from 'expo-secure-store';
+import { setAuthTokenGetter, setBaseUrl } from '@workspace/api-client-react';
 import { QuizProvider } from '@/contexts/QuizContext';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import { AuthProvider as AccountAuthProvider } from '@/lib/auth';
 
 // Set API base URL so Expo bundles reach the shared API server.
 setBaseUrl(`https://${process.env.EXPO_PUBLIC_DOMAIN}`);
+// Attach the stored session token as a bearer header on every API request.
+setAuthTokenGetter(() => SecureStore.getItemAsync('auth_session_token'));
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -72,17 +76,19 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <ErrorBoundary>
-        <AuthProvider>
-          <QueryClientProvider client={queryClient}>
-            <QuizProvider>
-              <GestureHandlerRootView style={{ flex: 1 }}>
-                <KeyboardProvider>
-                  <RootLayoutNav />
-                </KeyboardProvider>
-              </GestureHandlerRootView>
-            </QuizProvider>
-          </QueryClientProvider>
-        </AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <AccountAuthProvider>
+            <AuthProvider>
+              <QuizProvider>
+                <GestureHandlerRootView style={{ flex: 1 }}>
+                  <KeyboardProvider>
+                    <RootLayoutNav />
+                  </KeyboardProvider>
+                </GestureHandlerRootView>
+              </QuizProvider>
+            </AuthProvider>
+          </AccountAuthProvider>
+        </QueryClientProvider>
       </ErrorBoundary>
     </SafeAreaProvider>
   );

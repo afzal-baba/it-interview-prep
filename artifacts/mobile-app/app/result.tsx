@@ -17,6 +17,7 @@ import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 import { useCreateLeaderboardEntry } from '@workspace/api-client-react';
 import { useQuizContext } from '@/contexts/QuizContext';
+import { useAuth as useAccountAuth } from '@/lib/auth';
 import { useColors } from '@/hooks/useColors';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -41,6 +42,7 @@ export default function ResultScreen() {
   const botPad = Platform.OS === 'web' ? 34 : insets.bottom;
 
   const { result, selectedCourse, timedMode, setSession, setResult } = useQuizContext();
+  const { user, isAuthenticated } = useAccountAuth();
   const createEntry = useCreateLeaderboardEntry();
   const { playerName: storedName } = useAuth();
 
@@ -62,9 +64,10 @@ export default function ResultScreen() {
   const topBadge = result.badges?.length ? result.badges[result.badges.length - 1] : undefined;
   const badgeMeta = topBadge ? (BADGE_META[topBadge] ?? null) : null;
 
-  const handleSave = () => {
-    const name = playerName.trim();
-    if (!name) return;
+  const accountName =
+    [user?.firstName, user?.lastName].filter(Boolean).join(' ') || user?.email || null;
+
+  const saveEntry = (name: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     createEntry.mutate(
       { data: { sessionId: result.sessionId, playerName: name } },
@@ -76,6 +79,21 @@ export default function ResultScreen() {
         },
       }
     );
+  };
+
+  const handleSave = () => {
+    const name = playerName.trim();
+    if (!name) return;
+    saveEntry(name);
+  };
+
+  // Logged-in users save under their account name — no manual name entry
+  const handleSavePress = () => {
+    if (isAuthenticated && accountName) {
+      saveEntry(accountName);
+    } else {
+      setShowSaveModal(true);
+    }
   };
 
   const handlePlayAgain = () => {
@@ -181,11 +199,20 @@ export default function ResultScreen() {
         {!saved ? (
           <TouchableOpacity
             style={[styles.saveBtn, { backgroundColor: colors.accent + '20', borderColor: colors.accent + '50' }]}
-            onPress={() => setShowSaveModal(true)}
+            onPress={handleSavePress}
             activeOpacity={0.75}
+            disabled={createEntry.isPending}
           >
-            <Ionicons name="trophy-outline" size={18} color={colors.accent} />
-            <Text style={[styles.saveBtnText, { color: colors.accent }]}>Save to Leaderboard</Text>
+            {createEntry.isPending && !showSaveModal ? (
+              <ActivityIndicator size="small" color={colors.accent} />
+            ) : (
+              <>
+                <Ionicons name="trophy-outline" size={18} color={colors.accent} />
+                <Text style={[styles.saveBtnText, { color: colors.accent }]}>
+                  {isAuthenticated && accountName ? `Save as ${accountName}` : 'Save to Leaderboard'}
+                </Text>
+              </>
+            )}
           </TouchableOpacity>
         ) : (
           <View style={[styles.savedRow, { backgroundColor: colors.success + '15', borderColor: colors.success + '40' }]}>

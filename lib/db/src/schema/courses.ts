@@ -1,4 +1,4 @@
-import { pgTable, serial, text, integer, timestamp, jsonb, boolean, unique } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, varchar, integer, timestamp, jsonb, boolean, unique } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
@@ -41,6 +41,7 @@ export const sessionsTable = pgTable("sessions", {
 export const leaderboardTable = pgTable("leaderboard", {
   id: serial("id").primaryKey(),
   playerName: text("player_name").notNull(),
+  userId: varchar("user_id"),
   courseId: integer("course_id").notNull().references(() => coursesTable.id),
   level: text("level", { enum: ["beginner", "intermediate", "advanced"] }).notNull(),
   score: integer("score").notNull(),

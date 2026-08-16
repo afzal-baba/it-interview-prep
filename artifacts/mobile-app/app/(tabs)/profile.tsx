@@ -9,21 +9,66 @@ import {
   ScrollView,
   Platform,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Feather, Ionicons } from '@expo/vector-icons';
+import {
+  useListMyScores,
+  getListMyScoresQueryKey,
+  type LeaderboardEntry,
+} from '@workspace/api-client-react';
 import { useColors } from '@/hooks/useColors';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth as usePlayerName } from '@/contexts/AuthContext';
+import { useAuth as useAccountAuth } from '@/lib/auth';
+
+function formatDate(iso: string): string {
+  const d = new Date(iso);
+  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function ScoreRow({ entry }: { entry: LeaderboardEntry }) {
+  const colors = useColors();
+  const pct = Math.round(entry.percentage);
+  const pctColor =
+    pct >= 90 ? colors.success : pct >= 70 ? colors.amber : pct >= 50 ? colors.orange : colors.destructive;
+
+  return (
+    <View style={[rowStyles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
+      <View style={{ flex: 1 }}>
+        <Text style={[rowStyles.course, { color: colors.foreground }]} numberOfLines={1}>
+          {entry.courseName}
+        </Text>
+        <Text style={[rowStyles.meta, { color: colors.mutedForeground }]}>
+          {entry.level} · {entry.score} pts · {formatDate(entry.createdAt)}
+          {entry.timedMode ? ' · timed' : ''}
+        </Text>
+      </View>
+      <Text style={[rowStyles.pct, { color: pctColor }]}>{pct}%</Text>
+    </View>
+  );
+}
 
 export default function ProfileScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
-  const { playerName, signIn, signOut } = useAuth();
+  const { playerName, signIn, signOut } = usePlayerName();
+  const {
+    user,
+    isLoading: accountLoading,
+    isAuthenticated,
+    login,
+    logout,
+  } = useAccountAuth();
   const topPad = Platform.OS === 'web' ? 67 : insets.top;
 
   const [editing, setEditing] = useState(false);
   const [newName, setNewName] = useState(playerName ?? '');
   const [saving, setSaving] = useState(false);
+
+  const scoresQuery = useListMyScores({
+    query: { enabled: isAuthenticated, queryKey: getListMyScoresQueryKey() },
+  });
 
   const handleSave = async () => {
     const trimmed = newName.trim();
@@ -44,6 +89,12 @@ export default function ProfileScreen() {
       ]
     );
   };
+
+  const accountName =
+    [user?.firstName, user?.lastName].filter(Boolean).join(' ') || user?.email || null;
+  const displayName = isAuthenticated && accountName ? accountName : playerName;
+  const scores = scoresQuery.data ?? [];
+  const best = scores.length ? Math.max(...scores.map((s) => Math.round(s.percentage))) : null;
 
   return (
     <View style={[styles.root, { backgroundColor: colors.background }]}>
@@ -70,16 +121,86 @@ export default function ProfileScreen() {
       >
         {/* Avatar */}
         <View style={styles.avatarSection}>
-          <View style={[styles.avatar, { backgroundColor: colors.primary + '20', borderColor: colors.primary + '40' }]}>
-            <Text style={[styles.avatarInitial, { color: colors.primary }]}>
-              {(playerName ?? '?').charAt(0).toUpperCase()}
-            </Text>
-          </View>
-          {!editing && (
-            <Text style={[styles.displayName, { color: colors.foreground }]}>{playerName}</Text>
+          {isAuthenticated && user?.profileImageUrl ? (
+            <Image source={{ uri: user.profileImageUrl }} style={styles.avatarImage} />
+          ) : (
+            <View style={[styles.avatar, { backgroundColor: colors.primary + '20', borderColor: colors.primary + '40' }]}>
+              <Text style={[styles.avatarInitial, { color: colors.primary }]}>
+                {(displayName ?? '?').charAt(0).toUpperCase()}
+              </Text>
+            </View>
           )}
-          <Text style={[styles.displayRole, { color: colors.mutedForeground }]}>Quiz Player</Text>
+          {!editing && (
+            <Text style={[styles.displayName, { color: colors.foreground }]}>{displayName}</Text>
+          )}
+          <Text style={[styles.displayRole, { color: colors.mutedForeground }]}>
+            {isAuthenticated ? user?.email ?? 'Signed in' : 'Quiz Player'}
+          </Text>
         </View>
+
+        {/* Account card — sign in to tie scores to an account */}
+        <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
+          <Text style={[styles.cardLabel, { color: colors.mutedForeground }]}>ACCOUNT</Text>
+          {accountLoading ? (
+            <ActivityIndicator color={colors.accent} />
+          ) : isAuthenticated ? (
+            <TouchableOpacity
+              style={[styles.nameRow, { borderColor: colors.border }]}
+              onPress={logout}
+              activeOpacity={0.7}
+            >
+              <Text style={[styles.nameValue, { color: colors.foreground }]}>Log out</Text>
+              <Ionicons name="log-out-outline" size={18} color={colors.mutedForeground} />
+            </TouchableOpacity>
+          ) : (
+            <>
+              <Text style={[styles.infoText, { color: colors.mutedForeground, marginBottom: 12 }]}>
+                Sign in so your quiz scores are tied to your account and your history follows you.
+              </Text>
+              <TouchableOpacity
+                style={[styles.loginBtn, { backgroundColor: colors.primary }]}
+                onPress={login}
+                activeOpacity={0.8}
+              >
+                <Ionicons name="log-in-outline" size={18} color={colors.primaryForeground} />
+                <Text style={[styles.loginBtnText, { color: colors.primaryForeground }]}>Log in</Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
+
+        {/* Score history (signed-in only) */}
+        {isAuthenticated && (
+          <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <Text style={[styles.cardLabel, { color: colors.mutedForeground }]}>SCORE HISTORY</Text>
+            <View style={[styles.statsRow, { borderColor: colors.border }]}>
+              <View style={styles.statCell}>
+                <Text style={[styles.statValue, { color: colors.foreground }]}>{scores.length}</Text>
+                <Text style={[styles.statLabel, { color: colors.mutedForeground }]}>Saved scores</Text>
+              </View>
+              <View style={[styles.statDivider, { backgroundColor: colors.border }]} />
+              <View style={styles.statCell}>
+                <Text style={[styles.statValue, { color: colors.success }]}>
+                  {best !== null ? `${best}%` : '—'}
+                </Text>
+                <Text style={[styles.statLabel, { color: colors.mutedForeground }]}>Best result</Text>
+              </View>
+            </View>
+            {scoresQuery.isLoading ? (
+              <ActivityIndicator style={{ marginTop: 8 }} color={colors.accent} />
+            ) : scores.length === 0 ? (
+              <Text style={[styles.infoText, { color: colors.mutedForeground }]}>
+                No saved scores yet. Finish a quiz and save your score — it will show up here.
+              </Text>
+            ) : (
+              <View style={{ gap: 10 }}>
+                {scores.map((entry) => (
+                  <ScoreRow key={entry.id} entry={entry} />
+                ))}
+              </View>
+            )}
+          </View>
+        )}
 
         {/* Edit name card */}
         <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
@@ -146,8 +267,8 @@ export default function ProfileScreen() {
           <Text style={[styles.cardLabel, { color: colors.mutedForeground }]}>ABOUT</Text>
           {[
             { icon: 'info' as const, text: 'Your name appears on the global leaderboard.' },
-            { icon: 'shield' as const, text: 'No email or password — just a display name.' },
-            { icon: 'refresh-cw' as const, text: 'You can change it anytime from this screen.' },
+            { icon: 'shield' as const, text: 'Sign in to tie scores to your account; otherwise just a display name is used.' },
+            { icon: 'refresh-cw' as const, text: 'You can change your display name anytime from this screen.' },
           ].map(({ icon, text }) => (
             <View key={text} style={styles.infoRow}>
               <Feather name={icon} size={14} color={colors.accent} style={styles.infoIcon} />
@@ -206,6 +327,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 4,
   },
+  avatarImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    marginBottom: 4,
+  },
   avatarInitial: {
     fontFamily: 'Inter_700Bold',
     fontSize: 34,
@@ -230,6 +357,27 @@ const styles = StyleSheet.create({
     letterSpacing: 1.5,
     marginBottom: 12,
   },
+  loginBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    borderRadius: 12,
+    paddingVertical: 13,
+  },
+  loginBtnText: { fontFamily: 'Inter_700Bold', fontSize: 15 },
+  statsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 12,
+    borderWidth: 1,
+    paddingVertical: 12,
+    marginBottom: 12,
+  },
+  statCell: { flex: 1, alignItems: 'center' },
+  statValue: { fontFamily: 'Inter_700Bold', fontSize: 20, letterSpacing: -0.5 },
+  statLabel: { fontFamily: 'Inter_400Regular', fontSize: 11, marginTop: 3 },
+  statDivider: { width: 1, height: 32 },
   nameRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -305,4 +453,18 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_600SemiBold',
     fontSize: 15,
   },
+});
+
+const rowStyles = StyleSheet.create({
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    borderRadius: 14,
+    borderWidth: 1,
+    padding: 14,
+  },
+  course: { fontFamily: 'Inter_600SemiBold', fontSize: 15 },
+  meta: { fontFamily: 'Inter_400Regular', fontSize: 12, marginTop: 3, textTransform: 'capitalize' },
+  pct: { fontFamily: 'Inter_700Bold', fontSize: 18 },
 });

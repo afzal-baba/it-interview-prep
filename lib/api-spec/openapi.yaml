@@ -18,6 +18,8 @@ tags:
     description: Quiz sessions
   - name: leaderboard
     description: Leaderboard and scoring
+  - name: Auth
+    description: Browser and mobile authentication endpoints.
 
 paths:
   /healthz:
@@ -186,6 +188,181 @@ paths:
               schema:
                 $ref: "#/components/schemas/LeaderboardEntry"
 
+  /auth/user:
+    get:
+      tags: [Auth]
+      operationId: getCurrentAuthUser
+      summary: Get the currently authenticated user
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationSessionHeader'
+        - $ref: '#/components/parameters/SessionCookie'
+      responses:
+        '200':
+          description: Auth status resolved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthUserEnvelope'
+  /login:
+    get:
+      tags: [Auth]
+      operationId: beginBrowserLogin
+      summary: Start the browser OIDC login flow
+      parameters:
+        - name: returnTo
+          in: query
+          required: false
+          description: Relative path to redirect to after login (must start with `/`). Defaults to `/`.
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Redirect to the OIDC authorization endpoint.
+  /callback:
+    get:
+      tags: [Auth]
+      operationId: handleBrowserLoginCallback
+      summary: Complete the browser OIDC login flow
+      parameters:
+        - name: code
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: state
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: iss
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Redirect to the `returnTo` path on success (defaults to `/`) or `/api/login` on failure.
+  /logout:
+    get:
+      tags: [Auth]
+      operationId: logoutBrowserSession
+      summary: Clear the session and begin OIDC logout
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationSessionHeader'
+        - $ref: '#/components/parameters/SessionCookie'
+        - name: returnTo
+          in: query
+          required: false
+          schema:
+            type: string
+            default: /
+      responses:
+        '302':
+          description: Redirect to the OIDC provider logout URL with a post-logout redirect back to the validated `returnTo` path.
+  /mobile-auth/token-exchange:
+    post:
+      tags: [Auth]
+      operationId: exchangeMobileAuthorizationCode
+      summary: Exchange a mobile OIDC code for a session token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MobileTokenExchangeRequest'
+      responses:
+        '200':
+          description: Session created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MobileTokenExchangeSuccess'
+        '400':
+          description: Missing or invalid required fields.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '401':
+          description: Token did not contain usable claims.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '500':
+          description: Token exchange failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+  /mobile-auth/logout:
+    post:
+      tags: [Auth]
+      operationId: logoutMobileSession
+      summary: Delete a mobile session token
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationSessionHeader'
+      responses:
+        '200':
+          description: Logout processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutSuccess'
+  /me/scores:
+    get:
+      tags: [leaderboard]
+      operationId: listMyScores
+      summary: Get the authenticated user's personal score history
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationSessionHeader'
+        - $ref: '#/components/parameters/SessionCookie'
+      responses:
+        '200':
+          description: The user's leaderboard entries, newest first.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LeaderboardEntry'
+        '401':
+          description: Not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+
+  /codelab-progress:
+    get:
+      operationId: getCodelabProgress
+      tags: [leaderboard]
+      summary: Get Code Lab progress for the current anonymous session
+      responses:
+        "200":
+          description: Progress for this session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CodelabProgress"
+    post:
+      operationId: saveCodelabProgress
+      tags: [leaderboard]
+      summary: Save Code Lab progress for the current anonymous session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CodelabProgressInput"
+      responses:
+        "200":
+          description: Progress saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CodelabProgress"
+
   /codelab-scores:
     post:
       operationId: submitCodelabScore
@@ -243,7 +420,84 @@ paths:
                 $ref: "#/components/schemas/LeaderboardStats"
 
 components:
+  parameters:
+    AuthorizationSessionHeader:
+      name: Authorization
+      in: header
+      required: false
+      description: Opaque session token — `Bearer <sid>`.
+      schema:
+        type: string
+    SessionCookie:
+      name: sid
+      in: cookie
+      required: false
+      description: Browser session cookie.
+      schema:
+        type: string
   schemas:
+    AuthUser:
+      type: object
+      required: [id, email, firstName, lastName, profileImageUrl]
+      properties:
+        id:
+          type: string
+        email:
+          type: [string, 'null']
+        firstName:
+          type: [string, 'null']
+        lastName:
+          type: [string, 'null']
+        profileImageUrl:
+          type: [string, 'null']
+    AuthUserEnvelope:
+      type: object
+      required: [user]
+      properties:
+        user:
+          oneOf:
+            - $ref: '#/components/schemas/AuthUser'
+            - type: 'null'
+    MobileTokenExchangeRequest:
+      type: object
+      required: [code, code_verifier, redirect_uri, state]
+      properties:
+        code:
+          type: string
+          minLength: 1
+        code_verifier:
+          type: string
+          minLength: 1
+        redirect_uri:
+          type: string
+          minLength: 1
+
+        state:
+          type: string
+          minLength: 1
+        nonce:
+          type: string
+          minLength: 1
+    MobileTokenExchangeSuccess:
+      type: object
+      required: [token]
+      properties:
+        token:
+          type: string
+    LogoutSuccess:
+      type: object
+      required: [success]
+      properties:
+        success:
+          type: boolean
+          const: true
+    ErrorEnvelope:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+
     HealthStatus:
       type: object
       properties:
@@ -254,7 +508,7 @@ components:
 
     Course:
       type: object
-      required: [id, name, slug, description, icon, questionCounts]
+      required: [id, name, slug, description, icon, category, questionCounts]
       properties:
         id:
           type: integer
@@ -265,6 +519,8 @@ components:
         description:
           type: string
         icon:
+          type: string
+        category:
           type: string
         questionCounts:
           type: object
@@ -405,6 +661,9 @@ components:
           type: integer
         playerName:
           type: string
+        userId:
+          type: ["string", "null"]
+          description: ID of the authenticated user who posted this score, if any
         courseId:
           type: integer
         courseName:
@@ -441,6 +700,29 @@ components:
           description: The session ID whose server-computed result should be recorded
         playerName:
           type: string
+
+    CodelabProgress:
+      type: object
+      required: [totalScore, completedSlugs]
+      properties:
+        totalScore:
+          type: integer
+        completedSlugs:
+          type: array
+          items:
+            type: string
+
+    CodelabProgressInput:
+      type: object
+      required: [totalScore, completedSlugs]
+      properties:
+        totalScore:
+          type: integer
+          minimum: 0
+        completedSlugs:
+          type: array
+          items:
+            type: string
 
     CodelabScoreInput:
       type: object

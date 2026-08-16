@@ -1,2 +1,3 @@
 - [WebSocket routing](websocket-routing.md) — proxy keeps the `/api` prefix; attach WS upgrades at the full prefixed path on the shared HTTP server.
 - [Seed script & category grouping lessons](seed-and-category-lessons.md) — null bytes in TS strings, api-server must be rebuilt after schema changes, api-client-react Course type is manually maintained.
+- [Replit Auth setup quirks](replit-auth-setup.md) — auth store is `auth_sessions` (name clash with quiz `sessions`); no `format: uri/email` in spec (zod v3); api-zod manually exports AuthUser.

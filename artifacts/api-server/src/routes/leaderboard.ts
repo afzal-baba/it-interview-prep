@@ -7,6 +7,7 @@ import {
   CreateLeaderboardEntryBody,
   CreateLeaderboardEntryResponse,
   GetLeaderboardStatsResponse,
+  ListMyScoresResponse,
 } from "@workspace/api-zod";
 
 const router: IRouter = Router();
@@ -83,6 +84,7 @@ router.get("/leaderboard", async (req, res): Promise<void> => {
     .select({
       id: leaderboardTable.id,
       playerName: leaderboardTable.playerName,
+      userId: leaderboardTable.userId,
       courseId: leaderboardTable.courseId,
       courseName: coursesTable.name,
       level: leaderboardTable.level,
@@ -119,6 +121,9 @@ router.post("/leaderboard", async (req, res): Promise<void> => {
 
   const { sessionId, playerName } = parsed.data;
 
+  // Attach the authenticated user's id (if logged in) so scores are tied to accounts
+  const userId = req.isAuthenticated() ? req.user.id : null;
+
   // Look up the completed session to get server-computed results
   const sessions = await db
     .select()
@@ -150,6 +155,7 @@ router.post("/leaderboard", async (req, res): Promise<void> => {
     .insert(leaderboardTable)
     .values({
       playerName,
+      userId,
       courseId: session.courseId,
       level: session.level,
       score,
@@ -171,6 +177,7 @@ router.post("/leaderboard", async (req, res): Promise<void> => {
   res.status(201).json(CreateLeaderboardEntryResponse.parse({
     id: entry.id,
     playerName: entry.playerName,
+    userId: entry.userId,
     courseId: entry.courseId,
     courseName: course[0]?.name ?? "",
     level: entry.level,
@@ -182,6 +189,39 @@ router.post("/leaderboard", async (req, res): Promise<void> => {
     timeBonus: entry.timeBonus,
     createdAt: entry.createdAt,
   }));
+});
+
+// GET /me/scores — personal score history for the authenticated user
+router.get("/me/scores", async (req, res): Promise<void> => {
+  if (!req.isAuthenticated()) {
+    res.status(401).json({ error: "Not authenticated" });
+    return;
+  }
+
+  const rows = await db
+    .select({
+      id: leaderboardTable.id,
+      playerName: leaderboardTable.playerName,
+      userId: leaderboardTable.userId,
+      courseId: leaderboardTable.courseId,
+      courseName: coursesTable.name,
+      level: leaderboardTable.level,
+      score: leaderboardTable.score,
+      totalQuestions: leaderboardTable.totalQuestions,
+      percentage: leaderboardTable.percentage,
+      badges: leaderboardTable.badges,
+      timedMode: leaderboardTable.timedMode,
+      timeBonus: leaderboardTable.timeBonus,
+      createdAt: leaderboardTable.createdAt,
+    })
+    .from(leaderboardTable)
+    .innerJoin(coursesTable, eq(leaderboardTable.courseId, coursesTable.id))
+    .where(eq(leaderboardTable.userId, req.user.id))
+    .orderBy(desc(leaderboardTable.createdAt));
+
+  res.json(ListMyScoresResponse.parse(
+    rows.map((r) => ({ ...r, badges: (r.badges as string[]) ?? [] })),
+  ));
 });
 
 export default router;

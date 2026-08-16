@@ -5,6 +5,48 @@
  * IT Interview Prep API
  * OpenAPI spec version: 0.1.0
  */
+export interface AuthUser {
+  id: string;
+  /** @nullable */
+  email: string | null;
+  /** @nullable */
+  firstName: string | null;
+  /** @nullable */
+  lastName: string | null;
+  /** @nullable */
+  profileImageUrl: string | null;
+}
+
+export interface AuthUserEnvelope {
+  user: AuthUser | null;
+}
+
+export interface MobileTokenExchangeRequest {
+  /** @minLength 1 */
+  code: string;
+  /** @minLength 1 */
+  code_verifier: string;
+  /** @minLength 1 */
+  redirect_uri: string;
+  /** @minLength 1 */
+  state: string;
+  /** @minLength 1 */
+  nonce?: string;
+}
+
+export interface MobileTokenExchangeSuccess {
+  token: string;
+}
+
+export const LogoutSuccessValue = {
+  success: true,
+} as const;
+export type LogoutSuccess = typeof LogoutSuccessValue;
+
+export interface ErrorEnvelope {
+  error: string;
+}
+
 export interface HealthStatus {
   status: string;
 }
@@ -127,6 +169,11 @@ export const LeaderboardEntryLevel = {
 export interface LeaderboardEntry {
   id: number;
   playerName: string;
+  /**
+     * ID of the authenticated user who posted this score, if any
+     * @nullable
+     */
+  userId?: string | null;
   courseId: number;
   courseName: string;
   level: LeaderboardEntryLevel;
@@ -145,6 +192,17 @@ export interface LeaderboardEntryInput {
   /** The session ID whose server-computed result should be recorded */
   sessionId: number;
   playerName: string;
+}
+
+export interface CodelabProgress {
+  totalScore: number;
+  completedSlugs: string[];
+}
+
+export interface CodelabProgressInput {
+  /** @minimum 0 */
+  totalScore: number;
+  completedSlugs: string[];
 }
 
 export interface CodelabScoreInput {
@@ -186,6 +244,11 @@ export interface LeaderboardStats {
   badgeCounts: LeaderboardStatsBadgeCounts;
 }
 
+/**
+ * Opaque session token — `Bearer <sid>`.
+ */
+export type AuthorizationSessionHeaderParameter = string;
+
 export type ListQuestionsParams = {
 level: ListQuestionsLevel;
 limit?: number;
@@ -225,6 +288,23 @@ export const ListLeaderboardLevel = {
   intermediate: 'intermediate',
   advanced: 'advanced',
 } as const;
+
+export type BeginBrowserLoginParams = {
+/**
+ * Relative path to redirect to after login (must start with `/`). Defaults to `/`.
+ */
+returnTo?: string;
+};
+
+export type HandleBrowserLoginCallbackParams = {
+code?: string;
+state?: string;
+iss?: string;
+};
+
+export type LogoutBrowserSessionParams = {
+returnTo?: string;
+};
 
 export type ListCodelabLeaderboardParams = {
 limit?: number;
