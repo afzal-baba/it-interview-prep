@@ -39,6 +39,11 @@ export default function QuizScreen() {
     {
       query: {
         enabled: !!session,
+        // Never background-refetch mid-quiz. The server orders questions randomly, so
+        // a refetch returns a different question order and reshuffles currentIndex → wrong question.
+        // gcTime: 0 clears the cache on unmount so the next quiz gets a fresh random set.
+        staleTime: Infinity,
+        gcTime: 0,
         queryKey: getListQuestionsQueryKey(session?.courseId ?? 0, { level }),
       },
     }

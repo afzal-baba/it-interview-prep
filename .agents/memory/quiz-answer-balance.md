@@ -20,12 +20,14 @@ Options were also never shuffled server-side, so position was predictable.
 ## Script location
 `scripts/src/rewrite-wrong-answers.ts` — re-runnable; queries DB each time and skips already-balanced questions.
 
-## Scoring bug introduced by server-side shuffle (FIXED)
-Adding shuffle in the GET /courses/:id/questions handler broke scoring: the client sent the shuffled index back to the server, but the submit handler re-read the *original* correctOptionIndex from the DB and compared against the shuffled index → nearly every correct answer was marked wrong.
+## Scoring bug root cause: React Query background refetch mid-quiz (FIXED)
+The server uses `.orderBy(sql\`random()\`)` to randomize question order per-fetch. React Query's default `staleTime: 0` causes background refetches (e.g. on window focus). Each refetch returns questions in a DIFFERENT random order → `useMemo` re-runs with new `rawQuestions` reference → questions reshuffle → `questions[currentIndex]` becomes a completely different question than what the user was answering → wrong questions get scored, answers mapped incorrectly.
 
-**Fix:** Revert server-side shuffle. Add client-side Fisher-Yates shuffle in quiz.tsx (web + mobile). Store `originalIndexMap: number[]` on each shuffled question (shuffledIdx → DB original idx). In `handleSelect`, send `originalIndexMap[displayedIdx]` to the server so scoring always uses original DB indices.
+**Fix:** Add `staleTime: Infinity, gcTime: 0` to the `useListQuestions` call in quiz.tsx (web + mobile). `Infinity` prevents refetches during the quiz. `gcTime: 0` clears the cache on unmount so the next quiz gets a fresh random question set from the server.
 
-**Rule:** Never shuffle in the GET handler. Shuffle client-side with a reverse-mapping, always submit original indices.
+**Rule:** Any query whose data must stay stable during a user interaction (quiz, game, checkout) needs `staleTime: Infinity`. Pair with `gcTime: 0` if fresh data per session is needed.
+
+**Also fixed:** Client-side Fisher-Yates shuffle of answer options with `originalIndexMap: number[]` (shuffledIdx → DB idx), so the server always receives original DB indices regardless of display order. This prevents answer-position predictability.
 
 ## Production data rewrite
 Admin endpoint at `POST /api/admin/rewrite-answers` (header `x-admin-secret: SESSION_SECRET`) runs the OpenAI rewrite in the background against the live DB. Protected, one-time use. After production data is fixed this endpoint can be removed.
