@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import {
@@ -52,6 +53,10 @@ const BADGE_TIERS = [
 ];
 
 export default function About() {
+  useEffect(() => {
+    document.title = "About TechInterviewPrep — 600 Questions, 40 Topics, Free";
+  }, []);
+
   return (
     <div className="w-full max-w-4xl mx-auto py-16 px-4 animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-20">
 

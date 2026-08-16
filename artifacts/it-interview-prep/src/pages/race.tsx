@@ -22,6 +22,10 @@ export default function Race() {
   const socket = useRaceSocket();
   const [name, setName] = useState<string>(() => localStorage.getItem(NAME_KEY) ?? "");
 
+  useEffect(() => {
+    document.title = "Challenge Arena — Real-Time IT Interview Battles | TechInterviewPrep";
+  }, []);
+
   // Auto-register once connected if we already have a stored name
   const registeredOnce = useRef(false);
   useEffect(() => {

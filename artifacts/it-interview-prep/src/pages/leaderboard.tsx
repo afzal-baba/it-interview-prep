@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { useListLeaderboard, useGetLeaderboardStats, useListCourses, getListLeaderboardQueryKey, getGetLeaderboardStatsQueryKey } from "@workspace/api-client-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,6 +12,10 @@ export default function Leaderboard() {
   const [courseFilter, setCourseFilter] = useState<number | null>(null);
   const [levelFilter, setLevelFilter] = useState<any>(null);
   const [timedFilter, setTimedFilter] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    document.title = "Leaderboard — TechInterviewPrep";
+  }, []);
 
   const { data: courses } = useListCourses();
   

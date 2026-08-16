@@ -19,6 +19,10 @@ export default function Quiz() {
   const { currentSession, setResult, timedMode } = useQuizState();
   const submitSession = useSubmitSession();
 
+  useEffect(() => {
+    document.title = "Quiz — TechInterviewPrep";
+  }, []);
+
   const { data: questions, isLoading } = useListQuestions(
     currentSession?.courseId || 0,
     { level: currentSession?.level as any },

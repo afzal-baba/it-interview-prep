@@ -29,6 +29,10 @@ export default function Result() {
   });
 
   useEffect(() => {
+    document.title = "Your Results — TechInterviewPrep";
+  }, []);
+
+  useEffect(() => {
     if (!sessionResult || !currentSession) {
       setLocation("/");
     }

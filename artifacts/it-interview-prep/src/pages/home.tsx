@@ -382,6 +382,10 @@ export default function Home() {
   const [timedModeEnabled, setTimedModeEnabled] = useState(false);
   const [search, setSearch] = useState("");
 
+  useEffect(() => {
+    document.title = "IT Interview Prep — Practice Oracle, AWS, Java & 37 More Topics";
+  }, []);
+
   const filteredCourses = useMemo(() => {
     if (!courses) return [];
     const q = search.trim().toLowerCase();
