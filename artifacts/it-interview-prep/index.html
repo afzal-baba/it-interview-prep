@@ -21,6 +21,7 @@
     <meta name="twitter:description" content="Master technical interviews with 1200+ questions across 40 technologies. Timed mode, leaderboard, and real-time challenge arena." />
     <meta name="twitter:image" content="https://techinterviewprep.replit.app/og-image.png" />
     <meta name="twitter:site" content="@TechInterviewPrep" />
+    <link rel="canonical" href="https://techinterviewprep.replit.app/" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <script type="application/ld+json">
     {
@@ -72,8 +73,26 @@
   </head>
   <body>
     <div id="root"></div>
-    <!-- Static links for crawler discovery; hidden after React hydration -->
-    <nav aria-hidden="true" style="display:none">
+    <!-- Static content for crawlers that do not execute JavaScript.
+         Visually hidden via absolute positioning so it does not affect layout.
+         React hydration overwrites #root, leaving this content for bots. -->
+    <noscript>
+      <div style="max-width:800px;margin:0 auto;padding:2rem;font-family:sans-serif;color:#111">
+        <h1>TechInterviewPrep — Free IT Interview Practice</h1>
+        <p>Master technical interviews with 1200+ questions across 40 technologies.
+           Choose Docker, Python, AWS, TypeScript, Kubernetes, SQL, and more.
+           Timed mode, global leaderboard, and a real-time head-to-head challenge arena — all free.</p>
+        <nav>
+          <ul>
+            <li><a href="/">Home — Browse all 40 courses and start practicing</a></li>
+            <li><a href="/about">About — Features, badge system, and course list</a></li>
+            <li><a href="/leaderboard">Global Leaderboard — Top scorers by course and difficulty</a></li>
+            <li><a href="/race">Challenge Arena — Real-time head-to-head IT quiz battles</a></li>
+          </ul>
+        </nav>
+      </div>
+    </noscript>
+    <nav aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap">
       <a href="/">Home</a>
       <a href="/about">About</a>
       <a href="/leaderboard">Leaderboard</a>

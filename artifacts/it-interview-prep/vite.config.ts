@@ -4,32 +4,31 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 
 import runtimeErrorOverlay from '@replit/vite-plugin-runtime-error-modal';
+import { routeMetaPlugin } from './vite-plugin-route-meta';
 
 const rawPort = process.env.PORT;
+// PORT is only required in dev / preview mode, not during production builds.
+const isBuildMode = process.argv.includes('build');
+const port = rawPort ? Number(rawPort) : isBuildMode ? 3000 : undefined;
 
-if (!rawPort) {
-  throw new Error(
-    'PORT environment variable is required but was not provided.',
-  );
+if (!isBuildMode) {
+  if (!rawPort) {
+    throw new Error(
+      'PORT environment variable is required but was not provided.',
+    );
+  }
+  if (!port || Number.isNaN(port) || port <= 0) {
+    throw new Error(`Invalid PORT value: "${rawPort}"`);
+  }
 }
 
-const port = Number(rawPort);
-
-if (Number.isNaN(port) || port <= 0) {
-  throw new Error(`Invalid PORT value: "${rawPort}"`);
-}
-
-const basePath = process.env.BASE_PATH;
-
-if (!basePath) {
-  throw new Error(
-    'BASE_PATH environment variable is required but was not provided.',
-  );
-}
+// BASE_PATH defaults to '/' (root artifact) when not set by the environment.
+const basePath = process.env.BASE_PATH ?? '/';
 
 export default defineConfig({
   base: basePath,
   plugins: [
+    routeMetaPlugin(),
     react(),
     tailwindcss(),
     runtimeErrorOverlay(),
