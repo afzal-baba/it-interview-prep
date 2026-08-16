@@ -67,6 +67,17 @@ export const insertCodelabScoreSchema = createInsertSchema(codelabScoresTable).o
 export type CodelabScore = typeof codelabScoresTable.$inferSelect;
 export type InsertCodelabScore = z.infer<typeof insertCodelabScoreSchema>;
 
+// ── Search logs ────────────────────────────────────────────────────────────────
+// Records every search query so we can learn what topics users want.
+export const searchLogsTable = pgTable("search_logs", {
+  id: serial("id").primaryKey(),
+  query: text("query").notNull(),
+  resultCount: integer("result_count").notNull(), // 0 = unfulfilled demand
+  searchedAt: timestamp("searched_at").defaultNow().notNull(),
+});
+
+export type SearchLog = typeof searchLogsTable.$inferSelect;
+
 export const insertCourseSchema = createInsertSchema(coursesTable).omit({ id: true, createdAt: true });
 export const insertQuestionSchema = createInsertSchema(questionsTable).omit({ id: true, createdAt: true });
 export const insertSessionSchema = createInsertSchema(sessionsTable).omit({ id: true, startedAt: true });

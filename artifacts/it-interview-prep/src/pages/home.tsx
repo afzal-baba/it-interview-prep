@@ -401,6 +401,21 @@ export default function Home() {
     );
   }, [courses, search]);
 
+  // ── Search logging (fire-and-forget, debounced 1.5s) ──────────────────────
+  useEffect(() => {
+    const q = search.trim();
+    if (q.length < 2) return; // ignore very short queries
+    const timer = setTimeout(() => {
+      const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+      fetch(`${base}/api/search-log`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: q, resultCount: filteredCourses.length }),
+      }).catch(() => {}); // silent — never break the UI
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, [search, filteredCourses.length]);
+
   const handleStart = (level: SessionInputLevel) => {
     if (!selectedCourse) return;
     createSession.mutate(
