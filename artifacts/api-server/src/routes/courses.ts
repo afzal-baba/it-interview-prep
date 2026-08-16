@@ -79,15 +79,27 @@ router.get("/courses/:courseId/questions", async (req, res): Promise<void> => {
     .orderBy(sql`random()`)
     .limit(limit);
 
-  const result = questions.map((q) => ({
-    id: q.id,
-    courseId: q.courseId,
-    level: q.level,
-    text: q.text,
-    options: q.options as string[],
-    correctOptionIndex: q.correctOptionIndex,
-    explanation: q.explanation ?? null,
-  }));
+  const result = questions.map((q) => {
+    const opts = q.options as string[];
+    const correctText = opts[q.correctOptionIndex];
+
+    // Fisher-Yates shuffle a copy so the correct answer lands at a random position
+    const shuffled = [...opts];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    return {
+      id: q.id,
+      courseId: q.courseId,
+      level: q.level,
+      text: q.text,
+      options: shuffled,
+      correctOptionIndex: shuffled.indexOf(correctText),
+      explanation: q.explanation ?? null,
+    };
+  });
 
   res.json(ListQuestionsResponse.parse(result));
 });

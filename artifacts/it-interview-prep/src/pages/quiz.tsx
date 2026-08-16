@@ -212,18 +212,19 @@ export default function Quiz() {
             {currentQ.text}
           </h2>
 
-          <div className="space-y-4 mb-8 flex-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 flex-1">
             {currentQ.options.map((opt, idx) => {
               let btnClass = "border-white/10 bg-white/5 hover:bg-white/10 hover:border-primary/50 text-white";
               let icon = null;
+              const letter = String.fromCharCode(65 + idx); // A, B, C, D
               
               if (isRevealed) {
                 if (idx === currentQ.correctOptionIndex) {
                   btnClass = "border-success bg-success/20 text-white shadow-[0_0_15px_rgba(0,255,100,0.2)]";
-                  icon = <CheckCircle2 className="text-success" />;
+                  icon = <CheckCircle2 className="text-success shrink-0" />;
                 } else if (idx === selectedOption) {
                   btnClass = "border-destructive bg-destructive/20 text-white";
-                  icon = <XCircle className="text-destructive" />;
+                  icon = <XCircle className="text-destructive shrink-0" />;
                 } else {
                   btnClass = "border-white/5 bg-transparent opacity-50";
                 }
@@ -236,10 +237,11 @@ export default function Quiz() {
                   key={idx}
                   onClick={() => handleSelect(idx)}
                   disabled={isRevealed}
-                  className={`w-full text-left p-5 rounded-xl border-2 transition-all duration-300 flex items-center justify-between group ${btnClass}`}
+                  className={`w-full text-left p-5 rounded-xl border-2 transition-all duration-300 flex items-start gap-3 group min-h-[90px] ${btnClass}`}
                 >
-                  <span className="text-lg flex-1">{opt}</span>
-                  {icon && <span className="ml-4 animate-in zoom-in">{icon}</span>}
+                  <span className="shrink-0 w-7 h-7 rounded-full border border-current/30 flex items-center justify-center text-sm font-bold font-mono opacity-60">{letter}</span>
+                  <span className="text-base flex-1 leading-snug">{opt}</span>
+                  {icon && <span className="animate-in zoom-in">{icon}</span>}
                 </button>
               );
             })}
