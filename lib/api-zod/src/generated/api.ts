@@ -213,6 +213,28 @@ export const ListCodelabLeaderboardResponse = zod.array(ListCodelabLeaderboardRe
 
 
 /**
+ * @summary Get Code Lab progress for the current anonymous session
+ */
+export const GetCodelabProgressResponse = zod.object({
+  "totalScore": zod.number().int(),
+  "completedSlugs": zod.array(zod.string()),
+})
+
+/**
+ * @summary Save Code Lab progress for the current anonymous session
+ */
+export const SaveCodelabProgressBody = zod.object({
+  "totalScore": zod.number().int().min(0),
+  "completedSlugs": zod.array(zod.string()),
+})
+
+export const SaveCodelabProgressResponse = zod.object({
+  "totalScore": zod.number().int(),
+  "completedSlugs": zod.array(zod.string()),
+})
+
+
+/**
  * @summary Get aggregated leaderboard statistics
  */
 export const GetLeaderboardStatsResponse = zod.object({

@@ -22,7 +22,13 @@ router.post("/search-log", async (req, res): Promise<void> => {
 
 // GET /api/search-insights
 // Returns aggregated search data: top queries, zero-result queries (gap signals).
-router.get("/search-insights", async (_req, res): Promise<void> => {
+// Restricted to localhost to prevent public exposure of user search terms.
+router.get("/search-insights", async (req, res): Promise<void> => {
+  const ip = req.ip ?? req.socket?.remoteAddress ?? "";
+  if (ip !== "127.0.0.1" && ip !== "::1" && ip !== "::ffff:127.0.0.1") {
+    res.status(403).json({ error: "Forbidden" });
+    return;
+  }
   // Top 30 searched terms overall
   const topSearches = await db
     .select({

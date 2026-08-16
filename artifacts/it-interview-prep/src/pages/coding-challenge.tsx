@@ -1,6 +1,6 @@
 import { useState, lazy, Suspense, useEffect, useRef, useCallback } from "react";
 import { useLocation } from "wouter";
-import { useSubmitCodelabScore } from "@workspace/api-client-react";
+import { useSubmitCodelabScore, useGetCodelabProgress, useSaveCodelabProgress } from "@workspace/api-client-react";
 
 const MonacoEditor = lazy(() => import("@monaco-editor/react"));
 
@@ -761,6 +761,26 @@ export default function CodingChallenge() {
   const pendingMultRef = useRef<number | null>(null);
 
   const submitCodelabScore = useSubmitCodelabScore();
+  const saveCodelabProgress = useSaveCodelabProgress();
+  const { data: serverProgress } = useGetCodelabProgress();
+
+  // Merge server progress with localStorage once on first load (take the higher value)
+  useEffect(() => {
+    if (!serverProgress) return;
+    const { totalScore: serverTotal, completedSlugs } = serverProgress;
+    const serverCompleted = new Set(completedSlugs);
+    setScore((local) => {
+      const merged = Math.max(local, serverTotal);
+      if (merged !== local) saveScore(merged);
+      return merged;
+    });
+    setCompleted((local) => {
+      const merged = new Set([...local, ...serverCompleted]);
+      if (merged.size !== local.size) saveCompleted(merged);
+      return merged;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serverProgress]);
 
   // View state
   const urlChallenge = readChallengeFromURL();
@@ -909,8 +929,9 @@ export default function CodingChallenge() {
 
   function applyRating(mult: number, name: string) {
     const pts = activeTechSlug ? Math.round(TECH_CHALLENGES[activeTechSlug].points * mult) : 0;
+    // Compute next cumulative state eagerly so the server receives the full picture
+    const newScore = pts > 0 ? score + pts : score;
     if (pts > 0) {
-      const newScore = score + pts;
       setScore(newScore);
       saveScore(newScore);
       setBumpPts(pts);
@@ -920,6 +941,9 @@ export default function CodingChallenge() {
       const newCompleted = new Set(completed).add(activeTechSlug);
       setCompleted(newCompleted);
       saveCompleted(newCompleted);
+
+      // Persist full cumulative state to server so it survives browser clears (fire-and-forget)
+      saveCodelabProgress.mutate({ totalScore: newScore, completedSlugs: [...newCompleted] });
 
       // Submit to leaderboard API (fire-and-forget)
       if (name && pts > 0) {

@@ -1,4 +1,4 @@
-import { pgTable, serial, text, integer, timestamp, jsonb, boolean } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, integer, timestamp, jsonb, boolean, unique } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
@@ -65,6 +65,16 @@ export const codelabScoresTable = pgTable("codelab_scores", {
 
 export const insertCodelabScoreSchema = createInsertSchema(codelabScoresTable).omit({ id: true, createdAt: true, updatedAt: true });
 
+export const codelabProgressTable = pgTable("codelab_progress", {
+  id: serial("id").primaryKey(),
+  sessionId: text("session_id").notNull(),
+  totalScore: integer("total_score").notNull().default(0),
+  completedSlugs: jsonb("completed_slugs").$type<string[]>().notNull().default([]),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (t) => [unique("codelab_progress_session_id_unique").on(t.sessionId)]);
+
+export type CodelabProgress = typeof codelabProgressTable.$inferSelect;
 export type CodelabScore = typeof codelabScoresTable.$inferSelect;
 export type InsertCodelabScore = z.infer<typeof insertCodelabScoreSchema>;
 
