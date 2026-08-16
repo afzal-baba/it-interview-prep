@@ -467,7 +467,7 @@ export default function Home() {
             loading={createSession.isPending}
           />
         ) : (
-          <div style={{ maxWidth: 1100, margin: "0 auto", padding: "96px 32px 80px" }}>
+          <div className="cin-home-content" style={{ maxWidth: 1100, margin: "0 auto", padding: "96px 32px 80px" }}>
 
             {/* ── Hero ── */}
             <div style={{ textAlign: "center", marginBottom: 80, display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -632,8 +632,9 @@ function LevelSelector({
   const Icon = getCourseIcon(course.icon);
 
   return (
-    <div style={{ minHeight: "calc(100vh - 75px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 32 }}>
+    <div className="cin-level-outer" style={{ minHeight: "calc(100vh - 75px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 32 }}>
       <div
+        className="cin-level-card"
         style={{
           maxWidth: 540, width: "100%",
           background: "var(--cin-surface)", backdropFilter: "blur(20px)",

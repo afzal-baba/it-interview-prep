@@ -789,7 +789,7 @@ export default function CodingChallenge() {
           {bumpPts && <ScoreBump pts={bumpPts} />}
           <TechPicker score={score} completed={completed} onSelect={pickTech} />
           {/* Floating create button */}
-          <div style={{ position: "fixed", bottom: 32, right: 32, zIndex: 10 }}>
+          <div className="cin-fab" style={{ position: "fixed", bottom: 32, right: 32, zIndex: 10 }}>
             <button onClick={() => setShowModal(true)}
               style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700, color: "var(--cin-bg)", background: "linear-gradient(90deg,var(--cin-cyan),var(--cin-violet))", border: "none", padding: "12px 24px", borderRadius: 12, cursor: "pointer", boxShadow: "0 8px 32px rgba(91,231,216,0.3)" }}>
               ✏️ Create challenge
