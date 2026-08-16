@@ -54,7 +54,7 @@ const BADGE_TIERS = [
 
 export default function About() {
   useEffect(() => {
-    document.title = "About TechInterviewPrep — 600 Questions, 40 Topics, Free";
+    document.title = "About TechInterviewPrep — 600 Questions, 20 Topics, Free";
   }, []);
 
   return (

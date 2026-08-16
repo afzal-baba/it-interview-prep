@@ -542,8 +542,8 @@ export default function Home() {
                 style={{ display: "flex", gap: 48, flexWrap: "wrap", justifyContent: "center", marginTop: 52, animation: "cin-slideUp 0.7s ease-out 0.6s both" }}
               >
                 {[
-                  { val: "40", label: "Technologies" },
-                  { val: "1200+", label: "Questions" },
+                  { val: "20", label: "Technologies" },
+                  { val: "600", label: "Questions" },
                   { val: "4", label: "Badge Tiers" },
                 ].map(({ val, label }) => (
                   <div key={label} style={{ textAlign: "center" }}>

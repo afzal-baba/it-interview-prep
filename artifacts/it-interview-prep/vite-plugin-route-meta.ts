@@ -35,16 +35,16 @@ export const ROUTE_META: Record<string, RouteMeta> = {
   '/': {
     title: 'TechInterviewPrep — Ace Your Next Technical Interview',
     description:
-      'Master technical interviews with 1200+ questions across 40 technologies. Choose Docker, Python, AWS, TypeScript, and more — with timed mode and a real-time challenge arena.',
+      'Master technical interviews with 600 hand-crafted questions across 20 technologies. Choose Docker, Python, AWS, TypeScript, and more — with timed mode and a real-time challenge arena.',
     ogTitle: 'TechInterviewPrep — Ace Your Next Technical Interview',
     ogDescription:
-      'Master technical interviews with 1200+ questions across 40 technologies. Timed mode, global leaderboard, and real-time head-to-head challenge arena.',
+      'Master technical interviews with 600 hand-crafted questions across 20 technologies. Timed mode, global leaderboard, and real-time head-to-head challenge arena.',
     ogUrl: `${BASE_URL}/`,
     canonical: `${BASE_URL}/`,
   },
 
   '/about': {
-    title: 'About TechInterviewPrep — 1200 Questions, 40 Technologies, Free',
+    title: 'About TechInterviewPrep — 600 Questions, 20 Technologies, Free',
     description:
       'TechInterviewPrep offers 600 hand-crafted questions across 20 technology courses — Docker, AWS, Python, SQL, Kubernetes, and more. Earn Bronze to Platinum badges, climb the leaderboard, and race head-to-head in real-time.',
     ogTitle: 'About TechInterviewPrep — Free IT Interview Practice Platform',
