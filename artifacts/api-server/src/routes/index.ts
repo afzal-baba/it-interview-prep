@@ -7,6 +7,7 @@ import leaderboardRouter from "./leaderboard";
 import codelabRouter from "./codelab";
 import onlineRouter from "./online";
 import searchRouter from "./search";
+import adminRouter from "./admin";
 
 const router: IRouter = Router();
 
@@ -18,5 +19,6 @@ router.use(leaderboardRouter);
 router.use(codelabRouter);
 router.use(onlineRouter);
 router.use(searchRouter);
+router.use(adminRouter);
 
 export default router;

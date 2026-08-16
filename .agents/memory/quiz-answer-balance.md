@@ -19,3 +19,15 @@ Options were also never shuffled server-side, so position was predictable.
 
 ## Script location
 `scripts/src/rewrite-wrong-answers.ts` — re-runnable; queries DB each time and skips already-balanced questions.
+
+## Scoring bug introduced by server-side shuffle (FIXED)
+Adding shuffle in the GET /courses/:id/questions handler broke scoring: the client sent the shuffled index back to the server, but the submit handler re-read the *original* correctOptionIndex from the DB and compared against the shuffled index → nearly every correct answer was marked wrong.
+
+**Fix:** Revert server-side shuffle. Add client-side Fisher-Yates shuffle in quiz.tsx (web + mobile). Store `originalIndexMap: number[]` on each shuffled question (shuffledIdx → DB original idx). In `handleSelect`, send `originalIndexMap[displayedIdx]` to the server so scoring always uses original DB indices.
+
+**Rule:** Never shuffle in the GET handler. Shuffle client-side with a reverse-mapping, always submit original indices.
+
+## Production data rewrite
+Admin endpoint at `POST /api/admin/rewrite-answers` (header `x-admin-secret: SESSION_SECRET`) runs the OpenAI rewrite in the background against the live DB. Protected, one-time use. After production data is fixed this endpoint can be removed.
+
+`executeSql` with `environment: "production"` is READ-ONLY — cannot UPDATE production data directly. Must go through the deployed API server.

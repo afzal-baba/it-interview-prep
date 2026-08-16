@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useLocation } from "wouter";
 import { 
   useListQuestions, 
@@ -23,7 +23,7 @@ export default function Quiz() {
     document.title = "Quiz — TechInterviewPrep";
   }, []);
 
-  const { data: questions, isLoading } = useListQuestions(
+  const { data: rawQuestions, isLoading } = useListQuestions(
     currentSession?.courseId || 0,
     { level: currentSession?.level as any },
     { 
@@ -33,6 +33,24 @@ export default function Quiz() {
       } 
     }
   );
+
+  // Shuffle options client-side once per question load. originalIndexMap[shuffledIdx] → DB index.
+  const questions = useMemo(() => {
+    if (!rawQuestions) return null;
+    return rawQuestions.map((q) => {
+      const positions = [0, 1, 2, 3];
+      for (let i = positions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [positions[i], positions[j]] = [positions[j], positions[i]];
+      }
+      return {
+        ...q,
+        options: positions.map((p) => q.options[p]),
+        correctOptionIndex: positions.indexOf(q.correctOptionIndex),
+        originalIndexMap: positions,
+      };
+    });
+  }, [rawQuestions]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<(AnswerInput & { timeTakenMs?: number })[]>([]);
@@ -82,9 +100,12 @@ export default function Quiz() {
 
     const currentQ = questions?.[currentIndex];
     if (currentQ) {
+      // Translate shuffled display index → original DB index so server scoring is correct.
+      // idx === -1 means timeout (no selection).
+      const originalIdx = idx === -1 ? -1 : currentQ.originalIndexMap[idx];
       setAnswers(prev => [...prev, {
         questionId: currentQ.id,
-        selectedOptionIndex: idx,
+        selectedOptionIndex: originalIdx,
         timeTakenMs: timedMode ? elapsed : undefined,
       }]);
     }
