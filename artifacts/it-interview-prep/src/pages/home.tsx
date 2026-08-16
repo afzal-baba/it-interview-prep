@@ -11,50 +11,97 @@ import { TOTAL_COURSES, TOTAL_QUESTIONS_DISPLAY, DIFFICULTY_TIERS } from "@/lib/
 import * as SiIcons from "react-icons/si";
 import { Search, X, ArrowLeft, Timer } from "lucide-react";
 
+// ─── Category order ───────────────────────────────────────────────────────────
+const CATEGORY_ORDER = [
+  "Cloud",
+  "Languages",
+  "Frontend",
+  "Backend",
+  "Databases",
+  "DevOps",
+  "Data Engineering",
+  "Observability",
+  "Security",
+  "Infrastructure",
+  "Testing",
+  "AI & ML",
+  "APIs & Integration",
+  "Messaging",
+  "Enterprise",
+  "General",
+];
+
 // ─── Accent colors ────────────────────────────────────────────────────────────
 const SLUG_ACCENT: Record<string, string> = {
-  // original 20
-  oracle:          "#f0748a",
-  sap:             "#8f7bf0",
+  // Cloud
+  aws:             "#f0a35c",
+  azure:           "#6fd3f0",
+  gcp:             "#f0b84f",
+  // Languages
   java:            "#f0b84f",
   python:          "#5be3d8",
-  aws:             "#f0a35c",
-  linux:           "#6fd3f0",
-  "docker-k8s":    "#5be3d8",
   javascript:      "#f0b84f",
-  cybersecurity:   "#f0748a",
-  sql:             "#8f7bf0",
-  networking:      "#6fd3f0",
-  azure:           "#6fd3f0",
-  git:             "#f0a35c",
-  terraform:       "#8f7bf0",
-  cicd:            "#f0a35c",
-  sre:             "#5be3d8",
-  ansible:         "#f0748a",
-  gcp:             "#f0b84f",
   typescript:      "#5be3d8",
   bash:            "#f0b84f",
-  // new 20
+  golang:          "#6fd3f0",
+  dotnet:          "#8f7bf0",
+  php:             "#8f7bf0",
+  rust:            "#f0a35c",
+  // Frontend
   react:           "#5be3d8",
+  "vue-angular":   "#6fd3f0",
+  graphql:         "#f0748a",
+  // Backend
   nodejs:          "#6fd3f0",
   django:          "#5be3d8",
   "spring-boot":   "#f0b84f",
+  fastapi:         "#5be3d8",
+  nestjs:          "#f0748a",
+  rails:           "#f0748a",
+  // Databases
+  sql:             "#8f7bf0",
+  oracle:          "#f0748a",
+  postgresql:      "#6fd3f0",
   mongodb:         "#6fd3f0",
   redis:           "#f0748a",
-  postgresql:      "#6fd3f0",
-  "machine-learning": "#f0b84f",
+  mysql:           "#6fd3f0",
+  // DevOps
+  "docker-k8s":    "#5be3d8",
+  git:             "#f0a35c",
+  terraform:       "#8f7bf0",
+  cicd:            "#f0a35c",
+  ansible:         "#f0748a",
+  // Data Engineering
   kafka:           "#f0748a",
-  elasticsearch:   "#f0a35c",
   "data-warehouse":"#5be3d8",
-  virtualization:  "#6fd3f0",
-  "testing-qa":    "#8f7bf0",
-  graphql:         "#f0748a",
-  "jira-agile":    "#f0a35c",
-  fastapi:         "#5be3d8",
   rabbitmq:        "#f0748a",
-  "deep-learning": "#8f7bf0",
+  spark:           "#f0b84f",
+  airflow:         "#5be3d8",
+  "data-viz":      "#5be3d8",
+  // Observability
+  sre:             "#5be3d8",
+  elasticsearch:   "#f0a35c",
+  "prometheus-grafana": "#f0a35c",
+  splunk:          "#f0b84f",
+  // Security
+  cybersecurity:   "#f0748a",
   vault:           "#f0b84f",
-  "vue-angular":   "#6fd3f0",
+  "active-directory": "#8f7bf0",
+  // Infrastructure
+  linux:           "#6fd3f0",
+  networking:      "#6fd3f0",
+  virtualization:  "#6fd3f0",
+  powershell:      "#6fd3f0",
+  // Testing
+  "testing-qa":    "#8f7bf0",
+  playwright:      "#8f7bf0",
+  // AI & ML
+  "machine-learning": "#f0b84f",
+  "deep-learning": "#8f7bf0",
+  "llm-apis":      "#f0b84f",
+  // Enterprise
+  sap:             "#8f7bf0",
+  "jira-agile":    "#f0a35c",
 };
 const FALLBACK = ["#f0748a","#8f7bf0","#f0b84f","#5be3d8","#f0a35c","#6fd3f0"];
 const getAccent = (course: Course, idx: number) =>
@@ -370,6 +417,140 @@ function CourseCard({
   );
 }
 
+// ─── Category icon map ────────────────────────────────────────────────────────
+const CATEGORY_ICON: Record<string, string> = {
+  "Cloud":            "☁️",
+  "Languages":        "{ }",
+  "Frontend":         "◱",
+  "Backend":          "⚙",
+  "Databases":        "🗄",
+  "DevOps":           "♾",
+  "Data Engineering": "⬡",
+  "Observability":    "◎",
+  "Security":         "🔒",
+  "Infrastructure":   "🖥",
+  "Testing":          "✓",
+  "AI & ML":          "✦",
+  "Messaging":        "⇄",
+  "Enterprise":          "◈",
+  "APIs & Integration":  "⇌",
+  "General":             "●",
+};
+
+// ─── CoursesByCategory ────────────────────────────────────────────────────────
+function CoursesByCategory({
+  courses,
+  onSelect,
+}: {
+  courses: Course[];
+  onSelect: (c: Course) => void;
+}) {
+  // Build a stable slug→global-index map so accent colours are consistent
+  const globalIdx = useMemo(() => {
+    const map = new Map<string, number>();
+    courses.forEach((c, i) => map.set(c.slug, i));
+    return map;
+  }, [courses]);
+
+  // Group by category
+  const grouped = useMemo(() => {
+    const map = new Map<string, Course[]>();
+    for (const c of courses) {
+      const cat = c.category || "General";
+      if (!map.has(cat)) map.set(cat, []);
+      map.get(cat)!.push(c);
+    }
+    return map;
+  }, [courses]);
+
+  // Sort categories by canonical order
+  const sortedCategories = useMemo(() => {
+    const keys = Array.from(grouped.keys());
+    return keys.sort((a, b) => {
+      const ai = CATEGORY_ORDER.indexOf(a);
+      const bi = CATEGORY_ORDER.indexOf(b);
+      return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+    });
+  }, [grouped]);
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 56 }}>
+      {sortedCategories.map((cat) => {
+        const catCourses = grouped.get(cat)!;
+        const emoji = CATEGORY_ICON[cat] ?? "●";
+        return (
+          <section key={cat}>
+            {/* Category header */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                marginBottom: 24,
+                paddingBottom: 16,
+                borderBottom: "1px solid var(--cin-border)",
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: "'JetBrains Mono',monospace",
+                  fontSize: 15,
+                  lineHeight: 1,
+                  color: "var(--cin-cyan)",
+                  minWidth: 22,
+                  textAlign: "center",
+                }}
+              >
+                {emoji}
+              </span>
+              <h2
+                style={{
+                  fontFamily: "'Inter',sans-serif",
+                  fontSize: 20,
+                  fontWeight: 700,
+                  letterSpacing: "-0.015em",
+                  color: "var(--cin-text)",
+                  flex: 1,
+                }}
+              >
+                {cat}
+              </h2>
+              <span
+                style={{
+                  fontFamily: "'JetBrains Mono',monospace",
+                  fontSize: 11.5,
+                  color: "var(--cin-faint)",
+                  border: "1px solid var(--cin-border)",
+                  padding: "3px 10px",
+                  borderRadius: 20,
+                  flexShrink: 0,
+                }}
+              >
+                {catCourses.length} {catCourses.length === 1 ? "course" : "courses"}
+              </span>
+            </div>
+            {/* Grid */}
+            <div className="cin-grid">
+              {catCourses.map((course) => {
+                const idx = globalIdx.get(course.slug) ?? 0;
+                return (
+                  <CourseCard
+                    key={course.id}
+                    course={course}
+                    accent={getAccent(course, idx)}
+                    idx={idx}
+                    onClick={() => onSelect(course)}
+                  />
+                );
+              })}
+            </div>
+          </section>
+        );
+      })}
+    </div>
+  );
+}
+
 // ─── Film grain data URI ──────────────────────────────────────────────────────
 const GRAIN = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E`;
 
@@ -591,7 +772,7 @@ export default function Home() {
             {/* ── Section header ── */}
             <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 36, flexWrap: "wrap", gap: 8 }}>
               <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: 30, fontWeight: 800, letterSpacing: "-0.02em", color: "var(--cin-text)" }}>
-                Available courses
+                {search.trim() ? "Search results" : "All courses"}
               </h2>
               <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "var(--cin-faint)" }}>
                 {filteredCourses.length} {filteredCourses.length === 1 ? "module" : "modules"} ·{" "}
@@ -599,7 +780,7 @@ export default function Home() {
               </span>
             </div>
 
-            {/* ── Grid / empty state ── */}
+            {/* ── Grouped by category / empty state ── */}
             {filteredCourses.length === 0 ? (
               <div style={{ textAlign: "center", padding: "80px 0", color: "var(--cin-faint)" }}>
                 <Search size={40} style={{ margin: "0 auto 16px", opacity: 0.3, display: "block" }} />
@@ -612,17 +793,10 @@ export default function Home() {
                 </button>
               </div>
             ) : (
-              <div className="cin-grid">
-                {filteredCourses.map((course, idx) => (
-                  <CourseCard
-                    key={course.id}
-                    course={course}
-                    accent={getAccent(course, idx)}
-                    idx={idx}
-                    onClick={() => setSelectedCourse(course)}
-                  />
-                ))}
-              </div>
+              <CoursesByCategory
+                courses={filteredCourses}
+                onSelect={setSelectedCourse}
+              />
             )}
           </div>
         )}

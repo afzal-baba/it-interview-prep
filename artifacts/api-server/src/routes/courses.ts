@@ -41,6 +41,7 @@ router.get("/courses", async (req, res): Promise<void> => {
     slug: c.slug,
     description: c.description,
     icon: c.icon,
+    category: c.category,
     questionCounts: countMap[c.id] ?? { beginner: 0, intermediate: 0, advanced: 0 },
   }));
 

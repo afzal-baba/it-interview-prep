@@ -25,6 +25,7 @@ export const ListCoursesResponseItem = zod.object({
   "slug": zod.string(),
   "description": zod.string(),
   "icon": zod.string(),
+  "category": zod.string(),
   "questionCounts": zod.object({
   "beginner": zod.number().int(),
   "intermediate": zod.number().int(),

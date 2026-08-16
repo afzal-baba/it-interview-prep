@@ -5,13 +5,7 @@ import {
   Terminal, BookOpen, Trophy, Swords, Timer, Zap, Users, Star, CheckCircle2, Code2,
 } from "lucide-react";
 import { TOTAL_COURSES, TOTAL_QUESTIONS_DISPLAY, QUESTIONS_PER_COURSE } from "@/lib/platform-stats";
-
-const COURSES = [
-  "Oracle DB", "SAP", "Java", "Python", "AWS", "Linux",
-  "Docker & Kubernetes", "JavaScript", "Cybersecurity", "SQL",
-  "Networking", "Azure", "Git", "Terraform", "CI/CD & DevOps",
-  "SRE & Observability", "Ansible", "GCP", "TypeScript", "Bash & Shell Scripting",
-];
+import { useListCourses } from "@workspace/api-client-react";
 
 const FEATURES = [
   {
@@ -54,6 +48,8 @@ const BADGE_TIERS = [
 ];
 
 export default function About() {
+  const { data: courses } = useListCourses();
+
   useEffect(() => {
     document.title = `About TechInterviewPrep — ${TOTAL_QUESTIONS_DISPLAY} Questions, ${TOTAL_COURSES} Topics, Free`;
   }, []);
@@ -136,13 +132,20 @@ export default function About() {
 
       {/* Courses list */}
       <section>
-        <h2 className="text-3xl font-extrabold tracking-tight mb-2 text-center">All {TOTAL_COURSES} Courses</h2>
+        <h2 className="text-3xl font-extrabold tracking-tight mb-2 text-center">
+          All {courses ? courses.length : TOTAL_COURSES} Courses
+        </h2>
         <p className="text-muted-foreground text-center mb-8">Each course has {QUESTIONS_PER_COURSE} questions split evenly across Beginner, Intermediate, and Advanced.</p>
         <div className="flex flex-wrap gap-2 justify-center">
-          {COURSES.map((c) => (
-            <span key={c} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border bg-card text-sm font-medium shadow-sm">
-              <Code2 size={14} className="text-primary" /> {c}
-            </span>
+          {(courses ?? []).map((c) => (
+            <Link key={c.slug} href="/">
+              <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border bg-card text-sm font-medium shadow-sm hover:border-primary/50 hover:bg-primary/5 transition-colors cursor-pointer">
+                <Code2 size={14} className="text-primary" /> {c.name}
+              </span>
+            </Link>
+          ))}
+          {!courses && Array.from({ length: 12 }).map((_, i) => (
+            <span key={i} className="inline-flex items-center px-4 py-2 rounded-full border bg-card text-sm w-24 h-9 animate-pulse" />
           ))}
         </div>
       </section>

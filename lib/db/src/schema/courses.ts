@@ -8,6 +8,7 @@ export const coursesTable = pgTable("courses", {
   slug: text("slug").notNull().unique(),
   description: text("description").notNull(),
   icon: text("icon").notNull(),
+  category: text("category").notNull().default("General"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

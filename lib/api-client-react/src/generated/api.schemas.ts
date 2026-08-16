@@ -21,6 +21,7 @@ export interface Course {
   slug: string;
   description: string;
   icon: string;
+  category: string;
   questionCounts: CourseQuestionCounts;
 }
 
