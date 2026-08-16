@@ -1,5 +1,6 @@
 import { useState, lazy, Suspense, useEffect, useRef, useCallback } from "react";
 import { useLocation } from "wouter";
+import { useSubmitCodelabScore } from "@workspace/api-client-react";
 
 const MonacoEditor = lazy(() => import("@monaco-editor/react"));
 
@@ -395,6 +396,8 @@ function loadScore(): number { try { return Number(localStorage.getItem("codelab
 function saveScore(s: number) { try { localStorage.setItem("codelab-score", String(s)); } catch { /* noop */ } }
 function loadCompleted(): Set<string> { try { return new Set(JSON.parse(localStorage.getItem("codelab-completed") ?? "[]")); } catch { return new Set(); } }
 function saveCompleted(s: Set<string>) { try { localStorage.setItem("codelab-completed", JSON.stringify([...s])); } catch { /* noop */ } }
+function loadPlayerName(): string { try { return localStorage.getItem("codelab-player-name") ?? ""; } catch { return ""; } }
+function savePlayerName(n: string) { try { localStorage.setItem("codelab-player-name", n); } catch { /* noop */ } }
 
 // ── Answer persistence helpers ────────────────────────────────────────────────
 
@@ -520,6 +523,39 @@ function TabBar({ tabs, activeIdx, onSelect, answers, challenge }: { tabs: Chall
         );
       })}
     </div>
+  );
+}
+
+// ── Name prompt modal ─────────────────────────────────────────────────────────
+
+function NamePromptModal({ onConfirm }: { onConfirm: (name: string) => void }) {
+  const [name, setName] = useState("");
+  return (
+    <>
+      <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", backdropFilter: "blur(4px)", zIndex: 100 }} />
+      <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%,-50%)", zIndex: 101, width: "min(420px,90vw)", background: "#0d1018", border: "1px solid var(--cin-border-strong)", borderRadius: 20, padding: "36px 32px", boxShadow: "0 32px 80px rgba(0,0,0,0.6)", textAlign: "center" }}>
+        <div style={{ fontSize: 36, marginBottom: 12 }}>🏆</div>
+        <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: 20, fontWeight: 700, color: "var(--cin-text)", margin: "0 0 8px", letterSpacing: "-0.015em" }}>Enter your name</h2>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "var(--cin-dim)", marginBottom: 20, lineHeight: 1.6 }}>Your score will appear on the Code Lab leaderboard.</p>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          onKeyDown={(e) => { if (e.key === "Enter" && name.trim()) onConfirm(name.trim()); }}
+          placeholder="Your name or handle"
+          maxLength={32}
+          autoFocus
+          style={{ width: "100%", boxSizing: "border-box", background: "#080b12", color: "var(--cin-text)", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, border: "1px solid var(--cin-border-strong)", borderRadius: 10, padding: "12px 16px", outline: "none", marginBottom: 16 }}
+        />
+        <button
+          onClick={() => { if (name.trim()) onConfirm(name.trim()); }}
+          disabled={!name.trim()}
+          style={{ width: "100%", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 700, color: "var(--cin-bg)", background: name.trim() ? "linear-gradient(90deg,var(--cin-cyan),var(--cin-violet))" : "var(--cin-border)", border: "none", padding: "12px 28px", borderRadius: 10, cursor: name.trim() ? "pointer" : "not-allowed", transition: "opacity 0.2s" }}
+        >
+          Continue →
+        </button>
+      </div>
+    </>
   );
 }
 
@@ -719,6 +755,13 @@ export default function CodingChallenge() {
   const [completed, setCompleted] = useState(loadCompleted);
   const [bumpPts, setBumpPts] = useState<number | null>(null);
 
+  // Player name for leaderboard submission
+  const [playerName, setPlayerName] = useState(loadPlayerName);
+  const [showNamePrompt, setShowNamePrompt] = useState(false);
+  const pendingMultRef = useRef<number | null>(null);
+
+  const submitCodelabScore = useSubmitCodelabScore();
+
   // View state
   const urlChallenge = readChallengeFromURL();
   const [view, setView] = useState<PageView>(urlChallenge ? "challenge" : "pick");
@@ -864,7 +907,7 @@ export default function CodingChallenge() {
     window.history.replaceState(null, "", url);
   }
 
-  function handleRate(mult: number) {
+  function applyRating(mult: number, name: string) {
     const pts = activeTechSlug ? Math.round(TECH_CHALLENGES[activeTechSlug].points * mult) : 0;
     if (pts > 0) {
       const newScore = score + pts;
@@ -877,10 +920,41 @@ export default function CodingChallenge() {
       const newCompleted = new Set(completed).add(activeTechSlug);
       setCompleted(newCompleted);
       saveCompleted(newCompleted);
+
+      // Submit to leaderboard API (fire-and-forget)
+      if (name && pts > 0) {
+        const ch = TECH_CHALLENGES[activeTechSlug];
+        submitCodelabScore.mutate({
+          data: {
+            playerName: name,
+            techSlug: activeTechSlug,
+            techTitle: ch.title.replace(" Challenge", ""),
+            points: pts,
+          },
+        });
+      }
     }
     setAssessing(false);
     setView("pick");
     window.history.replaceState(null, "", window.location.pathname);
+  }
+
+  function handleRate(mult: number) {
+    if (!playerName) {
+      pendingMultRef.current = mult;
+      setShowNamePrompt(true);
+      return;
+    }
+    applyRating(mult, playerName);
+  }
+
+  function handleNameConfirm(name: string) {
+    savePlayerName(name);
+    setPlayerName(name);
+    setShowNamePrompt(false);
+    const mult = pendingMultRef.current ?? 0;
+    pendingMultRef.current = null;
+    applyRating(mult, name);
   }
 
   const allTasks = flattenTasks(challenge);
@@ -921,6 +995,10 @@ export default function CodingChallenge() {
   }
 
   // ── Self-assessment ──────────────────────────────────────────────────────
+
+  if (showNamePrompt) {
+    return <NamePromptModal onConfirm={handleNameConfirm} />;
+  }
 
   if (assessing && activeTechSlug) {
     return <AssessModal points={TECH_CHALLENGES[activeTechSlug].points} onRate={handleRate} />;

@@ -186,6 +186,49 @@ paths:
               schema:
                 $ref: "#/components/schemas/LeaderboardEntry"
 
+  /codelab-scores:
+    post:
+      operationId: submitCodelabScore
+      tags: [leaderboard]
+      summary: Submit or update a Code Lab challenge score
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CodelabScoreInput"
+      responses:
+        "200":
+          description: Score saved or updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CodelabScoreEntry"
+        "400":
+          description: Invalid input
+
+  /codelab-leaderboard:
+    get:
+      operationId: listCodelabLeaderboard
+      tags: [leaderboard]
+      summary: Get Code Lab leaderboard (total points per player)
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 50
+      responses:
+        "200":
+          description: Code Lab leaderboard ordered by total points desc
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CodelabLeaderboardEntry"
+
   /leaderboard/stats:
     get:
       operationId: getLeaderboardStats
@@ -398,6 +441,49 @@ components:
           description: The session ID whose server-computed result should be recorded
         playerName:
           type: string
+
+    CodelabScoreInput:
+      type: object
+      required: [playerName, techSlug, techTitle, points]
+      properties:
+        playerName:
+          type: string
+        techSlug:
+          type: string
+        techTitle:
+          type: string
+        points:
+          type: integer
+          description: Points earned for this challenge (0–max for that tech)
+
+    CodelabScoreEntry:
+      type: object
+      required: [id, playerName, techSlug, techTitle, points, updatedAt]
+      properties:
+        id:
+          type: integer
+        playerName:
+          type: string
+        techSlug:
+          type: string
+        techTitle:
+          type: string
+        points:
+          type: integer
+        updatedAt:
+          type: string
+          format: date-time
+
+    CodelabLeaderboardEntry:
+      type: object
+      required: [playerName, totalPoints, challengesCompleted]
+      properties:
+        playerName:
+          type: string
+        totalPoints:
+          type: integer
+        challengesCompleted:
+          type: integer
 
     LeaderboardStats:
       type: object

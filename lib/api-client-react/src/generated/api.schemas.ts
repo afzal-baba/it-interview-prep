@@ -146,6 +146,29 @@ export interface LeaderboardEntryInput {
   playerName: string;
 }
 
+export interface CodelabScoreInput {
+  playerName: string;
+  techSlug: string;
+  techTitle: string;
+  /** Points earned for this challenge (0–max for that tech) */
+  points: number;
+}
+
+export interface CodelabScoreEntry {
+  id: number;
+  playerName: string;
+  techSlug: string;
+  techTitle: string;
+  points: number;
+  updatedAt: string;
+}
+
+export interface CodelabLeaderboardEntry {
+  playerName: string;
+  totalPoints: number;
+  challengesCompleted: number;
+}
+
 export type LeaderboardStatsBadgeCounts = {
   bronze: number;
   silver: number;
@@ -201,4 +224,8 @@ export const ListLeaderboardLevel = {
   intermediate: 'intermediate',
   advanced: 'advanced',
 } as const;
+
+export type ListCodelabLeaderboardParams = {
+limit?: number;
+};
 

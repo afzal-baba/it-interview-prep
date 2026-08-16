@@ -175,6 +175,43 @@ export const CreateLeaderboardEntryResponse = zod.object({
 
 
 /**
+ * @summary Submit or update a Code Lab challenge score
+ */
+export const SubmitCodelabScoreBody = zod.object({
+  "playerName": zod.string(),
+  "techSlug": zod.string(),
+  "techTitle": zod.string(),
+  "points": zod.number().int().describe('Points earned for this challenge (0–max for that tech)')
+})
+
+export const SubmitCodelabScoreResponse = zod.object({
+  "id": zod.number().int(),
+  "playerName": zod.string(),
+  "techSlug": zod.string(),
+  "techTitle": zod.string(),
+  "points": zod.number().int(),
+  "updatedAt": zod.coerce.date()
+})
+
+
+/**
+ * @summary Get Code Lab leaderboard (total points per player)
+ */
+export const listCodelabLeaderboardQueryLimitDefault = 50;
+
+export const ListCodelabLeaderboardQueryParams = zod.object({
+  "limit": zod.coerce.number().int().default(listCodelabLeaderboardQueryLimitDefault)
+})
+
+export const ListCodelabLeaderboardResponseItem = zod.object({
+  "playerName": zod.string(),
+  "totalPoints": zod.number().int(),
+  "challengesCompleted": zod.number().int()
+})
+export const ListCodelabLeaderboardResponse = zod.array(ListCodelabLeaderboardResponseItem)
+
+
+/**
  * @summary Get aggregated leaderboard statistics
  */
 export const GetLeaderboardStatsResponse = zod.object({

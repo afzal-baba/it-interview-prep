@@ -52,6 +52,21 @@ export const leaderboardTable = pgTable("leaderboard", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const codelabScoresTable = pgTable("codelab_scores", {
+  id: serial("id").primaryKey(),
+  playerName: text("player_name").notNull(),
+  techSlug: text("tech_slug").notNull(),
+  techTitle: text("tech_title").notNull(),
+  points: integer("points").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertCodelabScoreSchema = createInsertSchema(codelabScoresTable).omit({ id: true, createdAt: true, updatedAt: true });
+
+export type CodelabScore = typeof codelabScoresTable.$inferSelect;
+export type InsertCodelabScore = z.infer<typeof insertCodelabScoreSchema>;
+
 export const insertCourseSchema = createInsertSchema(coursesTable).omit({ id: true, createdAt: true });
 export const insertQuestionSchema = createInsertSchema(questionsTable).omit({ id: true, createdAt: true });
 export const insertSessionSchema = createInsertSchema(sessionsTable).omit({ id: true, startedAt: true });

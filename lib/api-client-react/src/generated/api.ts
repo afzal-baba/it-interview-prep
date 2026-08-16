@@ -20,11 +20,15 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  CodelabLeaderboardEntry,
+  CodelabScoreEntry,
+  CodelabScoreInput,
   Course,
   HealthStatus,
   LeaderboardEntry,
   LeaderboardEntryInput,
   LeaderboardStats,
+  ListCodelabLeaderboardParams,
   ListLeaderboardParams,
   ListQuestionsParams,
   Question,
@@ -222,8 +226,8 @@ export const getListQuestionsUrl = (courseId: number,
 
   Object.entries(params || {}).forEach(([key, value]) => {
 
-    if (value !== undefined && value !== null) {
-      normalizedParams.append(key, String(value))
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
     }
   });
 
@@ -453,8 +457,8 @@ export const getListLeaderboardUrl = (params?: ListLeaderboardParams,) => {
 
   Object.entries(params || {}).forEach(([key, value]) => {
 
-    if (value !== undefined && value !== null) {
-      normalizedParams.append(key, String(value))
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
     }
   });
 
@@ -602,6 +606,161 @@ export const useCreateLeaderboardEntry = <TError = ErrorType<unknown>,
       > => {
       return useMutation(getCreateLeaderboardEntryMutationOptions(options));
     }
+
+export const getSubmitCodelabScoreUrl = () => {
+
+
+
+
+  return `/api/codelab-scores`
+}
+
+/**
+ * @summary Submit or update a Code Lab challenge score
+ */
+export const submitCodelabScore = async (codelabScoreInput: CodelabScoreInput, options?: Parameters<typeof customFetch>[1]): Promise<CodelabScoreEntry> => {
+
+  return customFetch<CodelabScoreEntry>(getSubmitCodelabScoreUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(codelabScoreInput)
+  }
+);}
+
+
+
+
+
+export const getSubmitCodelabScoreMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitCodelabScore>>, TError,{data: BodyType<CodelabScoreInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof submitCodelabScore>>, TError,{data: BodyType<CodelabScoreInput>}, TContext> => {
+
+const mutationKey = ['submitCodelabScore'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof submitCodelabScore>>, {data: BodyType<CodelabScoreInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  submitCodelabScore(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SubmitCodelabScoreMutationResult = NonNullable<Awaited<ReturnType<typeof submitCodelabScore>>>
+    export type SubmitCodelabScoreMutationBody = BodyType<CodelabScoreInput>
+    export type SubmitCodelabScoreMutationError = ErrorType<void>
+
+    /**
+ * @summary Submit or update a Code Lab challenge score
+ */
+export const useSubmitCodelabScore = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitCodelabScore>>, TError,{data: BodyType<CodelabScoreInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof submitCodelabScore>>,
+        TError,
+        {data: BodyType<CodelabScoreInput>},
+        TContext
+      > => {
+      return useMutation(getSubmitCodelabScoreMutationOptions(options));
+    }
+
+export const getListCodelabLeaderboardUrl = (params?: ListCodelabLeaderboardParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/codelab-leaderboard?${stringifiedParams}` : `/api/codelab-leaderboard`
+}
+
+/**
+ * @summary Get Code Lab leaderboard (total points per player)
+ */
+export const listCodelabLeaderboard = async (params?: ListCodelabLeaderboardParams, options?: Parameters<typeof customFetch>[1]): Promise<CodelabLeaderboardEntry[]> => {
+
+  return customFetch<CodelabLeaderboardEntry[]>(getListCodelabLeaderboardUrl(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListCodelabLeaderboardQueryKey = (params?: ListCodelabLeaderboardParams,) => {
+    return [
+    `/api/codelab-leaderboard`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getListCodelabLeaderboardQueryOptions = <TData = Awaited<ReturnType<typeof listCodelabLeaderboard>>, TError = ErrorType<unknown>>(params?: ListCodelabLeaderboardParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listCodelabLeaderboard>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListCodelabLeaderboardQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listCodelabLeaderboard>>> = ({ signal }) => listCodelabLeaderboard(params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listCodelabLeaderboard>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListCodelabLeaderboardQueryResult = NonNullable<Awaited<ReturnType<typeof listCodelabLeaderboard>>>
+export type ListCodelabLeaderboardQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get Code Lab leaderboard (total points per player)
+ */
+
+export function useListCodelabLeaderboard<TData = Awaited<ReturnType<typeof listCodelabLeaderboard>>, TError = ErrorType<unknown>>(
+ params?: ListCodelabLeaderboardParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listCodelabLeaderboard>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListCodelabLeaderboardQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
 
 export const getGetLeaderboardStatsUrl = () => {
 
