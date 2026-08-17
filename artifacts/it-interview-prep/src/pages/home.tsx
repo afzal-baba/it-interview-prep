@@ -30,6 +30,7 @@ const CATEGORY_ORDER = [
   "APIs & Integration",
   "Messaging",
   "Enterprise",
+  "CMS & Platforms",
   "General",
 ];
 
@@ -134,6 +135,10 @@ const SLUG_ACCENT: Record<string, string> = {
   grpc:            "#5be3d8",
   // Frontend extras (new)
   svelte:          "#f0a35c",
+  // Languages gap courses (new)
+  "dotnet-csharp": "#8f7bf0",
+  // CMS & Platforms (new)
+  aem:             "#f0748a",
 };
 const FALLBACK = ["#f0748a","#8f7bf0","#f0b84f","#5be3d8","#f0a35c","#6fd3f0"];
 const getAccent = (course: Course, idx: number) =>
@@ -467,6 +472,7 @@ const CATEGORY_ICON: Record<string, string> = {
   "Architecture":     "◫",
   "Messaging":        "⇄",
   "Enterprise":          "◈",
+  "CMS & Platforms":     "◧",
   "APIs & Integration":  "⇌",
   "General":             "●",
 };
