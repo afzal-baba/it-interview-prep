@@ -67,7 +67,12 @@ router.get("/leaderboard/stats", async (req, res): Promise<void> => {
 
 // GET /leaderboard
 router.get("/leaderboard", async (req, res): Promise<void> => {
-  const parsed = ListLeaderboardQueryParams.safeParse(req.query);
+  // The generated client serialises JS null as the string "null"; strip those
+  // before validation so optional filters are treated as absent (not invalid).
+  const cleanedQuery = Object.fromEntries(
+    Object.entries(req.query).filter(([, v]) => v !== "null" && v !== "undefined" && v !== ""),
+  );
+  const parsed = ListLeaderboardQueryParams.safeParse(cleanedQuery);
   if (!parsed.success) {
     res.status(400).json({ error: parsed.error.message });
     return;
