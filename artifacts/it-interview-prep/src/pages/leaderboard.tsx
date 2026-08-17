@@ -91,7 +91,7 @@ export default function Leaderboard() {
           className={cn(
             "flex items-center gap-2 h-10 px-5 rounded-xl text-sm font-bold transition-all",
             activeTab === "quiz"
-              ? "bg-white shadow text-primary"
+              ? "text-primary shadow-sm border border-border/60"
               : "text-muted-foreground hover:text-foreground"
           )}
         >
@@ -102,7 +102,7 @@ export default function Leaderboard() {
           className={cn(
             "flex items-center gap-2 h-10 px-5 rounded-xl text-sm font-bold transition-all",
             activeTab === "codelab"
-              ? "bg-white shadow text-primary"
+              ? "text-primary shadow-sm border border-border/60"
               : "text-muted-foreground hover:text-foreground"
           )}
         >
@@ -113,7 +113,7 @@ export default function Leaderboard() {
       {activeTab === "quiz" ? (
         <>
           {/* Filters */}
-          <div className="flex flex-wrap items-center gap-4 mb-8 p-4 bg-white rounded-2xl border shadow-sm">
+          <div className="flex flex-wrap items-center gap-4 mb-8 p-4 rounded-2xl border border-border/60" style={{ background: "var(--cin-surface)", backdropFilter: "blur(12px)" }}>
             <div className="text-sm font-bold text-muted-foreground mr-2">FILTERS:</div>
 
             <select
@@ -295,7 +295,7 @@ export default function Leaderboard() {
       ) : (
         /* Code Lab leaderboard */
         <>
-          <div className="flex items-center gap-3 mb-6 p-4 bg-white rounded-2xl border shadow-sm">
+          <div className="flex items-center gap-3 mb-6 p-4 rounded-2xl border border-border/60" style={{ background: "var(--cin-surface)", backdropFilter: "blur(12px)" }}>
             <FlaskConical className="w-5 h-5 text-primary" />
             <p className="text-sm text-muted-foreground">
               Rankings are based on self-assessed Code Lab challenge scores across all 40 technologies.
@@ -361,11 +361,11 @@ export default function Leaderboard() {
 
 function StatCard({ title, value, icon }: any) {
   return (
-    <Card className="bg-white">
+    <Card className="border-border/60" style={{ background: "var(--cin-surface)", backdropFilter: "blur(12px)" }}>
       <CardContent className="p-6 flex flex-col justify-center items-center text-center">
         <div className="text-primary mb-2 p-3 bg-primary/10 rounded-full">{icon}</div>
         <div className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-1">{title}</div>
-        <div className="text-2xl font-black font-mono">{value}</div>
+        <div className="text-2xl font-black font-mono text-foreground">{value}</div>
       </CardContent>
     </Card>
   );
