@@ -231,6 +231,15 @@ function SharePanel({
   );
 }
 
+// ─── Player name persistence ───────────────────────────────────────────────────
+const PLAYER_NAME_KEY = "leaderboard-player-name";
+function getSavedPlayerName(): string {
+  try { return localStorage.getItem(PLAYER_NAME_KEY) ?? ""; } catch { return ""; }
+}
+function persistPlayerName(name: string) {
+  try { localStorage.setItem(PLAYER_NAME_KEY, name); } catch { /* noop */ }
+}
+
 // ─── Form schema ──────────────────────────────────────────────────────────────
 const formSchema = z.object({
   playerName: z.string().min(2, "Name must be at least 2 characters").max(30),
@@ -244,14 +253,19 @@ export default function Result() {
   const { data: courses } = useListCourses();
   const [savedName, setSavedName] = useState("");
   const fired = useRef(false);
+  const autoSubmitted = useRef(false);
+
+  const knownName = getSavedPlayerName();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitSuccessful },
     getValues,
+    setValue,
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: { playerName: knownName },
   });
 
   useEffect(() => {
@@ -278,10 +292,28 @@ export default function Result() {
   const courseName  = courses?.find(c => c.id === currentSession.courseId)?.name ?? "";
   const level       = currentSession.level ?? "";
 
+  // Auto-submit if we already know the player's name from a previous session
+  useEffect(() => {
+    if (!sessionResult || !currentSession) return;
+    if (autoSubmitted.current) return;
+    if (!knownName || knownName.length < 2) return;
+    autoSubmitted.current = true;
+    createLeaderboardEntry.mutateAsync({
+      data: { sessionId: sessionResult.sessionId, playerName: knownName },
+    }).then(() => {
+      setSavedName(knownName);
+    }).catch(() => {
+      // Silent fail — user can still manually submit below
+      autoSubmitted.current = false;
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessionResult, currentSession]);
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     await createLeaderboardEntry.mutateAsync({
-      data: { sessionId: sessionResult.sessionId, playerName: values.playerName },
+      data: { sessionId: sessionResult!.sessionId, playerName: values.playerName },
     });
+    persistPlayerName(values.playerName);
     setSavedName(values.playerName);
   };
 
@@ -387,12 +419,12 @@ export default function Result() {
             <CardTitle className="text-2xl">Claim Your Rank</CardTitle>
           </CardHeader>
           <CardContent>
-            {isSubmitSuccessful ? (
+            {(isSubmitSuccessful || savedName !== "") ? (
               <div className="bg-success/10 border-2 border-success/20 rounded-xl p-8 text-center animate-in zoom-in">
                 <CheckCircle2 className="w-12 h-12 text-success mx-auto mb-4" />
                 <h3 className="text-xl font-bold text-success mb-2">Score Saved! 🎉</h3>
                 <p className="text-foreground/80 mb-6">
-                  Your performance is on the global leaderboard.
+                  <strong>{savedName || knownName}</strong>'s performance is on the global leaderboard.
                 </p>
                 <div className="flex justify-center gap-3 flex-wrap">
                   <Button variant="outline" onClick={() => setLocation("/")}>
