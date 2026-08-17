@@ -594,6 +594,53 @@ function CoursesByCategory({
 // ─── Film grain data URI ──────────────────────────────────────────────────────
 const GRAIN = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E`;
 
+// ─── Search box ───────────────────────────────────────────────────────────────
+function SearchBox({ search, onSearch }: { search: string; onSearch: (v: string) => void }) {
+  const [focused, setFocused] = useState(false);
+  return (
+    <div
+      style={{
+        display: "flex", alignItems: "center", gap: 12,
+        background: "var(--cin-surface)", backdropFilter: "blur(14px)",
+        border: focused
+          ? "1.5px solid rgba(255,255,255,0.75)"
+          : "1.5px solid rgba(255,255,255,0.22)",
+        padding: "15px 20px", borderRadius: 14,
+        boxShadow: focused
+          ? "0 0 0 3px rgba(255,255,255,0.08), 0 20px 60px -20px rgba(0,0,0,0.65)"
+          : "0 20px 60px -20px rgba(0,0,0,0.65)",
+        transition: "border-color 0.2s, box-shadow 0.2s",
+      }}
+    >
+      <Search size={16} style={{ color: focused ? "rgba(255,255,255,0.7)" : "var(--cin-faint)", flexShrink: 0, transition: "color 0.2s" }} />
+      <input
+        type="text"
+        className="cin-search-input"
+        placeholder="Search courses… e.g. Docker, React, Kafka, Vault"
+        value={search}
+        onChange={(e) => onSearch(e.target.value)}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        style={{
+          flex: 1, background: "transparent", border: "none", outline: "none",
+          color: "var(--cin-text)", fontFamily: "'JetBrains Mono',monospace", fontSize: 13.5,
+        }}
+      />
+      {search ? (
+        <button
+          onClick={() => onSearch("")}
+          aria-label="Clear search"
+          style={{ background: "none", border: "none", cursor: "pointer", color: "var(--cin-faint)", display: "flex", padding: 0, flexShrink: 0 }}
+        >
+          <X size={15} />
+        </button>
+      ) : (
+        <kbd style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "var(--cin-faint)", border: "1px solid var(--cin-border)", padding: "2px 7px", borderRadius: 5, flexShrink: 0 }}>/</kbd>
+      )}
+    </div>
+  );
+}
+
 // ─── Home ─────────────────────────────────────────────────────────────────────
 export default function Home() {
   const { data: courses, isLoading, isError, refetch } = useListCourses({
@@ -919,38 +966,7 @@ export default function Home() {
 
               {/* Search box */}
               <div style={{ width: "100%", maxWidth: 540, animation: "cin-slideUp 0.7s ease-out 0.5s both" }}>
-                <div
-                  style={{
-                    display: "flex", alignItems: "center", gap: 12,
-                    background: "var(--cin-surface)", backdropFilter: "blur(14px)",
-                    border: "1px solid var(--cin-border)", padding: "15px 20px", borderRadius: 14,
-                    boxShadow: "0 20px 60px -20px rgba(0,0,0,0.65)",
-                  }}
-                >
-                  <Search size={16} style={{ color: "var(--cin-faint)", flexShrink: 0 }} />
-                  <input
-                    type="text"
-                    className="cin-search-input"
-                    placeholder="Search courses… e.g. Docker, React, Kafka, Vault"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    style={{
-                      flex: 1, background: "transparent", border: "none", outline: "none",
-                      color: "var(--cin-text)", fontFamily: "'JetBrains Mono',monospace", fontSize: 13.5,
-                    }}
-                  />
-                  {search ? (
-                    <button
-                      onClick={() => setSearch("")}
-                      aria-label="Clear search"
-                      style={{ background: "none", border: "none", cursor: "pointer", color: "var(--cin-faint)", display: "flex", padding: 0, flexShrink: 0 }}
-                    >
-                      <X size={15} />
-                    </button>
-                  ) : (
-                    <kbd style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "var(--cin-faint)", border: "1px solid var(--cin-border)", padding: "2px 7px", borderRadius: 5, flexShrink: 0 }}>/</kbd>
-                  )}
-                </div>
+                <SearchBox search={search} onSearch={setSearch} />
               </div>
 
               {/* Stats row */}

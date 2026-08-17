@@ -18,6 +18,50 @@ import {
   Timer, Linkedin, Twitter, Copy, Check, Users, Share2,
 } from "lucide-react";
 
+// ─── Motivating quotes by tier ────────────────────────────────────────────────
+const QUOTES: Record<string, string[]> = {
+  legendary: [
+    "\"The expert in anything was once a beginner who refused to quit.\"",
+    "\"Success is the sum of small efforts, repeated day in and day out.\" — R. Collier",
+    "\"Excellence is not a destination but a continuous journey.\" — Brian Tracy",
+    "\"The harder you work for something, the greater you'll feel when you achieve it.\"",
+    "\"Champions keep playing until they get it right.\" — Billie Jean King",
+  ],
+  excellent: [
+    "\"Success usually comes to those who are too busy to be looking for it.\" — Thoreau",
+    "\"The secret of getting ahead is getting started.\" — Mark Twain",
+    "\"It always seems impossible until it's done.\" — Nelson Mandela",
+    "\"Quality is not an act, it is a habit.\" — Aristotle",
+    "\"Work hard in silence. Let success make the noise.\"",
+  ],
+  good: [
+    "\"Progress, not perfection, is the goal.\"",
+    "\"A little progress each day adds up to big results.\"",
+    "\"Keep going. Everything you need will come to you at the right time.\"",
+    "\"Small steps in the right direction can turn out to be the biggest step of your life.\"",
+    "\"Rome wasn't built in a day, but they were laying bricks every hour.\"",
+  ],
+  none: [
+    "\"The only way to do great work is to love what you do.\" — Steve Jobs",
+    "\"Fall seven times, stand up eight.\" — Japanese Proverb",
+    "\"Challenges are what make life interesting. Overcoming them is what makes it meaningful.\"",
+    "\"Every master was once a disaster.\"",
+    "\"You don't have to be great to start, but you have to start to be great.\" — Zig Ziglar",
+  ],
+  sad: [
+    "\"It does not matter how slowly you go as long as you do not stop.\" — Confucius",
+    "\"Failure is simply the opportunity to begin again, this time more intelligently.\" — Henry Ford",
+    "\"The greatest glory in living lies not in never falling, but in rising every time we fall.\" — Nelson Mandela",
+    "\"Every expert was once a beginner. Every pro was once an amateur.\"",
+    "\"Success is not final, failure is not fatal: It is the courage to continue that counts.\" — Churchill",
+  ],
+};
+
+function getRandomQuote(type: string): string {
+  const pool = QUOTES[type] ?? QUOTES.none;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
 // ─── Score tier config ────────────────────────────────────────────────────────
 function getScoreTier(pct: number) {
   if (pct >= 95) return {
@@ -26,6 +70,7 @@ function getScoreTier(pct: number) {
     glowClass: "score-glow-gold",
     message: "You're interview-ready. FAANG is within reach — go get it.",
     confettiType: "legendary" as const,
+    quoteType: "legendary",
   };
   if (pct >= 85) return {
     emoji: "🎉", label: "Excellent!", color: "text-green-400",
@@ -33,6 +78,7 @@ function getScoreTier(pct: number) {
     glowClass: "",
     message: "Outstanding! You'll ace your next technical interview.",
     confettiType: "excellent" as const,
+    quoteType: "excellent",
   };
   if (pct >= 70) return {
     emoji: "⭐", label: "Great Work!", color: "text-blue-400",
@@ -40,6 +86,7 @@ function getScoreTier(pct: number) {
     glowClass: "",
     message: "Solid foundation. A bit more practice and you'll be unstoppable.",
     confettiType: "good" as const,
+    quoteType: "good",
   };
   if (pct >= 50) return {
     emoji: "💪", label: "Keep Going!", color: "text-orange-400",
@@ -47,6 +94,7 @@ function getScoreTier(pct: number) {
     glowClass: "",
     message: "You're on the right track. Review the explanations and retry!",
     confettiType: "none" as const,
+    quoteType: "none",
   };
   return {
     emoji: "🦆", label: "Don't Give Up!", color: "text-red-400",
@@ -54,6 +102,7 @@ function getScoreTier(pct: number) {
     glowClass: "",
     message: "Every expert was once a beginner. Review the basics and come back stronger!",
     confettiType: "sad" as const,
+    quoteType: "sad",
   };
 }
 
@@ -350,6 +399,18 @@ export default function Result() {
           {tier.label}
         </h1>
         <p className="text-xl text-muted-foreground max-w-md mx-auto">{tier.message}</p>
+
+        {/* Motivating quote */}
+        <p
+          className="text-sm italic max-w-lg mx-auto mt-4 opacity-70"
+          style={{
+            fontFamily: "'Inter', sans-serif",
+            lineHeight: 1.6,
+            color: "currentColor",
+          }}
+        >
+          {getRandomQuote(tier.quoteType)}
+        </p>
 
         {timedMode && (
           <div className="inline-flex items-center gap-2 text-orange-500 font-bold bg-orange-500/10 px-4 py-1.5 rounded-full border border-orange-500/20 mt-4">

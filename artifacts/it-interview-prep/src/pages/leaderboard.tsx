@@ -249,8 +249,7 @@ export default function Leaderboard() {
                 <thead className="bg-secondary/50 text-muted-foreground font-bold tracking-wider uppercase text-xs">
                   <tr>
                     <th className="px-6 py-4">Rank</th>
-                    <th className="px-6 py-4">Player</th>
-                    <th className="px-6 py-4">Course</th>
+                    <th className="px-6 py-4">Player & Course</th>
                     <th className="px-6 py-4">Level</th>
                     <th className="px-6 py-4">Mode</th>
                     <th className="px-6 py-4 text-right">Score</th>
@@ -292,12 +291,16 @@ export default function Leaderboard() {
                           #{idx + 1}
                         </td>
                         <td className="px-6 py-4">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-bold text-base">{entry.playerName}</span>
-                            <RoyalBadge rank={idx} />
+                          <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="font-bold text-base leading-tight">{entry.playerName}</span>
+                              <RoyalBadge rank={idx} />
+                            </div>
+                            <span className="text-xs text-muted-foreground font-medium truncate max-w-[200px]">
+                              📚 {entry.courseName}
+                            </span>
                           </div>
                         </td>
-                        <td className="px-6 py-4">{entry.courseName}</td>
                         <td className="px-6 py-4 capitalize">
                           <Badge
                             variant="outline"
