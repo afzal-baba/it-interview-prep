@@ -566,6 +566,26 @@ export default function Home() {
   const [timedModeEnabled, setTimedModeEnabled] = useState(false);
   const [search, setSearch] = useState("");
 
+  // ── Challenge invite params ────────────────────────────────────────────────
+  const [challengeParams] = useState(() => {
+    const p = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
+    const c = p.get("c"); const l = p.get("l"); const from = p.get("from");
+    if (!c || !l || !from) return null;
+    return {
+      courseId: Number(c),
+      level: l,
+      from: decodeURIComponent(from),
+      courseName: p.get("cn") ? decodeURIComponent(p.get("cn")!) : null,
+    };
+  });
+
+  // Auto-select the challenged course once courses load
+  useEffect(() => {
+    if (!challengeParams || !courses || selectedCourse) return;
+    const found = courses.find((c) => c.id === challengeParams.courseId);
+    if (found) setSelectedCourse(found);
+  }, [courses, challengeParams, selectedCourse]);
+
   useEffect(() => {
     document.title = "IT Interview Prep — Practice Oracle, AWS, Java & 37 More Topics";
   }, []);
@@ -664,6 +684,47 @@ export default function Home() {
           />
         ) : (
           <div className="cin-home-content" style={{ maxWidth: 1100, margin: "0 auto", padding: "96px 32px 80px" }}>
+
+            {/* ── Challenge banner ── */}
+            {challengeParams && (
+              <div
+                style={{
+                  display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
+                  background: "linear-gradient(135deg, rgba(95,120,240,0.12), rgba(91,227,216,0.12))",
+                  border: "1px solid rgba(95,120,240,0.4)", borderRadius: 16,
+                  padding: "16px 24px", marginBottom: 40,
+                  animation: "cin-slideUp 0.5s ease-out both",
+                }}
+              >
+                <div style={{ fontSize: 36 }}>🎯</div>
+                <div style={{ flex: 1, minWidth: 200 }}>
+                  <div style={{ fontWeight: 700, color: "var(--cin-text)", fontSize: 15 }}>
+                    {challengeParams.from} challenged you!
+                  </div>
+                  <div style={{ color: "var(--cin-dim)", fontSize: 13, marginTop: 3 }}>
+                    Beat their score on{" "}
+                    <strong style={{ color: "var(--cin-cyan)" }}>
+                      {challengeParams.courseName ?? "a quiz"}
+                    </strong>{" "}
+                    ({challengeParams.level} level)
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    const found = courses?.find((c) => c.id === challengeParams.courseId);
+                    if (found) setSelectedCourse(found);
+                  }}
+                  style={{
+                    background: "linear-gradient(135deg, #5f78f0, #5be3d8)", color: "#fff",
+                    border: "none", borderRadius: 10, padding: "10px 22px",
+                    fontWeight: 700, fontSize: 13, cursor: "pointer", whiteSpace: "nowrap",
+                    boxShadow: "0 4px 16px rgba(95,120,240,0.35)",
+                  }}
+                >
+                  Accept Challenge 🎮
+                </button>
+              </div>
+            )}
 
             {/* ── Hero ── */}
             <div style={{ textAlign: "center", marginBottom: 80, display: "flex", flexDirection: "column", alignItems: "center" }}>

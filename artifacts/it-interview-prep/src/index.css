@@ -238,3 +238,36 @@
 .dark-panel {
   @apply bg-[#0B0F19] text-white border border-white/10 shadow-2xl;
 }
+
+/* ── Result page animations ───────────────────────────────────────── */
+@keyframes duck-pop-in {
+  0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+  70%  { transform: scale(1.15) rotate(6deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg);   opacity: 1; }
+}
+@keyframes duck-bob {
+  0%, 100% { transform: translateY(0)    rotate(-6deg); }
+  50%       { transform: translateY(-12px) rotate(6deg);  }
+}
+@keyframes bubble-pop {
+  0%   { transform: scale(0) translateY(8px); opacity: 0; }
+  70%  { transform: scale(1.05) translateY(-2px); opacity: 1; }
+  100% { transform: scale(1) translateY(0);  opacity: 1; }
+}
+@keyframes trophy-pulse {
+  0%, 100% { filter: drop-shadow(0 0 0px rgba(255,215,0,0)); }
+  50%       { filter: drop-shadow(0 0 24px rgba(255,215,0,0.7)); }
+}
+@keyframes score-glow-gold {
+  0%, 100% { text-shadow: 0 0 20px rgba(255,215,0,0.4); }
+  50%       { text-shadow: 0 0 50px rgba(255,215,0,0.9), 0 0 80px rgba(255,165,0,0.5); }
+}
+@keyframes result-badge-pop {
+  0%   { transform: scale(0); opacity: 0; }
+  80%  { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1);  opacity: 1; }
+}
+@keyframes share-slide-up {
+  0%   { transform: translateY(16px); opacity: 0; }
+  100% { transform: translateY(0);    opacity: 1; }
+}
