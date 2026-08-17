@@ -99,6 +99,7 @@ router.get("/leaderboard", async (req, res): Promise<void> => {
       badges: leaderboardTable.badges,
       timedMode: leaderboardTable.timedMode,
       timeBonus: leaderboardTable.timeBonus,
+      gender: leaderboardTable.gender,
       createdAt: leaderboardTable.createdAt,
     })
     .from(leaderboardTable)
@@ -110,6 +111,7 @@ router.get("/leaderboard", async (req, res): Promise<void> => {
   const result = rows.map((r) => ({
     ...r,
     badges: (r.badges as string[]) ?? [],
+    gender: r.gender ?? null,
   }));
 
   res.json(ListLeaderboardResponse.parse(result));
@@ -124,7 +126,7 @@ router.post("/leaderboard", async (req, res): Promise<void> => {
     return;
   }
 
-  const { sessionId, playerName } = parsed.data;
+  const { sessionId, playerName, gender } = parsed.data;
 
   // Attach the authenticated user's id (if logged in) so scores are tied to accounts
   const userId = req.isAuthenticated() ? req.user.id : null;
@@ -170,6 +172,7 @@ router.post("/leaderboard", async (req, res): Promise<void> => {
       timedMode,
       timeBonus,
       sessionId: session.id,
+      gender: gender ?? null,
     })
     .returning();
 
@@ -192,6 +195,7 @@ router.post("/leaderboard", async (req, res): Promise<void> => {
     badges: (entry.badges as string[]) ?? [],
     timedMode: entry.timedMode,
     timeBonus: entry.timeBonus,
+    gender: entry.gender,
     createdAt: entry.createdAt,
   }));
 });

@@ -17,55 +17,41 @@ import { cn } from "@/lib/utils";
 
 type TabKind = "quiz" | "codelab";
 
-/** Crown + title decoration for top-2 players */
-function RoyalBadge({ rank }: { rank: number }) {
-  if (rank === 0) {
-    return (
-      <span
-        title="King — #1 on the leaderboard"
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 4,
-          background: "linear-gradient(135deg, #f59e0b22, #eab30844)",
-          border: "1px solid #f59e0b66",
-          borderRadius: 20,
-          padding: "2px 8px",
-          fontSize: 11,
-          fontWeight: 800,
-          color: "#f59e0b",
-          letterSpacing: "0.03em",
-          whiteSpace: "nowrap",
-        }}
-      >
-        👑 King
-      </span>
-    );
-  }
-  if (rank === 1) {
-    return (
-      <span
-        title="Queen — #2 on the leaderboard"
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 4,
-          background: "linear-gradient(135deg, #a78bfa22, #c4b5fd44)",
-          border: "1px solid #a78bfa66",
-          borderRadius: 20,
-          padding: "2px 8px",
-          fontSize: 11,
-          fontWeight: 800,
-          color: "#a78bfa",
-          letterSpacing: "0.03em",
-          whiteSpace: "nowrap",
-        }}
-      >
-        👸 Queen
-      </span>
-    );
-  }
-  return null;
+/** Crown + title decoration for top-2 players, respecting self-reported gender */
+function RoyalBadge({ rank, gender }: { rank: number; gender?: string | null }) {
+  if (rank > 1) return null;
+
+  const isKing = gender === "M" || (gender == null && rank === 0);
+  const isFirst = rank === 0;
+
+  const colorStyle = isFirst
+    ? { bg: "linear-gradient(135deg, #f59e0b22, #eab30844)", border: "#f59e0b66", text: "#f59e0b" }
+    : { bg: "linear-gradient(135deg, #a78bfa22, #c4b5fd44)", border: "#a78bfa66", text: "#a78bfa" };
+
+  const label = isKing ? "👑 King" : "👸 Queen";
+  const title = `${isKing ? "King" : "Queen"} — #${rank + 1} on the leaderboard`;
+
+  return (
+    <span
+      title={title}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 4,
+        background: colorStyle.bg,
+        border: `1px solid ${colorStyle.border}`,
+        borderRadius: 20,
+        padding: "2px 8px",
+        fontSize: 11,
+        fontWeight: 800,
+        color: colorStyle.text,
+        letterSpacing: "0.03em",
+        whiteSpace: "nowrap",
+      }}
+    >
+      {label}
+    </span>
+  );
 }
 
 export default function Leaderboard() {
@@ -294,7 +280,7 @@ export default function Leaderboard() {
                           <div className="flex flex-col gap-1">
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className="font-bold text-base leading-tight">{entry.playerName}</span>
-                              <RoyalBadge rank={idx} />
+                              <RoyalBadge rank={idx} gender={entry.gender} />
                             </div>
                             <span className="text-xs text-muted-foreground font-medium truncate max-w-[200px]">
                               📚 {entry.courseName}
@@ -419,7 +405,7 @@ export default function Leaderboard() {
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className="font-bold text-base">{entry.playerName}</span>
-                            <RoyalBadge rank={idx} />
+                            <RoyalBadge rank={idx} gender={null} />
                           </div>
                         </td>
                         <td className="px-6 py-4 text-right font-mono font-bold text-lg text-primary">

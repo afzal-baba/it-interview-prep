@@ -147,7 +147,8 @@ export const ListLeaderboardResponseItem = zod.object({
   "badges": zod.array(zod.string()),
   "createdAt": zod.coerce.date(),
   "timedMode": zod.boolean().optional().describe('Whether this score was achieved in timed mode'),
-  "timeBonus": zod.number().int().optional().describe('Time bonus points earned')
+  "timeBonus": zod.number().int().optional().describe('Time bonus points earned'),
+  "gender": zod.enum(["M", "F"]).nullish().describe('Player gender for King/Queen badge')
 })
 export const ListLeaderboardResponse = zod.array(ListLeaderboardResponseItem)
 
@@ -157,7 +158,8 @@ export const ListLeaderboardResponse = zod.array(ListLeaderboardResponseItem)
  */
 export const CreateLeaderboardEntryBody = zod.object({
   "sessionId": zod.number().int().describe('The session ID whose server-computed result should be recorded'),
-  "playerName": zod.string()
+  "playerName": zod.string(),
+  "gender": zod.enum(["M", "F"]).optional().describe('Player gender for King/Queen badge (M or F)')
 })
 
 export const CreateLeaderboardEntryResponse = zod.object({
@@ -173,7 +175,8 @@ export const CreateLeaderboardEntryResponse = zod.object({
   "badges": zod.array(zod.string()),
   "createdAt": zod.coerce.date(),
   "timedMode": zod.boolean().optional().describe('Whether this score was achieved in timed mode'),
-  "timeBonus": zod.number().int().optional().describe('Time bonus points earned')
+  "timeBonus": zod.number().int().optional().describe('Time bonus points earned'),
+  "gender": zod.enum(["M", "F"]).nullish().describe('Player gender for King/Queen badge')
 })
 
 

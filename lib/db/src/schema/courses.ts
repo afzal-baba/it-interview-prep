@@ -51,6 +51,7 @@ export const leaderboardTable = pgTable("leaderboard", {
   timedMode: boolean("timed_mode").default(false).notNull(),
   timeBonus: integer("time_bonus").default(0).notNull(),
   sessionId: integer("session_id").references(() => sessionsTable.id),
+  gender: text("gender", { enum: ["M", "F"] }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

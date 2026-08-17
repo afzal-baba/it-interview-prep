@@ -280,13 +280,24 @@ function SharePanel({
   );
 }
 
-// ─── Player name persistence ───────────────────────────────────────────────────
-const PLAYER_NAME_KEY = "leaderboard-player-name";
+// ─── Player name & gender persistence ─────────────────────────────────────────
+const PLAYER_NAME_KEY   = "leaderboard-player-name";
+const PLAYER_GENDER_KEY = "leaderboard-player-gender";
+
 function getSavedPlayerName(): string {
   try { return localStorage.getItem(PLAYER_NAME_KEY) ?? ""; } catch { return ""; }
 }
 function persistPlayerName(name: string) {
   try { localStorage.setItem(PLAYER_NAME_KEY, name); } catch { /* noop */ }
+}
+function getSavedGender(): "M" | "F" | null {
+  try {
+    const v = localStorage.getItem(PLAYER_GENDER_KEY);
+    return (v === "M" || v === "F") ? v : null;
+  } catch { return null; }
+}
+function persistGender(g: "M" | "F") {
+  try { localStorage.setItem(PLAYER_GENDER_KEY, g); } catch { /* noop */ }
 }
 
 // ─── Form schema ──────────────────────────────────────────────────────────────
@@ -301,6 +312,7 @@ export default function Result() {
   const createLeaderboardEntry = useCreateLeaderboardEntry();
   const { data: courses } = useListCourses();
   const [savedName, setSavedName] = useState("");
+  const [gender, setGender] = useState<"M" | "F" | null>(() => getSavedGender());
   const fired = useRef(false);
   const autoSubmitted = useRef(false);
 
@@ -348,7 +360,7 @@ export default function Result() {
     if (!knownName || knownName.length < 2) return;
     autoSubmitted.current = true;
     createLeaderboardEntry.mutateAsync({
-      data: { sessionId: sessionResult.sessionId, playerName: knownName },
+      data: { sessionId: sessionResult.sessionId, playerName: knownName, gender: getSavedGender() ?? undefined },
     }).then(() => {
       setSavedName(knownName);
     }).catch(() => {
@@ -360,9 +372,10 @@ export default function Result() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     await createLeaderboardEntry.mutateAsync({
-      data: { sessionId: sessionResult!.sessionId, playerName: values.playerName },
+      data: { sessionId: sessionResult!.sessionId, playerName: values.playerName, gender: gender ?? undefined },
     });
     persistPlayerName(values.playerName);
+    if (gender) persistGender(gender);
     setSavedName(values.playerName);
   };
 
@@ -512,6 +525,38 @@ export default function Result() {
                     <p className="text-sm text-destructive">{errors.playerName.message}</p>
                   )}
                 </div>
+
+                {/* Gender toggle — determines King / Queen badge on leaderboard */}
+                <div className="space-y-2">
+                  <p className="text-sm text-muted-foreground font-medium">
+                    How should the leaderboard crown you?
+                  </p>
+                  <div className="flex gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setGender("M")}
+                      className={`flex-1 h-12 rounded-xl border-2 text-base font-bold transition-all ${
+                        gender === "M"
+                          ? "border-yellow-400 bg-yellow-400/10 text-yellow-500"
+                          : "border-border bg-background text-muted-foreground hover:border-yellow-400/50"
+                      }`}
+                    >
+                      👑 King
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setGender("F")}
+                      className={`flex-1 h-12 rounded-xl border-2 text-base font-bold transition-all ${
+                        gender === "F"
+                          ? "border-violet-400 bg-violet-400/10 text-violet-500"
+                          : "border-border bg-background text-muted-foreground hover:border-violet-400/50"
+                      }`}
+                    >
+                      👸 Queen
+                    </button>
+                  </div>
+                </div>
+
                 <Button type="submit" size="lg" className="w-full h-14 text-lg rounded-xl" disabled={isSubmitting}>
                   {isSubmitting ? "Saving…" : "Save to Leaderboard"}
                 </Button>

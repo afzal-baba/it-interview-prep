@@ -186,12 +186,16 @@ export interface LeaderboardEntry {
   timedMode?: boolean;
   /** Time bonus points earned */
   timeBonus?: number;
+  /** Player gender for King/Queen badge */
+  gender?: 'M' | 'F' | null;
 }
 
 export interface LeaderboardEntryInput {
   /** The session ID whose server-computed result should be recorded */
   sessionId: number;
   playerName: string;
+  /** Player gender for King/Queen badge (M or F) */
+  gender?: 'M' | 'F';
 }
 
 export interface CodelabProgress {
