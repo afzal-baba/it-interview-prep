@@ -164,7 +164,7 @@ export function Navbar() {
           padding: "20px 56px",
           backdropFilter: "blur(10px)",
           borderBottom: "1px solid var(--cin-border)",
-          backgroundColor: "rgba(246,248,252,0.92)",
+          backgroundColor: "rgba(5,7,15,0.88)",
           animation: "cin-slideDown 0.7s ease-out 0.1s both",
         }}
       >
@@ -279,7 +279,7 @@ export function Navbar() {
               position: "fixed",
               inset: 0,
               zIndex: 48,
-              background: "rgba(0,0,0,0.15)",
+              background: "rgba(5,7,15,0.55)",
               backdropFilter: "blur(2px)",
             }}
           />
@@ -291,7 +291,7 @@ export function Navbar() {
               left: 0,
               right: 0,
               zIndex: 49,
-              background: "rgba(246,248,252,0.98)",
+              background: "rgba(5,7,15,0.97)",
               backdropFilter: "blur(12px)",
               borderBottom: "1px solid var(--cin-border-strong)",
               paddingTop: 72, // below navbar

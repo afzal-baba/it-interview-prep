@@ -49,60 +49,60 @@
 }
 
 :root {
-  /* ─── Light theme ────────────────────────────────────────── */
-  --background: 220 25% 98%;       /* #f6f8fc */
-  --foreground: 222 84% 8%;        /* #0d1120 */
+  /* ─── Aurora dark theme ──────────────────────────────────── */
+  --background: 230 55% 7%;        /* #060918 deep navy */
+  --foreground: 224 50% 92%;       /* #d8e0f8 */
 
-  --card: 0 0% 100%;
-  --card-foreground: 222 84% 8%;
-  --card-border: 220 20% 88%;
+  --card: 228 50% 10%;
+  --card-foreground: 224 50% 92%;
+  --card-border: 228 35% 20%;
 
-  --popover: 0 0% 100%;
-  --popover-foreground: 222 84% 8%;
-  --popover-border: 220 20% 88%;
+  --popover: 228 50% 10%;
+  --popover-foreground: 224 50% 92%;
+  --popover-border: 228 35% 20%;
 
-  --primary: 249 72% 58%;          /* #6b55d4 violet */
+  --primary: 249 72% 68%;          /* #8f7bf0 violet */
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 220 25% 93%;
-  --secondary-foreground: 222 84% 8%;
+  --secondary: 228 45% 14%;
+  --secondary-foreground: 224 50% 92%;
 
-  --muted: 220 20% 94%;
-  --muted-foreground: 215 18% 46%;
+  --muted: 228 40% 16%;
+  --muted-foreground: 218 25% 58%;
 
-  --accent: 176 60% 38%;           /* teal */
-  --accent-foreground: 0 0% 100%;
+  --accent: 177 75% 55%;           /* #5be3d8 teal */
+  --accent-foreground: 228 50% 10%;
 
-  --destructive: 350 85% 48%;
+  --destructive: 350 85% 55%;
   --destructive-foreground: 0 0% 100%;
 
-  --success: 150 70% 36%;
+  --success: 150 70% 45%;
   --success-foreground: 0 0% 100%;
 
-  --border: 220 18% 88%;
-  --input: 220 18% 92%;
-  --ring: 249 72% 58%;
+  --border: 228 35% 20%;
+  --input: 228 45% 14%;
+  --ring: 249 72% 68%;
 
   --app-font-sans: 'Inter', sans-serif;
   --app-font-mono: 'JetBrains Mono', monospace;
 
   --radius: 0.75rem;
 
-  /* ─── Design tokens (light mode) ──────────────────────── */
-  --cin-bg: #f6f8fc;
-  --cin-surface: rgba(255, 255, 255, 0.85);
-  --cin-surface-solid: #ffffff;
-  --cin-cyan: #0b9fbe;
-  --cin-violet: #6b55d4;
-  --cin-rose: #c93f5a;
-  --cin-amber: #b07e14;
-  --cin-orange: #b06228;
-  --cin-lblue: #2a8ec4;
-  --cin-text: #0d1120;
-  --cin-dim: #3d4a6a;
-  --cin-faint: #8090b0;
-  --cin-border: rgba(0, 0, 0, 0.09);
-  --cin-border-strong: rgba(0, 0, 0, 0.22);
+  /* ─── Design tokens (aurora dark) ─────────────────────── */
+  --cin-bg: #05070f;
+  --cin-surface: rgba(10, 15, 42, 0.60);
+  --cin-surface-solid: #0c1230;
+  --cin-cyan: #5be3d8;
+  --cin-violet: #8f7bf0;
+  --cin-rose: #f0748a;
+  --cin-amber: #f0b84f;
+  --cin-orange: #f0a35c;
+  --cin-lblue: #6fd3f0;
+  --cin-text: #e2e8ff;
+  --cin-dim: #7080a8;
+  --cin-faint: #3a4a70;
+  --cin-border: rgba(255, 255, 255, 0.07);
+  --cin-border-strong: rgba(255, 255, 255, 0.14);
 }
 
 @layer base {
@@ -117,6 +117,21 @@
   body {
     @apply font-sans antialiased text-foreground selection:bg-primary/20;
   }
+}
+
+/* ─── Aurora keyframes ─────────────────────────────────────── */
+@keyframes cin-aurora-1 {
+  0%, 100% { transform: translateX(-8%) scaleY(1.0) rotate(-2deg); opacity: 0.55; }
+  50%       { transform: translateX(6%)  scaleY(1.2) rotate(2deg);  opacity: 0.85; }
+}
+@keyframes cin-aurora-2 {
+  0%, 100% { transform: translateX(6%)  scaleY(1.1) rotate(2deg);  opacity: 0.45; }
+  50%       { transform: translateX(-6%) scaleY(0.9) rotate(-2deg); opacity: 0.80; }
+}
+@keyframes cin-aurora-3 {
+  0%, 100% { transform: translateX(0%) scaleY(1.0); opacity: 0.30; }
+  33%       { transform: translateX(4%) scaleY(1.1); opacity: 0.55; }
+  66%       { transform: translateX(-4%) scaleY(0.9); opacity: 0.40; }
 }
 
 /* ─── Cinematic keyframes ──────────────────────────────────── */

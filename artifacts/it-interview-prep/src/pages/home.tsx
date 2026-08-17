@@ -175,7 +175,7 @@ function NetworkCanvas() {
           const d = Math.sqrt(dx * dx + dy * dy);
           if (d < 140) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(80,110,200,${0.12 * (1 - d / 140)})`;
+            ctx.strokeStyle = `rgba(80,120,220,${0.22 * (1 - d / 140)})`;
             ctx.lineWidth = 0.6;
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
@@ -186,7 +186,7 @@ function NetworkCanvas() {
       for (const n of nodes) {
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(80,110,200,0.35)";
+        ctx.fillStyle = "rgba(90,130,230,0.55)";
         ctx.fill();
         n.x += n.vx; n.y += n.vy;
         if (n.x < 0 || n.x > canvas.width)  n.vx *= -1;
@@ -246,7 +246,7 @@ function ParticleCanvas() {
           const a = Math.sin((p.life / p.maxLife) * Math.PI) * 0.45;
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          ctx.fillStyle = p.cyan ? `rgba(11,159,190,${a * 0.7})` : `rgba(107,85,212,${a * 0.7})`;
+          ctx.fillStyle = p.cyan ? `rgba(91,227,216,${a * 0.9})` : `rgba(143,123,240,${a * 0.9})`;
           ctx.fill();
           return { ...p, x: p.x + p.vx, y: p.y + p.vy, life: p.life + 1 };
         })
@@ -305,7 +305,7 @@ function CursorGlow() {
       ref={ref}
       style={{
         position: "fixed", top: 0, left: 0, width: 240, height: 240, borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(95,120,240,0.12), transparent 70%)",
+        background: "radial-gradient(circle, rgba(91,227,216,0.18), transparent 70%)",
         filter: "blur(60px)", pointerEvents: "none", zIndex: 2, opacity: 0,
         transition: "opacity 0.3s",
       }}
@@ -335,17 +335,17 @@ function CourseCard({
       onMouseLeave={() => setHovered(false)}
       style={{
         position: "relative",
-        background: hovered ? "#ffffff" : "var(--cin-surface)",
+        background: hovered ? "rgba(14,20,52,0.85)" : "var(--cin-surface)",
         backdropFilter: "blur(14px)",
-        border: `1px solid ${hovered ? `${accent}50` : "var(--cin-border)"}`,
+        border: `1px solid ${hovered ? "transparent" : "var(--cin-border)"}`,
         padding: 28,
         borderRadius: 16,
         cursor: "pointer",
         overflow: "hidden",
-        transform: hovered ? "translateY(-6px)" : "translateY(0)",
+        transform: hovered ? "translateY(-8px)" : "translateY(0)",
         boxShadow: hovered
-          ? `0 16px 48px -12px rgba(0,0,0,0.18), 0 0 0 1px ${accent}30`
-          : "0 2px 10px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)",
+          ? `0 25px 80px -20px rgba(0,0,0,0.75), inset 0 0 0 1px ${accent}50`
+          : "none",
         transition: "transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease",
         opacity: 0,
         animation: `cin-cardSlide 0.4s ease-out ${idx * 0.05}s both`,
@@ -369,7 +369,7 @@ function CourseCard({
         <div
           style={{
             width: 42, height: 42, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center",
-            background: "rgba(0,0,0,0.04)", border: "1px solid var(--cin-border)",
+            background: "rgba(255,255,255,0.03)", border: "1px solid var(--cin-border)",
             boxShadow: `0 0 16px ${accent}28`,
           }}
         >
@@ -672,18 +672,41 @@ export default function Home() {
       <ParticleCanvas />
       <CursorGlow />
 
-      {/* Static glow orbs */}
+      {/* Aurora streaks */}
       <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: -220, left: -160, width: 640, height: 640, borderRadius: "50%", background: "radial-gradient(circle, rgba(95,120,240,0.10), transparent 70%)", filter: "blur(110px)" }} />
-        <div style={{ position: "absolute", top: -100, right: -200, width: 560, height: 560, borderRadius: "50%", background: "radial-gradient(circle, rgba(11,159,190,0.08), transparent 70%)", filter: "blur(110px)" }} />
-        <div style={{ position: "absolute", bottom: -260, left: "30%", width: 700, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(240,116,138,0.06), transparent 70%)", filter: "blur(110px)" }} />
+        {/* Green-teal aurora — top left */}
+        <div style={{
+          position: "absolute", top: -260, left: "-15%", width: "70%", height: 520,
+          background: "linear-gradient(160deg, rgba(0,220,160,0.22) 0%, rgba(0,190,220,0.12) 55%, transparent 100%)",
+          filter: "blur(90px)", borderRadius: "50%",
+          animation: "cin-aurora-1 14s ease-in-out infinite",
+          transformOrigin: "center top",
+        }} />
+        {/* Violet aurora — top right */}
+        <div style={{
+          position: "absolute", top: -300, right: "-12%", width: "62%", height: 560,
+          background: "linear-gradient(200deg, rgba(130,60,255,0.22) 0%, rgba(170,100,255,0.12) 50%, transparent 100%)",
+          filter: "blur(110px)", borderRadius: "50%",
+          animation: "cin-aurora-2 17s ease-in-out infinite",
+          transformOrigin: "center top",
+        }} />
+        {/* Soft center glow */}
+        <div style={{
+          position: "absolute", top: -180, left: "18%", width: "55%", height: 380,
+          background: "linear-gradient(180deg, rgba(0,240,200,0.10) 0%, transparent 80%)",
+          filter: "blur(70px)", borderRadius: "50%",
+          animation: "cin-aurora-3 20s ease-in-out infinite",
+          transformOrigin: "center top",
+        }} />
+        {/* Deep bottom glow for depth */}
+        <div style={{ position: "absolute", bottom: -260, left: "30%", width: 700, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(130,60,255,0.08), transparent 70%)", filter: "blur(110px)" }} />
       </div>
 
-      {/* Vignette — subtle on light */}
-      <div style={{ position: "fixed", inset: 0, background: "radial-gradient(ellipse 1400px 900px at 50% 20%, transparent 50%, rgba(200,210,230,0.18) 100%)", pointerEvents: "none", zIndex: 3 }} />
+      {/* Vignette — dark edges */}
+      <div style={{ position: "fixed", inset: 0, background: "radial-gradient(ellipse 1400px 900px at 50% 20%, transparent 40%, rgba(4,6,16,0.70) 100%)", pointerEvents: "none", zIndex: 3 }} />
 
       {/* Film grain */}
-      <div style={{ position: "fixed", inset: 0, backgroundImage: `url("${GRAIN}")`, opacity: 0.02, mixBlendMode: "overlay", pointerEvents: "none", zIndex: 4 }} />
+      <div style={{ position: "fixed", inset: 0, backgroundImage: `url("${GRAIN}")`, opacity: 0.04, mixBlendMode: "overlay", pointerEvents: "none", zIndex: 4 }} />
 
       {/* ── Page content ── */}
       <div style={{ position: "relative", zIndex: 5, color: "var(--cin-text)", minHeight: "calc(100vh - 75px)" }}>
@@ -790,7 +813,7 @@ export default function Home() {
                 }}
               >
                 <span style={{ color: "var(--cin-text)", display: "block" }}>Ace your next</span>
-                <span style={{ display: "block", background: "linear-gradient(90deg, var(--cin-text) 10%, var(--cin-cyan) 50%, var(--cin-violet) 85%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                <span style={{ display: "block", background: "linear-gradient(90deg, #ffffff 15%, var(--cin-cyan) 52%, var(--cin-violet) 85%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                   technical interview
                 </span>
               </h1>
@@ -813,7 +836,7 @@ export default function Home() {
                     display: "flex", alignItems: "center", gap: 12,
                     background: "var(--cin-surface)", backdropFilter: "blur(14px)",
                     border: "1px solid var(--cin-border)", padding: "15px 20px", borderRadius: 14,
-                    boxShadow: "0 8px 32px -8px rgba(0,0,0,0.12)",
+                    boxShadow: "0 20px 60px -20px rgba(0,0,0,0.65)",
                   }}
                 >
                   <Search size={16} style={{ color: "var(--cin-faint)", flexShrink: 0 }} />
