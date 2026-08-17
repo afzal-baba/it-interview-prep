@@ -49,60 +49,60 @@
 }
 
 :root {
-  /* ─── Cinematic dark theme ───────────────────────────────── */
-  --background: 221 41% 3%;       /* #05070c */
-  --foreground: 222 52% 96%;      /* #eef1fa */
+  /* ─── Light theme ────────────────────────────────────────── */
+  --background: 220 25% 98%;       /* #f6f8fc */
+  --foreground: 222 84% 8%;        /* #0d1120 */
 
-  --card: 226 42% 9%;             /* #0d1120 */
-  --card-foreground: 222 52% 96%;
-  --card-border: 225 30% 20%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 84% 8%;
+  --card-border: 220 20% 88%;
 
-  --popover: 226 42% 9%;
-  --popover-foreground: 222 52% 96%;
-  --popover-border: 225 30% 20%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 84% 8%;
+  --popover-border: 220 20% 88%;
 
-  --primary: 249 78% 71%;         /* #8f7bf0 violet */
-  --primary-foreground: 221 41% 8%;
+  --primary: 249 72% 58%;          /* #6b55d4 violet */
+  --primary-foreground: 0 0% 100%;
 
-  --secondary: 225 35% 14%;
-  --secondary-foreground: 222 52% 96%;
+  --secondary: 220 25% 93%;
+  --secondary-foreground: 222 84% 8%;
 
-  --muted: 225 35% 12%;
-  --muted-foreground: 220 22% 66%;  /* #93a0bd */
+  --muted: 220 20% 94%;
+  --muted-foreground: 215 18% 46%;
 
-  --accent: 176 73% 62%;          /* #5be3d8 cyan */
-  --accent-foreground: 221 41% 8%;
+  --accent: 176 60% 38%;           /* teal */
+  --accent-foreground: 0 0% 100%;
 
-  --destructive: 350 90% 60%;
+  --destructive: 350 85% 48%;
   --destructive-foreground: 0 0% 100%;
 
-  --success: 150 90% 40%;
+  --success: 150 70% 36%;
   --success-foreground: 0 0% 100%;
 
-  --border: 225 30% 19%;
-  --input: 225 30% 16%;
-  --ring: 249 78% 71%;
+  --border: 220 18% 88%;
+  --input: 220 18% 92%;
+  --ring: 249 72% 58%;
 
   --app-font-sans: 'Inter', sans-serif;
   --app-font-mono: 'JetBrains Mono', monospace;
 
   --radius: 0.75rem;
 
-  /* ─── Cinematic design tokens ──────────────────────────── */
-  --cin-bg: #05070c;
-  --cin-surface: rgba(18, 22, 34, 0.55);
-  --cin-surface-solid: #0d1120;
-  --cin-cyan: #5be3d8;
-  --cin-violet: #8f7bf0;
-  --cin-rose: #f0748a;
-  --cin-amber: #f0b84f;
-  --cin-orange: #f0a35c;
-  --cin-lblue: #6fd3f0;
-  --cin-text: #eef1fa;
-  --cin-dim: #93a0bd;
-  --cin-faint: #545f7d;
-  --cin-border: rgba(140, 160, 220, 0.14);
-  --cin-border-strong: rgba(140, 180, 255, 0.32);
+  /* ─── Design tokens (light mode) ──────────────────────── */
+  --cin-bg: #f6f8fc;
+  --cin-surface: rgba(255, 255, 255, 0.85);
+  --cin-surface-solid: #ffffff;
+  --cin-cyan: #0b9fbe;
+  --cin-violet: #6b55d4;
+  --cin-rose: #c93f5a;
+  --cin-amber: #b07e14;
+  --cin-orange: #b06228;
+  --cin-lblue: #2a8ec4;
+  --cin-text: #0d1120;
+  --cin-dim: #3d4a6a;
+  --cin-faint: #8090b0;
+  --cin-border: rgba(0, 0, 0, 0.09);
+  --cin-border-strong: rgba(0, 0, 0, 0.22);
 }
 
 @layer base {
