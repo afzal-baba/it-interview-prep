@@ -17,6 +17,57 @@ import { cn } from "@/lib/utils";
 
 type TabKind = "quiz" | "codelab";
 
+/** Crown + title decoration for top-2 players */
+function RoyalBadge({ rank }: { rank: number }) {
+  if (rank === 0) {
+    return (
+      <span
+        title="King — #1 on the leaderboard"
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 4,
+          background: "linear-gradient(135deg, #f59e0b22, #eab30844)",
+          border: "1px solid #f59e0b66",
+          borderRadius: 20,
+          padding: "2px 8px",
+          fontSize: 11,
+          fontWeight: 800,
+          color: "#f59e0b",
+          letterSpacing: "0.03em",
+          whiteSpace: "nowrap",
+        }}
+      >
+        👑 King
+      </span>
+    );
+  }
+  if (rank === 1) {
+    return (
+      <span
+        title="Queen — #2 on the leaderboard"
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 4,
+          background: "linear-gradient(135deg, #a78bfa22, #c4b5fd44)",
+          border: "1px solid #a78bfa66",
+          borderRadius: 20,
+          padding: "2px 8px",
+          fontSize: 11,
+          fontWeight: 800,
+          color: "#a78bfa",
+          letterSpacing: "0.03em",
+          whiteSpace: "nowrap",
+        }}
+      >
+        👸 Queen
+      </span>
+    );
+  }
+  return null;
+}
+
 export default function Leaderboard() {
   const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState<TabKind>("quiz");
@@ -223,14 +274,29 @@ export default function Leaderboard() {
                     </tr>
                   ) : (
                     leaderboard?.map((entry, idx) => (
-                      <tr key={entry.id} className="hover:bg-muted/30 transition-colors">
+                      <tr
+                        key={entry.id}
+                        className="hover:bg-muted/30 transition-colors"
+                        style={
+                          idx === 0
+                            ? { background: "linear-gradient(90deg, rgba(245,158,11,0.08), transparent)" }
+                            : idx === 1
+                            ? { background: "linear-gradient(90deg, rgba(167,139,250,0.08), transparent)" }
+                            : undefined
+                        }
+                      >
                         <td className="px-6 py-4 font-mono font-bold text-lg">
                           {idx === 0 && <Medal className="inline w-6 h-6 text-yellow-500 mr-2" />}
                           {idx === 1 && <Medal className="inline w-6 h-6 text-gray-400 mr-2" />}
                           {idx === 2 && <Medal className="inline w-6 h-6 text-amber-700 mr-2" />}
                           #{idx + 1}
                         </td>
-                        <td className="px-6 py-4 font-bold text-base">{entry.playerName}</td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-bold text-base">{entry.playerName}</span>
+                            <RoyalBadge rank={idx} />
+                          </div>
+                        </td>
                         <td className="px-6 py-4">{entry.courseName}</td>
                         <td className="px-6 py-4 capitalize">
                           <Badge
@@ -330,14 +396,29 @@ export default function Leaderboard() {
                     </tr>
                   ) : (
                     codelabBoard.map((entry, idx) => (
-                      <tr key={entry.playerName} className="hover:bg-muted/30 transition-colors">
+                      <tr
+                        key={entry.playerName}
+                        className="hover:bg-muted/30 transition-colors"
+                        style={
+                          idx === 0
+                            ? { background: "linear-gradient(90deg, rgba(245,158,11,0.08), transparent)" }
+                            : idx === 1
+                            ? { background: "linear-gradient(90deg, rgba(167,139,250,0.08), transparent)" }
+                            : undefined
+                        }
+                      >
                         <td className="px-6 py-4 font-mono font-bold text-lg">
                           {idx === 0 && <Medal className="inline w-6 h-6 text-yellow-500 mr-2" />}
                           {idx === 1 && <Medal className="inline w-6 h-6 text-gray-400 mr-2" />}
                           {idx === 2 && <Medal className="inline w-6 h-6 text-amber-700 mr-2" />}
                           #{idx + 1}
                         </td>
-                        <td className="px-6 py-4 font-bold text-base">{entry.playerName}</td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-bold text-base">{entry.playerName}</span>
+                            <RoyalBadge rank={idx} />
+                          </div>
+                        </td>
                         <td className="px-6 py-4 text-right font-mono font-bold text-lg text-primary">
                           {entry.totalPoints.toLocaleString()} pts
                         </td>

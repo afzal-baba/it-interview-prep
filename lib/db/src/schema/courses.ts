@@ -90,6 +90,16 @@ export const searchLogsTable = pgTable("search_logs", {
 
 export type SearchLog = typeof searchLogsTable.$inferSelect;
 
+// ── Feedback / Ratings ─────────────────────────────────────────────────────────
+export const feedbackTable = pgTable("feedback", {
+  id: serial("id").primaryKey(),
+  rating: integer("rating").notNull(),  // 1–5 stars
+  comment: text("comment"),
+  submittedAt: timestamp("submitted_at").defaultNow().notNull(),
+});
+
+export type Feedback = typeof feedbackTable.$inferSelect;
+
 export const insertCourseSchema = createInsertSchema(coursesTable).omit({ id: true, createdAt: true });
 export const insertQuestionSchema = createInsertSchema(questionsTable).omit({ id: true, createdAt: true });
 export const insertSessionSchema = createInsertSchema(sessionsTable).omit({ id: true, startedAt: true });

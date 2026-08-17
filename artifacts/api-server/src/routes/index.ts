@@ -8,6 +8,7 @@ import codelabRouter from "./codelab";
 import onlineRouter from "./online";
 import searchRouter from "./search";
 import adminRouter from "./admin";
+import feedbackRouter from "./feedback";
 
 const router: IRouter = Router();
 
@@ -20,5 +21,6 @@ router.use(codelabRouter);
 router.use(onlineRouter);
 router.use(searchRouter);
 router.use(adminRouter);
+router.use(feedbackRouter);
 
 export default router;

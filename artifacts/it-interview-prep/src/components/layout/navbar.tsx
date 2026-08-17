@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function useOnlineCount() {
   const [count, setCount] = useState<number | null>(null);
@@ -135,6 +135,215 @@ function OnlineBadge({ count }: { count: number }) {
   );
 }
 
+const STARS = [1, 2, 3, 4, 5];
+
+function FeedbackButton() {
+  const [open, setOpen] = useState(false);
+  const [hovered, setHovered] = useState(0);
+  const [selected, setSelected] = useState(0);
+  const [comment, setComment] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
+  const popoverRef = useRef<HTMLDivElement>(null);
+
+  // Close on outside click
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  const reset = () => {
+    setSelected(0);
+    setHovered(0);
+    setComment("");
+    setStatus("idle");
+  };
+
+  const submit = async () => {
+    if (!selected) return;
+    setStatus("sending");
+    try {
+      const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+      const res = await fetch(`${base}/api/feedback`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rating: selected, comment: comment.trim() || null }),
+      });
+      if (!res.ok) throw new Error("server error");
+      setStatus("done");
+      setTimeout(() => { setOpen(false); reset(); }, 1800);
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  const activeStars = hovered || selected;
+
+  return (
+    <div style={{ position: "relative" }} ref={popoverRef}>
+      {/* Trigger button */}
+      <button
+        onClick={() => { setOpen((p) => !p); if (open) reset(); }}
+        title="Rate this app"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+          background: "var(--cin-surface)",
+          backdropFilter: "blur(10px)",
+          border: "1px solid var(--cin-border)",
+          padding: "8px 14px",
+          borderRadius: 20,
+          fontFamily: "'JetBrains Mono', monospace",
+          fontSize: 12,
+          color: "var(--cin-dim)",
+          cursor: "pointer",
+          whiteSpace: "nowrap",
+          transition: "border-color 0.2s, color 0.2s",
+        }}
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLElement).style.borderColor = "#f59e0b88";
+          (e.currentTarget as HTMLElement).style.color = "#f59e0b";
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLElement).style.borderColor = "var(--cin-border)";
+          (e.currentTarget as HTMLElement).style.color = "var(--cin-dim)";
+        }}
+      >
+        ⭐ Rate
+      </button>
+
+      {/* Popover */}
+      {open && (
+        <div
+          style={{
+            position: "absolute",
+            top: "calc(100% + 10px)",
+            right: 0,
+            width: 280,
+            background: "rgba(10,12,24,0.97)",
+            backdropFilter: "blur(16px)",
+            border: "1px solid var(--cin-border-strong)",
+            borderRadius: 16,
+            padding: 20,
+            zIndex: 200,
+            boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+            animation: "cin-slideDown 0.18s ease-out both",
+          }}
+        >
+          {status === "done" ? (
+            <div style={{ textAlign: "center", padding: "12px 0" }}>
+              <div style={{ fontSize: 32, marginBottom: 8 }}>🎉</div>
+              <div style={{ fontFamily: "'Inter', sans-serif", fontWeight: 700, color: "var(--cin-text)", fontSize: 15 }}>
+                Thanks for the feedback!
+              </div>
+            </div>
+          ) : (
+            <>
+              <div style={{ fontFamily: "'Inter', sans-serif", fontWeight: 700, fontSize: 14, color: "var(--cin-text)", marginBottom: 4 }}>
+                How are we doing?
+              </div>
+              <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: "var(--cin-dim)", marginBottom: 14 }}>
+                Tap a star to rate your experience
+              </div>
+
+              {/* Stars */}
+              <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 14 }}>
+                {STARS.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setSelected(s)}
+                    onMouseEnter={() => setHovered(s)}
+                    onMouseLeave={() => setHovered(0)}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      fontSize: 28,
+                      lineHeight: 1,
+                      transform: s <= activeStars ? "scale(1.15)" : "scale(1)",
+                      transition: "transform 0.12s, filter 0.12s",
+                      filter: s <= activeStars ? "drop-shadow(0 0 6px #f59e0b)" : "grayscale(1) opacity(0.4)",
+                      padding: 0,
+                    }}
+                    aria-label={`Rate ${s} star${s > 1 ? "s" : ""}`}
+                  >
+                    ⭐
+                  </button>
+                ))}
+              </div>
+
+              {/* Star label */}
+              <div style={{ textAlign: "center", fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#f59e0b", minHeight: 16, marginBottom: 12 }}>
+                {activeStars === 1 && "Needs work"}
+                {activeStars === 2 && "Could be better"}
+                {activeStars === 3 && "Pretty good"}
+                {activeStars === 4 && "Love it!"}
+                {activeStars === 5 && "Absolutely amazing! 🚀"}
+              </div>
+
+              {/* Comment box */}
+              <textarea
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="Tell us more (optional)..."
+                maxLength={500}
+                rows={3}
+                style={{
+                  width: "100%",
+                  background: "rgba(255,255,255,0.04)",
+                  border: "1px solid var(--cin-border)",
+                  borderRadius: 10,
+                  padding: "8px 10px",
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: 12,
+                  color: "var(--cin-text)",
+                  resize: "none",
+                  outline: "none",
+                  marginBottom: 12,
+                  boxSizing: "border-box",
+                }}
+              />
+
+              {status === "error" && (
+                <div style={{ fontSize: 11, color: "#f87171", marginBottom: 8, textAlign: "center" }}>
+                  Something went wrong. Please try again.
+                </div>
+              )}
+
+              <button
+                onClick={submit}
+                disabled={!selected || status === "sending"}
+                style={{
+                  width: "100%",
+                  padding: "9px 0",
+                  borderRadius: 10,
+                  border: "none",
+                  background: selected ? "linear-gradient(90deg, var(--cin-cyan), var(--cin-violet))" : "rgba(255,255,255,0.08)",
+                  color: selected ? "#000" : "var(--cin-dim)",
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 700,
+                  fontSize: 13,
+                  cursor: selected ? "pointer" : "not-allowed",
+                  transition: "opacity 0.2s",
+                  opacity: status === "sending" ? 0.6 : 1,
+                }}
+              >
+                {status === "sending" ? "Sending…" : "Submit Feedback"}
+              </button>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function Navbar() {
   const [location] = useLocation();
   const online = useOnlineCount();
@@ -225,6 +434,7 @@ export function Navbar() {
             <NavLink key={href} href={href} label={label} location={location} />
           ))}
           {online !== null && <OnlineBadge count={online} />}
+          <FeedbackButton />
         </div>
 
         {/* Mobile right side: online badge + hamburger */}
