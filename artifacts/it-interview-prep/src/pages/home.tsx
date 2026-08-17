@@ -624,16 +624,98 @@ export default function Home() {
     document.title = "IT Interview Prep — Practice Oracle, AWS, Java & 37 More Topics";
   }, []);
 
+  // ── Search alias expansion ────────────────────────────────────────────────
+  // Maps common shorthands / alternate phrasings to terms that hit course data.
+  const SEARCH_ALIASES: Record<string, string[]> = {
+    "dot net": [".net", "c#", "csharp"],
+    "dotnet": [".net", "c#", "csharp"],
+    "c#": [".net", "csharp"],
+    "k8s": ["kubernetes"],
+    "kube": ["kubernetes"],
+    "gke": ["kubernetes", "gcp"],
+    "eks": ["kubernetes", "aws"],
+    "node": ["node.js", "nodejs"],
+    "js": ["javascript"],
+    "ts": ["typescript"],
+    "py": ["python"],
+    "ml": ["machine learning"],
+    "ai": ["machine learning"],
+    "llm": ["machine learning"],
+    "neural": ["deep learning"],
+    "postgres": ["postgresql"],
+    "pg": ["postgresql"],
+    "mongo": ["mongodb"],
+    "nosql": ["mongodb"],
+    "elk": ["elasticsearch"],
+    "kibana": ["elasticsearch"],
+    "logstash": ["elasticsearch"],
+    "rmq": ["rabbitmq"],
+    "rabbit": ["rabbitmq"],
+    "next": ["next.js"],
+    "nextjs": ["next.js"],
+    "nuxt": ["vue"],
+    "angular": ["angular"],
+    "cicd": ["ci/cd"],
+    "devops": ["ci/cd"],
+    "pipelines": ["ci/cd"],
+    "github actions": ["ci/cd"],
+    "jenkins": ["ci/cd"],
+    "shell": ["bash"],
+    "bash scripting": ["bash"],
+    "zero trust": ["cybersecurity", "zero trust security"],
+    "ztna": ["cybersecurity", "zero trust"],
+    "hacking": ["cybersecurity"],
+    "infosec": ["cybersecurity"],
+    "penetration": ["cybersecurity"],
+    "pentesting": ["cybersecurity"],
+    "vault": ["hashicorp"],
+    "terraform": ["iac", "infrastructure as code"],
+    "iac": ["terraform"],
+    "vmware": ["virtualization"],
+    "vm": ["virtualization"],
+    "virtual machine": ["virtualization"],
+    "snowflake": ["data warehouse"],
+    "bigquery": ["data warehouse"],
+    "redshift": ["data warehouse"],
+    "s3": ["aws"],
+    "ec2": ["aws"],
+    "lambda": ["aws"],
+    "dynamodb": ["aws"],
+    "jira": ["agile"],
+    "scrum": ["agile"],
+    "kanban": ["agile"],
+    "spring": ["spring boot"],
+    "hibernate": ["spring boot"],
+    "selenium": ["testing"],
+    "playwright": ["testing"],
+    "cypress": ["testing"],
+    "qa": ["testing"],
+    "test automation": ["testing"],
+    "graphql": ["graph"],
+    "rest api": ["graphql", "api design"],
+    "api": ["graphql", "api design"],
+    "sre": ["observability"],
+    "prometheus": ["observability"],
+    "grafana": ["observability"],
+    "monitoring": ["observability"],
+    "tracing": ["observability"],
+  };
+
   const filteredCourses = useMemo(() => {
     if (!courses) return [];
     const q = search.trim().toLowerCase();
     if (!q) return courses;
-    return courses.filter(
-      (c) =>
-        c.name.toLowerCase().includes(q) ||
-        c.slug.toLowerCase().includes(q) ||
-        (c.description ?? "").toLowerCase().includes(q),
-    );
+    // Expand the query with aliases so shorthands / alternate names still match
+    const extraTerms = SEARCH_ALIASES[q] ?? [];
+    const allTerms = [q, ...extraTerms];
+    return courses.filter((c) => {
+      const name = c.name.toLowerCase();
+      const slug = c.slug.toLowerCase();
+      const desc = (c.description ?? "").toLowerCase();
+      return allTerms.some(
+        (term) => name.includes(term) || slug.includes(term) || desc.includes(term),
+      );
+    });
   }, [courses, search]);
 
   // ── Search logging (fire-and-forget, debounced 1.5s) ──────────────────────
@@ -900,15 +982,50 @@ export default function Home() {
 
             {/* ── Grouped by category / empty state ── */}
             {filteredCourses.length === 0 ? (
-              <div style={{ textAlign: "center", padding: "80px 0", color: "var(--cin-faint)" }}>
-                <Search size={40} style={{ margin: "0 auto 16px", opacity: 0.3, display: "block" }} />
-                <p style={{ fontSize: 18, fontWeight: 500, color: "var(--cin-dim)", marginBottom: 12 }}>No courses match "{search}"</p>
-                <button
-                  onClick={() => setSearch("")}
-                  style={{ background: "none", border: "none", cursor: "pointer", color: "var(--cin-cyan)", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, textDecoration: "underline", padding: 0 }}
-                >
-                  Clear search
-                </button>
+              <div style={{ textAlign: "center", padding: "80px 0 60px" }}>
+                <Search size={40} style={{ margin: "0 auto 20px", opacity: 0.25, display: "block", color: "var(--cin-cyan)" }} />
+                <p style={{ fontSize: 20, fontWeight: 700, color: "var(--cin-text)", marginBottom: 8, letterSpacing: "-0.01em" }}>
+                  No courses match &ldquo;{search}&rdquo;
+                </p>
+                <p style={{ fontSize: 14, color: "var(--cin-dim)", marginBottom: 28, maxWidth: 380, margin: "0 auto 28px" }}>
+                  We don&apos;t have a course on that topic yet — but we&apos;re adding new ones regularly.
+                </p>
+                <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+                  <button
+                    onClick={() => setSearch("")}
+                    style={{
+                      background: "rgba(255,255,255,0.06)",
+                      border: "1px solid var(--cin-border)",
+                      borderRadius: 10,
+                      cursor: "pointer",
+                      color: "var(--cin-text)",
+                      fontFamily: "'Inter',sans-serif",
+                      fontSize: 13,
+                      fontWeight: 500,
+                      padding: "9px 18px",
+                    }}
+                  >
+                    Clear search
+                  </button>
+                  <a
+                    href={`mailto:hello@mockinterviewprep.app?subject=Course request: ${encodeURIComponent(search)}&body=I searched for "${search}" and couldn't find it. Please add a course on this topic!`}
+                    style={{
+                      background: "var(--cin-cyan)",
+                      border: "none",
+                      borderRadius: 10,
+                      cursor: "pointer",
+                      color: "#05070f",
+                      fontFamily: "'Inter',sans-serif",
+                      fontSize: 13,
+                      fontWeight: 700,
+                      padding: "9px 18px",
+                      textDecoration: "none",
+                      display: "inline-block",
+                    }}
+                  >
+                    Request this course →
+                  </a>
+                </div>
               </div>
             ) : (
               <CoursesByCategory
