@@ -1,0 +1,1539 @@
+📝 AWS Cloud Practice Exam (30 Questions)
+1. Beginner Level (10 Questions)
+Which AWS service is primarily used for object storage? a) EC2 b) S3 c) RDS d) Lambda
+What does IAM stand for in AWS? a) Internet Access Management b) Identity and Access Management c) Internal Application Monitoring d) Infrastructure and Application Management
+Which AWS service provides scalable compute capacity in the cloud? a) EC2 b) DynamoDB c) CloudFront d) SNS
+What is the default pricing model for AWS services? a) Subscription-based b) Pay-as-you-go c) Annual contract d) Free for all
+Which AWS service is used for relational databases? a) DynamoDB b) RDS c) S3 d) CloudWatch
+What is an AWS Region? a) A single data center b) A geographic area containing multiple Availability Zones c) A virtual private cloud d) A subnet
+Which AWS service is serverless compute? a) EC2 b) Lambda c) EBS d) CloudFormation
+What does CloudFront provide? a) Content Delivery Network (CDN) b) Database replication c) Compute scaling d) Monitoring
+Which AWS service is used for monitoring and logging? a) CloudWatch b) S3 c) IAM d) Route 53
+What is the purpose of Route 53? a) DNS and domain name management b) File storage c) Compute scaling d) Security monitoring
+Beginner Answer Key & Explanations
+b) S3 — Amazon S3 stores objects like files and backups.
+b) Identity and Access Management — IAM controls user access and permissions.
+a) EC2 — Elastic Compute Cloud provides virtual servers.
+b) Pay-as-you-go — AWS charges only for resources used.
+b) RDS — Relational Database Service supports MySQL, PostgreSQL, etc.
+b) Region — A region contains multiple isolated Availability Zones.
+b) Lambda — AWS Lambda runs code without managing servers.
+a) CDN — CloudFront distributes content globally with low latency.
+a) CloudWatch — Monitors metrics, logs, and alarms.
+a) Route 53 — AWS’s DNS service for domain resolution.
+2. Intermediate Level (10 Questions)
+You need to host a static website. Which AWS service is most suitable? a) EC2 b) S3 c) RDS d) DynamoDB
+A company wants to store session data with millisecond latency. Which service should they use? a) RDS b) DynamoDB c) S3 d) CloudFront
+Which AWS service automates infrastructure provisioning using templates? a) CloudFormation b) CloudWatch c) IAM d) Lambda
+You want to run containers without managing servers. Which service is best? a) ECS with Fargate b) EC2 c) EBS d) CloudFront
+What is the purpose of AWS Auto Scaling? a) To monitor logs b) To adjust compute capacity based on demand c) To replicate databases d) To manage DNS
+Which AWS service provides managed Kubernetes? a) ECS b) EKS c) Lambda d) CloudFormation
+A company needs to analyze large-scale log data quickly. Which service should they use? a) CloudWatch b) Athena c) RDS d) DynamoDB
+Which AWS service provides a fully managed data warehouse? a) Redshift b) RDS c) DynamoDB d) S3
+You want to secure secrets like API keys. Which service is best? a) IAM b) Secrets Manager c) CloudWatch d) Route 53
+Which AWS service provides a managed message queue? a) SNS b) SQS c) CloudFront d) DynamoDB
+Intermediate Answer Key & Explanations
+b) S3 — S3 can host static websites directly.
+b) DynamoDB — NoSQL database with low-latency performance.
+a) CloudFormation — Automates infrastructure deployment via templates.
+a) ECS with Fargate — Runs containers without managing servers.
+b) Auto Scaling — Dynamically adjusts EC2 instances based on demand.
+b) EKS — Elastic Kubernetes Service manages Kubernetes clusters.
+b) Athena — Query S3 data using SQL without infrastructure.
+a) Redshift — AWS’s managed data warehouse.
+b) Secrets Manager — Stores and rotates secrets securely.
+b) SQS — Simple Queue Service provides reliable message queuing.
+3. Advanced Level (10 Questions)
+A company needs multi-region disaster recovery for its database. Which AWS service combination is best? a) RDS with Multi-AZ b) DynamoDB Global Tables c) S3 with Cross-Region Replication d) All of the above
+Which AWS service provides distributed denial-of-service (DDoS) protection? a) CloudWatch b) Shield c) WAF d) GuardDuty
+You need fine-grained access control for API Gateway. Which AWS service should you integrate? a) IAM b) Cognito c) Secrets Manager d) CloudFormation
+Which AWS service provides centralized logging across multiple accounts? a) CloudWatch Logs b) CloudTrail with Organization-level aggregation c) S3 d) Athena
+A company wants to enforce compliance policies across multiple AWS accounts. Which service is best? a) Config b) Organizations c) Control Tower d) Inspector
+Which AWS service provides intrusion detection and threat intelligence? a) GuardDuty b) Shield c) WAF d) CloudWatch
+You need to optimize cost by automatically stopping unused EC2 instances. Which service helps? a) Auto Scaling b) Lambda with CloudWatch Events c) Config d) Inspector
+Which AWS service provides hybrid cloud storage integration with on-premises? a) Storage Gateway b) S3 c) EBS d) CloudFront
+A company wants to run machine learning models at scale. Which AWS service is best? a) SageMaker b) Lambda c) Redshift d) CloudFormation
+Which AWS service provides automated security assessment of applications? a) Inspector b) GuardDuty c) WAF d) Shield
+Advanced Answer Key & Explanations
+d) All of the above — Each service provides multi-region resilience depending on workload type.
+b) Shield — AWS Shield provides DDoS protection.
+b) Cognito — Provides user authentication and fine-grained access for APIs.
+b) CloudTrail with Org-level aggregation — Centralizes logs across accounts.
+c) Control Tower — Enforces compliance and governance across accounts.
+a) GuardDuty — Detects threats using machine learning and AWS data sources.
+b) Lambda with CloudWatch Events — Automates stopping unused instances.
+a) Storage Gateway — Bridges on-premises storage with AWS cloud.
+a) SageMaker — Managed ML service for training and deployment.
+a) Inspector — Performs automated security assessments.
+🐍 Python Programming Practice Exam (30 Questions)
+1. Beginner Level (10 Questions)
+Which keyword is used to define a function in Python? a) func b) def c) function d) lambda
+What is the output of print(type("Hello"))? a) <class 'int'> b) <class 'str'> c) <class 'list'> d) <class 'dict'>
+Which of the following is a valid variable name? a) 2name b) name_2 c) name-2 d) @name
+What is the correct way to start a comment in Python? a) // b) # c) <!-- --> d) %
+What is the output of print(3**2)? a) 6 b) 9 c) 8 d) 12
+Which data type is mutable in Python? a) tuple b) list c) str d) int
+What is the default return value of a function that doesn’t explicitly return anything? a) 0 b) None c) "" d) False
+Which operator is used for floor division? a) / b) // c) % d) **
+What is the output of len([1,2,3,4])? a) 3 b) 4 c) 5 d) Error
+Which built-in function converts a string to an integer? a) str() b) int() c) float() d) bool()
+Beginner Answer Key & Explanations
+b) def — Functions are defined using def.
+b) <class 'str'> — Strings are of type str.
+b) name_2 — Variable names cannot start with digits or contain special characters like -.
+b) # — Comments in Python begin with #.
+b) 9 — ** is exponentiation, so 3² = 9.
+b) list — Lists are mutable; tuples and strings are immutable.
+b) None — Default return value is None.
+b) // — Floor division truncates decimals.
+b) 4 — The list has 4 elements.
+b) int() — Converts strings to integers.
+2. Intermediate Level (10 Questions)
+What will be the output of:
+python
+x = [1,2,3]
+print(x[1:])
+a) [1] b) [2,3] c) [1,2] d) Error
+Which method is used to add an element at the end of a list? a) append() b) insert() c) extend() d) add()
+What is the output of:
+python
+print("Python"[-2])
+a) h b) o c) n d) t
+Which of the following is used to handle exceptions? a) try-except b) if-else c) switch-case d) loop
+What is the output of:
+python
+print(bool(""))
+a) True b) False c) None d) Error
+Which keyword is used to create a generator? a) yield b) return c) gen d) next
+What is the output of:
+python
+print(set([1,2,2,3]))
+a) {1,2,2,3} b) {1,2,3} c) [1,2,3] d) Error
+Which module is used for regular expressions in Python? a) regex b) re c) regexp d) match
+What is the output of:
+python
+print(",".join(["a","b","c"]))
+a) abc b) a,b,c c) [a,b,c] d) Error
+Which statement is true about Python dictionaries? a) Keys must be unique b) Values must be unique c) Keys can be lists d) Dictionaries are ordered by default
+Intermediate Answer Key & Explanations
+b) [2,3] — Slicing from index 1 returns elements after the first.
+a) append() — Adds an element at the end of a list.
+b) o — Negative indexing counts from the end.
+a) try-except — Used for exception handling.
+b) False — Empty strings evaluate to False.
+a) yield — Used to create generators.
+b) {1,2,3} — Sets remove duplicates.
+b) re — The re module handles regex.
+b) a,b,c — join() concatenates with the given separator.
+a) Keys must be unique — Dictionary keys cannot be duplicated.
+3. Advanced Level (10 Questions)
+Which Python feature allows multiple inheritance resolution? a) Method Resolution Order (MRO) b) Polymorphism c) Encapsulation d) Overloading
+What is the time complexity of searching in a Python dictionary? a) O(n) b) O(log n) c) O(1) average case d) O(n²)
+Which Python module is used for asynchronous programming? a) asyncio b) threading c) multiprocessing d) concurrent
+What is the output of:
+python
+def f(a, b=[]):
+    b.append(a)
+    return b
+print(f(1))
+print(f(2))
+a) [1], [2] b) [1], [1,2] c) [1,2], [1,2] d) Error
+Which Python decorator is used to define a class method? a) @staticmethod b) @classmethod c) @property d) @abstractmethod
+What is the difference between is and == in Python? a) Both check equality b) is checks identity, == checks value equality c) is checks value, == checks identity d) Both check identity
+Which Python library is commonly used for data analysis? a) NumPy b) Pandas c) Matplotlib d) TensorFlow
+What is the Global Interpreter Lock (GIL)? a) Prevents multiple threads from executing Python bytecode simultaneously b) A lock for file handling c) A lock for database transactions d) A lock for multiprocessing
+Which Python feature allows lazy evaluation of sequences? a) Generators b) Lists c) Tuples d) Dictionaries
+What is the output of:
+python
+x = (i*i for i in range(3))
+print(list(x))
+a) [0,1,4] b) [1,4,9] c) [0,1,2] d) Error
+Advanced Answer Key & Explanations
+a) MRO — Determines method resolution in multiple inheritance.
+c) O(1) average case — Dictionary lookups are hash-based.
+a) asyncio — Provides async/await functionality.
+b) [1], [1,2] — Default mutable arguments persist across calls.
+b) @classmethod — Defines methods bound to the class, not instance.
+b) is checks identity, == checks value equality.
+b) Pandas — Widely used for data analysis.
+a) GIL — Restricts threads to one at a time for Python bytecode.
+a) Generators — Provide lazy evaluation.
+a) [0,1,4] — Generator expression squares numbers from 0 to 2.
+🗄️ Oracle Database Practice Exam (30 Questions)
+1. Beginner Level (10 Questions)
+Which SQL command is used to retrieve data from an Oracle table? a) SELECT b) INSERT c) UPDATE d) DELETE
+What is the default port number for Oracle Database listener? a) 1433 b) 3306 c) 1521 d) 8080
+Which Oracle data type is used to store variable-length character strings? a) CHAR b) VARCHAR2 c) NUMBER d) DATE
+What does DML stand for? a) Data Management Language b) Data Manipulation Language c) Database Modeling Language d) Data Migration Language
+Which command is used to create a new table in Oracle? a) CREATE TABLE b) ADD TABLE c) NEW TABLE d) MAKE TABLE
+What is the purpose of the COMMIT statement? a) Undo changes b) Save changes permanently c) Lock a table d) Exit session
+Which Oracle clause is used to filter rows in a query? a) ORDER BY b) WHERE c) GROUP BY d) HAVING
+What is the maximum length of a VARCHAR2 column in Oracle 19c? a) 255 b) 2000 c) 4000 d) Unlimited
+Which Oracle function returns the current system date and time? a) SYSDATE b) CURRENT_DATE c) GETDATE d) NOW
+Which Oracle tool is used to manage database instances? a) SQL*Plus b) RMAN c) Enterprise Manager d) All of the above
+Beginner Answer Key & Explanations
+a) SELECT — Retrieves data from tables.
+c) 1521 — Default listener port.
+b) VARCHAR2 — Stores variable-length strings.
+b) Data Manipulation Language — Includes SELECT, INSERT, UPDATE, DELETE.
+a) CREATE TABLE — Defines new tables.
+b) COMMIT — Saves changes permanently.
+b) WHERE — Filters rows in queries.
+c) 4000 — Maximum VARCHAR2 length in SQL mode.
+a) SYSDATE — Returns current date/time.
+d) All of the above — Multiple tools manage Oracle DB.
+2. Intermediate Level (10 Questions)
+Which Oracle feature ensures read consistency by maintaining old versions of data? a) Redo logs b) Undo tablespace c) Control files d) Temp tablespace
+What is the purpose of an Oracle index? a) Store data b) Speed up queries c) Enforce constraints d) Backup data
+Which Oracle utility is used for backup and recovery? a) SQL*Loader b) RMAN c) Data Pump d) Enterprise Manager
+What is the difference between TRUNCATE and DELETE? a) TRUNCATE is slower b) TRUNCATE cannot be rolled back c) DELETE removes structure d) DELETE cannot use WHERE
+Which Oracle join returns all rows from both tables, matching where possible? a) INNER JOIN b) LEFT JOIN c) RIGHT JOIN d) FULL OUTER JOIN
+Which Oracle background process writes modified blocks from buffer cache to data files? a) DBWR b) LGWR c) CKPT d) SMON
+What is the purpose of Oracle redo logs? a) Store backups b) Record changes for recovery c) Store indexes d) Manage constraints
+Which Oracle feature allows partitioning of large tables? a) Sharding b) Partitioning c) Clustering d) Materialized Views
+Which Oracle utility is used to move large volumes of data between databases? a) RMAN b) Data Pump (expdp/impdp) c) SQL*Loader d) GoldenGate
+Which Oracle constraint ensures uniqueness of values in a column? a) PRIMARY KEY b) FOREIGN KEY c) UNIQUE d) CHECK
+Intermediate Answer Key & Explanations
+b) Undo tablespace — Maintains old versions for read consistency.
+b) Speed up queries — Indexes improve performance.
+b) RMAN — Oracle’s backup/recovery tool.
+b) TRUNCATE cannot be rolled back — DELETE can be rolled back.
+d) FULL OUTER JOIN — Returns all rows from both tables.
+a) DBWR — Writes dirty blocks to disk.
+b) Record changes for recovery — Redo logs enable crash recovery.
+b) Partitioning — Splits large tables into manageable parts.
+b) Data Pump — Efficient data export/import.
+c) UNIQUE — Ensures column values are unique.
+3. Advanced Level (10 Questions)
+Which Oracle architecture component manages user processes and sessions? a) SGA b) PGA c) Listener d) Background processes
+What is Oracle RAC? a) Real Application Clusters — multiple servers accessing one DB b) Remote Access Control c) Replicated Application Cache d) Random Access Connection
+Which Oracle feature provides point-in-time recovery? a) Flashback Database b) RMAN Incremental Backup c) Data Guard d) Undo Tablespace
+What is the difference between Data Guard and GoldenGate? a) Data Guard is for disaster recovery, GoldenGate for replication b) Both are identical c) GoldenGate is only for backups d) Data Guard is only for OLTP
+Which Oracle background process writes redo log buffer contents to disk? a) DBWR b) LGWR c) CKPT d) SMON
+What is Oracle ASM used for? a) Automatic Storage Management — manages disk groups b) Application Session Management c) Advanced Security Module d) Automated SQL Monitoring
+Which Oracle feature allows querying across multiple databases? a) Database Links b) Materialized Views c) Partitioning d) RAC
+What is the purpose of Oracle control files? a) Store redo logs b) Maintain database structure metadata c) Store user data d) Backup indexes
+Which Oracle feature allows rolling upgrades with minimal downtime? a) RAC b) Data Guard c) Edition-Based Redefinition d) GoldenGate
+Which Oracle security feature provides fine-grained access control at row level? a) VPD (Virtual Private Database) b) Roles c) Privileges d) Auditing
+Advanced Answer Key & Explanations
+c) Listener — Manages connections and sessions.
+a) RAC — Enables multiple servers to access one DB.
+a) Flashback Database — Restores DB to a prior point in time.
+a) Data Guard = DR, GoldenGate = replication — Different use cases.
+b) LGWR — Writes redo buffer to redo logs.
+a) ASM — Manages disk groups for storage.
+a) Database Links — Enable cross-database queries.
+b) Control files — Store metadata like DB name, log history.
+c) Edition-Based Redefinition — Allows rolling upgrades.
+a) VPD — Enforces row-level security policies.
+🐧 Linux Practice Exam (30 Questions)
+1. Beginner Level (10 Questions)
+Which command lists files in a directory? a) ls b) cd c) pwd d) rm
+What does the pwd command display? a) Password file b) Present working directory c) Process ID d) Permissions
+Which command is used to change file permissions? a) chmod b) chown c) ls -l d) mv
+What symbol represents the home directory in Linux? a) / b) ~ c) $ d) #
+Which command is used to display the contents of a file? a) cat b) rm c) mkdir d) touch
+What does rm -r do? a) Removes a file b) Removes a directory recursively c) Renames a file d) Restarts a process
+Which command shows running processes? a) ps b) top c) jobs d) All of the above
+What is the root user’s UID in Linux? a) 0 b) 1 c) 1000 d) -1
+Which command is used to compress files in Linux? a) tar b) gzip c) zip d) All of the above
+Which file contains user account information? a) /etc/passwd b) /etc/shadow c) /etc/group d) /etc/hosts
+Beginner Answer Key & Explanations
+a) ls — Lists files and directories.
+b) Present working directory — Shows current path.
+a) chmod — Changes file permissions.
+b) ~ — Represents home directory.
+a) cat — Displays file contents.
+b) Removes directory recursively — Deletes folder and contents.
+d) All of the above — Each shows processes differently.
+a) 0 — Root UID is always 0.
+d) All of the above — Multiple tools compress files.
+a) /etc/passwd — Stores user account details.
+2. Intermediate Level (10 Questions)
+Which command is used to change file ownership? a) chmod b) chown c) ls d) mv
+What does the grep command do? a) Searches text patterns in files b) Compresses files c) Displays file contents d) Changes permissions
+Which command shows disk usage of files and directories? a) df b) du c) ls -lh d) free
+What is the difference between hard link and soft link? a) Hard link points to inode, soft link points to path b) Both are identical c) Soft link cannot cross filesystems d) Hard link is symbolic
+Which command is used to schedule tasks? a) cron b) at c) systemd timers d) All of the above
+What does kill -9 <PID> do? a) Stops process gracefully b) Forces process termination c) Restarts process d) Suspends process
+Which file stores group information? a) /etc/passwd b) /etc/shadow c) /etc/group d) /etc/fstab
+Which command shows system memory usage? a) free b) top c) vmstat d) All of the above
+What is the default shell in most Linux distributions? a) bash b) zsh c) sh d) fish
+Which command is used to check network connectivity? a) ping b) netstat c) traceroute d) curl
+Intermediate Answer Key & Explanations
+b) chown — Changes ownership of files.
+a) grep — Searches for patterns in text.
+b) du — Shows disk usage per directory.
+a) Hard link → inode, soft link → path.
+d) All of the above — Multiple scheduling tools exist.
+b) Forces termination — SIGKILL cannot be caught.
+c) /etc/group — Stores group info.
+d) All of the above — Each shows memory differently.
+a) bash — Default shell in most distros.
+a) ping — Tests connectivity.
+3. Advanced Level (10 Questions)
+Which Linux runlevel corresponds to multi-user mode without networking? a) 1 b) 2 c) 3 d) 5
+What is SELinux used for? a) File compression b) Mandatory access control c) Process scheduling d) Network monitoring
+Which command is used to analyze system performance in real time? a) sar b) iostat c) top d) perf
+What is the difference between systemd and init? a) systemd is modern init system with parallel startup b) init is faster c) Both are identical d) systemd only works on servers
+Which file defines mounted filesystems? a) /etc/fstab b) /etc/mounts c) /etc/passwd d) /etc/shadow
+What is the purpose of /proc filesystem? a) Stores binaries b) Provides runtime system information c) Stores logs d) Stores user data
+Which Linux command is used for packet capture? a) tcpdump b) wireshark c) tshark d) All of the above
+What is the difference between ext4 and XFS? a) ext4 is journaling, XFS is non-journaling b) ext4 is general-purpose, XFS optimized for large files c) Both are identical d) XFS is only for Windows
+Which Linux security tool scans for rootkits? a) chkrootkit b) rkhunter c) lynis d) All of the above
+Which Linux command is used to manage firewall rules? a) iptables b) firewalld c) ufw d) All of the above
+Advanced Answer Key & Explanations
+b) 2 — Multi-user without networking.
+b) SELinux — Provides mandatory access control.
+d) perf — Advanced performance analysis tool.
+a) systemd — Modern init system with parallel startup.
+a) /etc/fstab — Defines filesystems to mount.
+b) /proc — Virtual filesystem with runtime info.
+d) All of the above — Multiple tools capture packets.
+b) ext4 general-purpose, XFS for large files.
+d) All of the above — Each scans for rootkits.
+d) All of the above — Multiple firewall management tools.
+🌐 Networking Practice Exam (30 Questions)
+1. Beginner Level (10 Questions)
+What does IP stand for? a) Internet Protocol b) Internal Process c) Integrated Program d) Input Port
+Which layer of the OSI model is responsible for routing? a) Transport b) Network c) Data Link d) Application
+What is the default port number for HTTP? a) 21 b) 25 c) 80 d) 443
+Which device connects multiple networks together? a) Switch b) Router c) Hub d) Bridge
+What is the maximum length of a MAC address? a) 32 bits b) 48 bits c) 64 bits d) 128 bits
+Which protocol is used to translate domain names into IP addresses? a) DHCP b) DNS c) FTP d) ARP
+Which command is used to test connectivity in a network? a) ping b) traceroute c) nslookup d) netstat
+What is the default subnet mask for a Class C IP address? a) 255.0.0.0 b) 255.255.0.0 c) 255.255.255.0 d) 255.255.255.255
+Which protocol is used for secure web communication? a) HTTP b) HTTPS c) FTP d) Telnet
+Which layer of the OSI model ensures reliable delivery of data? a) Transport b) Network c) Data Link d) Physical
+Beginner Answer Key & Explanations
+a) Internet Protocol — Defines addressing and routing.
+b) Network — Handles routing and addressing.
+c) 80 — Default HTTP port.
+b) Router — Connects different networks.
+b) 48 bits — MAC addresses are 6 bytes.
+b) DNS — Resolves domain names to IPs.
+a) ping — Tests connectivity using ICMP.
+c) 255.255.255.0 — Default Class C mask.
+b) HTTPS — Uses SSL/TLS for secure communication.
+a) Transport — Ensures reliable delivery (TCP).
+2. Intermediate Level (10 Questions)
+Which protocol dynamically assigns IP addresses? a) DNS b) DHCP c) ARP d) ICMP
+What is the difference between TCP and UDP? a) TCP is connection-oriented, UDP is connectionless b) TCP is faster c) UDP guarantees delivery d) Both are identical
+Which command shows active network connections in Linux? a) netstat b) ifconfig c) ip addr d) traceroute
+What is the purpose of NAT? a) Encrypt traffic b) Translate private IPs to public IPs c) Assign MAC addresses d) Route packets
+Which protocol is used for email delivery? a) SMTP b) POP3 c) IMAP d) FTP
+What is the difference between a hub and a switch? a) Hub broadcasts, switch forwards intelligently b) Switch is slower c) Hub uses MAC addresses d) Both are identical
+Which protocol is used for remote login? a) Telnet b) SSH c) FTP d) SNMP
+What is the purpose of ARP? a) Resolve IP to MAC address b) Resolve MAC to IP address c) Encrypt traffic d) Assign IP addresses
+Which protocol is used to monitor and manage network devices? a) SNMP b) ICMP c) ARP d) DHCP
+Which command traces the path packets take to a destination? a) ping b) traceroute c) nslookup d) netstat
+Intermediate Answer Key & Explanations
+b) DHCP — Dynamically assigns IP addresses.
+a) TCP connection-oriented, UDP connectionless.
+a) netstat — Shows active connections.
+b) NAT — Translates private IPs to public.
+a) SMTP — Used for sending emails.
+a) Hub broadcasts, switch forwards based on MAC.
+b) SSH — Secure remote login.
+a) ARP — Maps IP to MAC.
+a) SNMP — Manages network devices.
+b) traceroute — Shows packet path.
+3. Advanced Level (10 Questions)
+Which protocol is used for routing between autonomous systems? a) OSPF b) RIP c) BGP d) EIGRP
+What is the main difference between IPv4 and IPv6 addressing? a) IPv6 uses 128-bit addresses, IPv4 uses 32-bit b) IPv6 is slower c) IPv4 supports more addresses d) Both are identical
+Which protocol uses link-state routing? a) RIP b) OSPF c) BGP d) EIGRP
+What is the purpose of VLANs? a) Segment networks logically b) Encrypt traffic c) Assign IP addresses d) Manage routing
+Which protocol secures VPN connections? a) IPSec b) SSL c) GRE d) PPTP
+What is the difference between stateful and stateless firewalls? a) Stateful tracks connections, stateless inspects packets only b) Stateless is more secure c) Both are identical d) Stateful is faster
+Which protocol is used for multicast routing? a) IGMP b) RIP c) OSPF d) BGP
+What is the purpose of QoS in networking? a) Prioritize traffic types b) Encrypt traffic c) Assign IP addresses d) Manage routing
+Which protocol is used for secure file transfer? a) FTP b) SFTP c) TFTP d) Telnet
+What is the purpose of MPLS? a) Speed up packet forwarding using labels b) Encrypt traffic c) Assign IP addresses d) Manage DNS
+Advanced Answer Key & Explanations
+c) BGP — Border Gateway Protocol routes between autonomous systems.
+a) IPv6 uses 128-bit addresses vs IPv4’s 32-bit.
+b) OSPF — Link-state routing protocol.
+a) VLANs — Segment networks logically.
+a) IPSec — Secures VPN tunnels.
+a) Stateful tracks connections, stateless inspects packets only.
+a) IGMP — Internet Group Management Protocol for multicast.
+a) QoS — Prioritizes traffic types.
+b) SFTP — Secure file transfer over SSH.
+a) MPLS — Uses labels for efficient forwarding.
+🐳 Docker & ☸️ Kubernetes Practice Exam (30 Questions)
+1. Beginner Level (10 Questions)
+Which command is used to build a Docker image? a) docker run b) docker build c) docker create d) docker exec
+What is the default Dockerfile instruction to set the base image? a) FROM b) BASE c) IMAGE d) ROOT
+Which command lists running Docker containers? a) docker ps b) docker ls c) docker show d) docker status
+What is the default network driver in Docker? a) bridge b) host c) overlay d) macvlan
+Which command pulls an image from Docker Hub? a) docker fetch b) docker pull c) docker get d) docker import
+What is the purpose of docker-compose.yml? a) Define multi-container applications b) Backup containers c) Monitor logs d) Build images
+Which Kubernetes object is used to run a single container instance? a) Pod b) Deployment c) Service d) ReplicaSet
+What is the default Kubernetes command-line tool? a) kubeadm b) kubectl c) minikube d) helm
+Which Kubernetes object exposes Pods to external traffic? a) Service b) Deployment c) ConfigMap d) Secret
+What is the default scheduler in Kubernetes? a) kube-scheduler b) kubelet c) etcd d) controller-manager
+Beginner Answer Key & Explanations
+b) docker build — Builds images from Dockerfile.
+a) FROM — Defines base image.
+a) docker ps — Lists running containers.
+a) bridge — Default network driver.
+b) docker pull — Downloads images.
+a) docker-compose.yml — Defines multi-container setups.
+a) Pod — Smallest deployable unit.
+b) kubectl — CLI for Kubernetes.
+a) Service — Exposes Pods.
+a) kube-scheduler — Assigns Pods to nodes.
+2. Intermediate Level (10 Questions)
+Which Docker command removes unused images and containers? a) docker clean b) docker prune c) docker rm d) docker delete
+What is the difference between COPY and ADD in Dockerfile? a) ADD supports remote URLs and archives, COPY does not b) COPY is faster c) Both are identical d) ADD is deprecated
+Which Kubernetes object ensures desired number of Pods are running? a) ReplicaSet b) Deployment c) StatefulSet d) DaemonSet
+What is the purpose of Kubernetes ConfigMap? a) Store configuration data b) Store secrets c) Store logs d) Store images
+Which Kubernetes object is used for persistent storage? a) Pod b) PersistentVolume c) ConfigMap d) Secret
+What is the difference between StatefulSet and Deployment? a) StatefulSet maintains identity and order of Pods b) Deployment is faster c) Both are identical d) StatefulSet is deprecated
+Which Kubernetes component stores cluster state? a) etcd b) kubelet c) scheduler d) controller-manager
+Which command scales a Kubernetes Deployment? a) kubectl scale b) kubectl resize c) kubectl expand d) kubectl grow
+What is the purpose of Kubernetes DaemonSet? a) Run Pods on all nodes b) Run Pods on one node c) Run Pods on master only d) Run Pods randomly
+Which tool is used to package Kubernetes applications? a) Helm b) Minikube c) kubeadm d) kubectl
+Intermediate Answer Key & Explanations
+b) docker prune — Cleans unused resources.
+a) ADD supports URLs/archives, COPY does not.
+a) ReplicaSet — Ensures desired Pod count.
+a) ConfigMap — Stores non-sensitive config.
+b) PersistentVolume — Provides storage.
+a) StatefulSet — Maintains Pod identity/order.
+a) etcd — Stores cluster state.
+a) kubectl scale — Scales deployments.
+a) DaemonSet — Ensures Pods run on all nodes.
+a) Helm — Packages Kubernetes apps.
+3. Advanced Level (10 Questions)
+Which Docker storage driver is default on most Linux distros? a) overlay2 b) aufs c) btrfs d) zfs
+What is the purpose of Kubernetes Ingress? a) Manage external HTTP/HTTPS access b) Store secrets c) Scale Pods d) Monitor logs
+Which Kubernetes feature provides self-healing? a) ReplicaSet b) Deployment c) Controller-manager d) All of the above
+What is the difference between Kubernetes NodePort and LoadBalancer Service types? a) NodePort exposes on node IP, LoadBalancer integrates with cloud LB b) NodePort is faster c) Both are identical d) LoadBalancer is deprecated
+Which Kubernetes networking model ensures every Pod gets its own IP? a) CNI (Container Network Interface) b) NAT c) Overlay d) Bridge
+What is the purpose of Kubernetes RBAC? a) Role-Based Access Control for security b) Resource Backup and Control c) Routing Between Applications d) Replica Balancing
+Which Kubernetes feature allows rolling updates with zero downtime? a) Deployment strategy b) StatefulSet c) DaemonSet d) ConfigMap
+What is the difference between Docker Swarm and Kubernetes? a) Kubernetes is more feature-rich and widely adopted b) Swarm is faster c) Both are identical d) Kubernetes is deprecated
+Which Kubernetes component enforces policies and manages controllers? a) controller-manager b) kubelet c) scheduler d) etcd
+What is the purpose of Kubernetes Horizontal Pod Autoscaler (HPA)? a) Scale Pods based on CPU/memory usage b) Scale Pods manually c) Scale Pods randomly d) Scale Pods based on storage
+Advanced Answer Key & Explanations
+a) overlay2 — Default storage driver.
+a) Ingress — Manages external HTTP/HTTPS.
+d) All of the above — Controllers ensure self-healing.
+a) NodePort vs LoadBalancer — NodePort exposes via node IP, LoadBalancer integrates with cloud LB.
+a) CNI — Ensures Pod IP allocation.
+a) RBAC — Provides fine-grained access control.
+a) Deployment strategy — Enables rolling updates.
+a) Kubernetes — More advanced than Swarm.
+a) controller-manager — Enforces policies/controllers.
+a) HPA — Scales Pods automatically based on metrics.
+🗄️ SQL Databases Practice Exam (30 Questions)
+1. Beginner Level (10 Questions)
+Which SQL command is used to retrieve data from a table? a) SELECT b) INSERT c) UPDATE d) DELETE
+What does SQL stand for? a) Structured Query Language b) Simple Query Language c) Sequential Query Language d) Standard Query Logic
+Which clause filters rows in a query? a) ORDER BY b) WHERE c) GROUP BY d) HAVING
+Which SQL keyword sorts results? a) SORT b) ORDER BY c) GROUP BY d) FILTER
+What is the default sort order in SQL? a) Ascending b) Descending c) Random d) None
+Which SQL function counts rows? a) SUM() b) COUNT() c) AVG() d) MAX()
+Which SQL statement adds new data? a) INSERT b) UPDATE c) ALTER d) CREATE
+Which SQL clause groups rows by column values? a) GROUP BY b) ORDER BY c) HAVING d) DISTINCT
+Which SQL keyword removes duplicate rows? a) UNIQUE b) DISTINCT c) FILTER d) CLEAN
+Which SQL command deletes a table permanently? a) DROP TABLE b) DELETE TABLE c) REMOVE TABLE d) TRUNCATE TABLE
+Beginner Answer Key & Explanations
+a) SELECT — Retrieves data.
+a) Structured Query Language — Standard language for databases.
+b) WHERE — Filters rows.
+b) ORDER BY — Sorts results.
+a) Ascending — Default order.
+b) COUNT() — Counts rows.
+a) INSERT — Adds new data.
+a) GROUP BY — Groups rows.
+b) DISTINCT — Removes duplicates.
+a) DROP TABLE — Deletes table structure and data.
+2. Intermediate Level (10 Questions)
+What is the difference between DELETE and TRUNCATE? a) DELETE can use WHERE, TRUNCATE cannot b) TRUNCATE is slower c) DELETE removes structure d) Both are identical
+Which SQL constraint enforces uniqueness of values? a) PRIMARY KEY b) FOREIGN KEY c) UNIQUE d) CHECK
+Which SQL join returns only matching rows? a) INNER JOIN b) LEFT JOIN c) RIGHT JOIN d) FULL OUTER JOIN
+Which SQL command modifies table structure? a) ALTER TABLE b) UPDATE TABLE c) MODIFY TABLE d) CHANGE TABLE
+Which SQL keyword is used to rename a column in output? a) RENAME b) AS c) ALIAS d) CHANGE
+Which SQL function returns the highest value? a) MAX() b) MIN() c) AVG() d) COUNT()
+Which SQL clause filters grouped results? a) WHERE b) HAVING c) ORDER BY d) DISTINCT
+Which SQL command creates a new database? a) CREATE DATABASE b) NEW DATABASE c) MAKE DATABASE d) INIT DATABASE
+Which SQL keyword is used to combine results of two queries? a) UNION b) JOIN c) MERGE d) COMBINE
+Which SQL statement updates existing data? a) UPDATE b) INSERT c) ALTER d) MODIFY
+Intermediate Answer Key & Explanations
+a) DELETE uses WHERE, TRUNCATE removes all rows quickly.
+c) UNIQUE — Ensures column values are unique.
+a) INNER JOIN — Returns only matches.
+a) ALTER TABLE — Modifies structure.
+b) AS — Creates alias.
+a) MAX() — Returns highest value.
+b) HAVING — Filters grouped results.
+a) CREATE DATABASE — Creates new DB.
+a) UNION — Combines query results.
+a) UPDATE — Modifies existing data.
+3. Advanced Level (10 Questions)
+What is a clustered index? a) Index that defines physical order of data b) Index stored separately c) Index on multiple columns d) Index for foreign keys
+What is the difference between OLTP and OLAP databases? a) OLTP handles transactions, OLAP handles analytics b) OLAP is faster c) OLTP is read-only d) Both are identical
+Which SQL feature allows recursive queries? a) WITH (CTE) b) UNION c) JOIN d) TRIGGER
+What is the purpose of database normalization? a) Reduce redundancy and improve integrity b) Increase redundancy c) Speed up queries only d) Backup data
+Which SQL command creates a trigger? a) CREATE TRIGGER b) NEW TRIGGER c) MAKE TRIGGER d) INIT TRIGGER
+What is the difference between primary key and foreign key? a) Primary key uniquely identifies rows, foreign key references another table b) Foreign key is faster c) Both are identical d) Primary key can be null
+Which SQL isolation level prevents dirty reads but allows non-repeatable reads? a) READ COMMITTED b) READ UNCOMMITTED c) REPEATABLE READ d) SERIALIZABLE
+What is the difference between materialized view and normal view? a) Materialized view stores data physically, normal view does not b) Normal view is faster c) Both are identical d) Materialized view cannot be refreshed
+Which SQL feature enforces business rules automatically? a) Constraints b) Triggers c) Stored Procedures d) Indexes
+Which SQL optimization technique improves query performance on large datasets? a) Indexing b) Normalization c) Partitioning d) All of the above
+Advanced Answer Key & Explanations
+a) Clustered index — Defines physical order of rows.
+a) OLTP = transactions, OLAP = analytics.
+a) WITH (CTE) — Enables recursion.
+a) Normalization — Reduces redundancy.
+a) CREATE TRIGGER — Defines triggers.
+a) Primary key = unique ID, foreign key = reference.
+a) READ COMMITTED — Prevents dirty reads.
+a) Materialized view stores data physically.
+b) Triggers — Enforce rules automatically.
+d) All of the above — Indexing, normalization, partitioning improve performance.
+🔐 Cybersecurity Practice Exam (30 Questions)
+1. Beginner Level (10 Questions)
+What does CIA triad stand for in cybersecurity? a) Confidentiality, Integrity, Availability b) Control, Inspection, Authentication c) Confidentiality, Identity, Access d) Compliance, Integrity, Audit
+Which of the following is considered malware? a) Virus b) Worm c) Trojan d) All of the above
+What is phishing? a) Unauthorized access to a system b) Fraudulent attempt to obtain sensitive information via email or websites c) Malware infection d) Network sniffing
+Which protocol is used for secure web communication? a) HTTP b) HTTPS c) FTP d) Telnet
+What does a firewall do? a) Encrypts data b) Filters network traffic c) Stores passwords d) Detects malware
+Which of the following is a strong password? a) password123 b) qwerty c) MyDog!2026# d) 123456
+What is two-factor authentication (2FA)? a) Using two passwords b) Using two different accounts c) Using two forms of verification (e.g., password + OTP) d) Using two devices
+Which type of attack floods a system with traffic to make it unavailable? a) SQL Injection b) DDoS c) Phishing d) Man-in-the-Middle
+Which file extension is commonly associated with ransomware notes? a) .exe b) .txt c) .html d) .lock
+Which cybersecurity principle ensures data is not altered during transmission? a) Confidentiality b) Integrity c) Availability d) Authentication
+Beginner Answer Key & Explanations
+a) CIA triad — Core principles of security.
+d) All of the above — Virus, worm, trojan are malware.
+b) Phishing — Fraudulent attempt to steal information.
+b) HTTPS — Secure protocol using SSL/TLS.
+b) Firewall — Filters traffic based on rules.
+c) MyDog!2026# — Strong password with complexity.
+c) 2FA — Combines two verification methods.
+b) DDoS — Distributed denial-of-service attack.
+d) .lock — Often used by ransomware.
+b) Integrity — Ensures data accuracy.
+2. Intermediate Level (10 Questions)
+What is SQL Injection? a) Malware infection b) Exploiting input fields to run malicious SQL queries c) Unauthorized login d) Network sniffing
+Which tool is commonly used for network packet analysis? a) Wireshark b) Nmap c) Metasploit d) Nessus
+What is the difference between symmetric and asymmetric encryption? a) Symmetric uses one key, asymmetric uses two keys b) Symmetric is slower c) Asymmetric is insecure d) Both are identical
+Which protocol is used for secure remote login? a) Telnet b) SSH c) FTP d) SNMP
+What is the purpose of IDS (Intrusion Detection System)? a) Prevent attacks b) Detect suspicious activity c) Encrypt traffic d) Manage firewalls
+Which vulnerability allows attackers to execute code in a victim’s browser? a) SQL Injection b) Cross-Site Scripting (XSS) c) Buffer Overflow d) CSRF
+Which tool is used for vulnerability scanning? a) Nessus b) Wireshark c) Nmap d) Burp Suite
+What is the difference between hashing and encryption? a) Hashing is one-way, encryption is reversible b) Hashing is faster c) Encryption is insecure d) Both are identical
+Which cybersecurity framework is widely used for compliance in the US? a) NIST b) ISO 27001 c) GDPR d) HIPAA
+Which attack tricks a user into executing unwanted actions on a web app? a) CSRF b) XSS c) SQL Injection d) DDoS
+Intermediate Answer Key & Explanations
+b) SQL Injection — Exploits input fields.
+a) Wireshark — Packet analysis tool.
+a) Symmetric = one key, asymmetric = two keys.
+b) SSH — Secure remote login.
+b) IDS — Detects suspicious activity.
+b) XSS — Executes code in browser.
+a) Nessus — Vulnerability scanner.
+a) Hashing = one-way, encryption = reversible.
+a) NIST — Widely used in US compliance.
+a) CSRF — Forces user actions.
+3. Advanced Level (10 Questions)
+What is a zero-day vulnerability? a) Known bug with patch b) Unknown vulnerability exploited before patch c) Malware infection d) Network misconfiguration
+Which encryption algorithm is commonly used in SSL/TLS? a) AES b) DES c) RSA d) Blowfish
+What is the purpose of a SIEM system? a) Collect and analyze security logs b) Encrypt traffic c) Manage firewalls d) Detect malware
+Which attack exploits buffer memory to execute arbitrary code? a) Buffer Overflow b) SQL Injection c) XSS d) CSRF
+What is the difference between penetration testing and vulnerability scanning? a) Pen testing simulates real attacks, scanning identifies weaknesses b) Scanning is more advanced c) Both are identical d) Pen testing is automated
+Which protocol secures email communication? a) S/MIME b) SMTP c) POP3 d) IMAP
+What is the purpose of sandboxing in cybersecurity? a) Isolate applications to prevent malware spread b) Encrypt traffic c) Backup data d) Manage firewalls
+Which advanced persistent threat (APT) technique uses legitimate tools to avoid detection? a) Living off the land b) SQL Injection c) Phishing d) Buffer Overflow
+Which cybersecurity principle ensures systems remain operational during attacks? a) Availability b) Integrity c) Confidentiality d) Authentication
+Which protocol is used for secure VPN tunnels? a) IPSec b) GRE c) PPTP d) L2TP
+Advanced Answer Key & Explanations
+b) Zero-day — Exploited before patch release.
+c) RSA — Common in SSL/TLS key exchange.
+a) SIEM — Security Information and Event Management.
+a) Buffer Overflow — Exploits memory.
+a) Pen testing simulates attacks, scanning finds weaknesses.
+a) S/MIME — Secures email with encryption/signatures.
+a) Sandboxing — Isolates apps.
+a) Living off the land — Uses legitimate tools.
+a) Availability — Ensures uptime.
+a) IPSec — Secures VPN tunnels.
+🗂️ Active Directory & LDAP Practice Exam (30 Questions)
+1. Beginner Level (10 Questions)
+What does LDAP stand for? a) Lightweight Directory Access Protocol b) Local Directory Authentication Protocol c) Logical Data Access Process d) Linked Directory Application Protocol
+Which Microsoft service provides centralized authentication and authorization? a) DNS b) Active Directory c) DHCP d) IIS
+What is the default port for LDAP? a) 389 b) 443 c) 636 d) 1433
+Which port is used for secure LDAP (LDAPS)? a) 389 b) 636 c) 443 d) 22
+What is a domain controller? a) A server that hosts Active Directory services b) A DNS server c) A DHCP server d) A file server
+Which command-line tool is used to query Active Directory objects? a) dsquery b) netstat c) ipconfig d) nslookup
+What is the purpose of Group Policy in Active Directory? a) Manage user and computer settings centrally b) Assign IP addresses c) Monitor network traffic d) Backup files
+Which Active Directory object represents a user’s login identity? a) User account b) Group c) OU d) Computer account
+What is the default authentication protocol in Active Directory? a) NTLM b) Kerberos c) RADIUS d) TACACS+
+Which tool is commonly used to manage Active Directory? a) Active Directory Users and Computers (ADUC) b) SQL Server Management Studio c) IIS Manager d) Power BI
+Beginner Answer Key & Explanations
+a) LDAP — Lightweight Directory Access Protocol.
+b) Active Directory — Provides centralized authentication.
+a) 389 — Default LDAP port.
+b) 636 — Secure LDAP port.
+a) Domain controller — Hosts AD services.
+a) dsquery — Queries AD objects.
+a) Group Policy — Manages settings centrally.
+a) User account — Represents login identity.
+b) Kerberos — Default authentication protocol.
+a) ADUC — GUI tool for managing AD.
+2. Intermediate Level (10 Questions)
+What is an Organizational Unit (OU) in Active Directory? a) A container for grouping objects b) A user account c) A DNS zone d) A database
+Which command resets a user’s password in Active Directory? a) net user b) dsmod user c) passwd d) setpwd
+What is the difference between a security group and a distribution group? a) Security groups assign permissions, distribution groups are for email lists b) Distribution groups assign permissions c) Both are identical d) Security groups are deprecated
+Which Active Directory database file stores directory data? a) ntds.dit b) system32.dll c) ad.db d) ldap.dat
+What is the purpose of FSMO roles? a) Special roles for AD operations b) Backup management c) DNS resolution d) DHCP assignment
+Which FSMO role manages schema changes? a) Schema Master b) RID Master c) PDC Emulator d) Infrastructure Master
+Which tool is used to replicate AD data between domain controllers? a) repadmin b) netdom c) ntdsutil d) gpupdate
+What is the difference between forest and domain in Active Directory? a) Forest is a collection of domains b) Domain is a collection of forests c) Both are identical d) Forest is deprecated
+Which command forces Group Policy update? a) gpupdate /force b) gpo /update c) policy /refresh d) updategp
+Which AD object represents a physical computer? a) Computer account b) User account c) OU d) Group
+Intermediate Answer Key & Explanations
+a) OU — Container for grouping objects.
+b) dsmod user — Resets passwords.
+a) Security = permissions, distribution = email lists.
+a) ntds.dit — AD database file.
+a) FSMO roles — Handle special AD tasks.
+a) Schema Master — Manages schema changes.
+a) repadmin — Replicates AD data.
+a) Forest = collection of domains.
+a) gpupdate /force — Forces Group Policy refresh.
+a) Computer account — Represents physical machines.
+3. Advanced Level (10 Questions)
+What is the purpose of the Global Catalog in Active Directory? a) Provides searchable directory across forest b) Stores DNS records c) Manages DHCP leases d) Stores passwords
+Which FSMO role is responsible for time synchronization? a) PDC Emulator b) RID Master c) Schema Master d) Infrastructure Master
+What is the difference between Kerberos and NTLM authentication? a) Kerberos uses tickets, NTLM uses challenge-response b) NTLM is faster c) Both are identical d) Kerberos is deprecated
+Which command-line tool repairs AD database issues? a) ntdsutil b) repadmin c) dsquery d) netdom
+What is the purpose of Active Directory Federation Services (ADFS)? a) Provide single sign-on across applications b) Manage DNS c) Backup AD d) Encrypt traffic
+Which LDAP operation is used to authenticate users? a) Bind b) Search c) Modify d) Compare
+What is the difference between LDAPS and StartTLS? a) LDAPS uses port 636, StartTLS upgrades connection on port 389 b) StartTLS is faster c) Both are identical d) LDAPS is deprecated
+Which AD feature allows delegation of administrative tasks? a) Role-based delegation b) Group Policy c) OU delegation d) FSMO roles
+What is the purpose of Active Directory Sites and Services? a) Manage replication topology b) Manage DNS zones c) Manage DHCP scopes d) Manage user accounts
+Which AD feature provides fine-grained password policies? a) Password Settings Objects (PSOs) b) Group Policy c) OU policies d) FSMO roles
+Advanced Answer Key & Explanations
+a) Global Catalog — Provides searchable directory across forest.
+a) PDC Emulator — Handles time sync.
+a) Kerberos = tickets, NTLM = challenge-response.
+a) ntdsutil — Repairs AD database.
+a) ADFS — Provides single sign-on.
+a) Bind — Authenticates users in LDAP.
+a) LDAPS = port 636, StartTLS = upgrade on 389.
+c) OU delegation — Allows delegated admin tasks.
+a) Sites and Services — Manages replication topology.
+a) PSOs — Fine-grained password policies.
+🔑 HashiCorp Vault Practice Exam (30 Questions)
+1. Beginner Level (10 Questions)
+What is HashiCorp Vault primarily used for? a) File storage b) Secrets management and encryption c) Database replication d) Monitoring
+Which command starts the Vault server? a) vault run b) vault server c) vault start d) vault init
+What is the default port for Vault HTTP API? a) 8200 b) 8080 c) 443 d) 3306
+What is the purpose of Vault tokens? a) Authenticate and authorize access b) Encrypt data c) Backup secrets d) Monitor logs
+Which Vault command is used to store a secret? a) vault write b) vault put c) vault save d) vault add
+What is the purpose of Vault policies? a) Define access control rules b) Encrypt secrets c) Backup data d) Monitor usage
+Which Vault command reads a secret? a) vault read b) vault get c) vault fetch d) vault show
+What is Vault’s default storage backend? a) Consul b) File c) DynamoDB d) MySQL
+Which Vault command initializes a new Vault cluster? a) vault init b) vault start c) vault bootstrap d) vault setup
+What is the purpose of Vault’s seal/unseal process? a) Secure master key management b) Encrypt tokens c) Backup secrets d) Monitor logs
+Beginner Answer Key & Explanations
+b) Secrets management — Vault manages sensitive data.
+b) vault server — Starts Vault server.
+a) 8200 — Default Vault API port.
+a) Tokens — Authenticate/authorize access.
+a) vault write — Stores secrets.
+a) Policies — Define access rules.
+a) vault read — Retrieves secrets.
+b) File — Default backend.
+a) vault init — Initializes Vault.
+a) Seal/unseal — Protects master key.
+2. Intermediate Level (10 Questions)
+What is Vault’s transit secrets engine used for? a) Encryption/decryption as a service b) Store passwords c) Backup data d) Monitor logs
+Which Vault command generates dynamic secrets? a) vault read b) vault write c) vault generate d) vault issue
+What is the difference between static and dynamic secrets in Vault? a) Static are long-lived, dynamic are short-lived and generated on demand b) Dynamic are encrypted, static are not c) Both are identical d) Static are faster
+Which Vault authentication method integrates with cloud IAM? a) AppRole b) AWS Auth c) LDAP d) Userpass
+What is the purpose of Vault leases? a) Define secret lifetime and renewal b) Encrypt tokens c) Backup secrets d) Monitor logs
+Which Vault command renews a lease? a) vault renew b) vault lease renew c) vault refresh d) vault extend
+What is the difference between Vault’s KV v1 and KV v2 secrets engine? a) KV v2 supports versioning of secrets b) KV v1 is faster c) Both are identical d) KV v1 supports versioning
+Which Vault feature allows revocation of secrets? a) Vault revoke b) Vault lease revoke c) Vault delete d) Vault reset
+Which Vault command authenticates a user with a token? a) vault login b) vault auth c) vault token d) vault access
+What is the purpose of Vault audit devices? a) Log all requests and responses b) Encrypt secrets c) Backup data d) Monitor leases
+Intermediate Answer Key & Explanations
+a) Transit engine — Encryption service.
+b) vault write — Generates dynamic secrets.
+a) Static = long-lived, dynamic = short-lived.
+b) AWS Auth — Integrates with IAM.
+a) Leases — Define secret lifetime.
+b) vault lease renew — Renews leases.
+a) KV v2 — Supports versioning.
+b) Vault lease revoke — Revokes secrets.
+a) vault login — Authenticates with token.
+a) Audit devices — Log requests/responses.
+3. Advanced Level (10 Questions)
+What is Vault’s Shamir’s Secret Sharing used for? a) Splitting master key into multiple shares b) Encrypting secrets c) Backup data d) Monitoring
+Which Vault feature provides high availability? a) Integrated storage with Raft b) File backend c) KV engine d) Transit engine
+What is the difference between Vault’s AppRole and Userpass authentication? a) AppRole is for machines, Userpass is for humans b) Userpass is faster c) Both are identical d) AppRole is deprecated
+Which Vault feature integrates with Kubernetes for Pod authentication? a) Kubernetes Auth method b) AppRole c) LDAP d) Userpass
+What is the purpose of Vault’s response wrapping? a) Securely deliver secrets by wrapping them in a temporary token b) Encrypt tokens c) Backup secrets d) Monitor logs
+Which Vault feature allows replication across data centers? a) Vault Enterprise Replication b) Vault sync c) Vault mirror d) Vault cluster
+What is the difference between Vault’s performance replication and disaster recovery replication? a) Performance = read scalability, DR = failover b) DR is faster c) Both are identical d) Performance is deprecated
+Which Vault feature allows encryption without storing data? a) Transit engine b) KV engine c) PKI engine d) Audit devices
+Which Vault command rotates root tokens? a) vault token rotate b) vault root rotate c) vault rotate d) vault admin rotate
+What is the purpose of Vault’s PKI secrets engine? a) Issue and manage TLS certificates b) Encrypt secrets c) Backup data d) Monitor logs
+Advanced Answer Key & Explanations
+a) Shamir’s Secret Sharing — Splits master key.
+a) Raft storage — Provides HA.
+a) AppRole = machines, Userpass = humans.
+a) Kubernetes Auth — Authenticates Pods.
+a) Response wrapping — Secure secret delivery.
+a) Enterprise Replication — Cross-DC replication.
+a) Performance = scalability, DR = failover.
+a) Transit engine — Encrypts without storage.
+a) vault token rotate — Rotates root tokens.
+a) PKI engine — Issues TLS certificates.
+⚙️ Ansible Practice Exam (30 Questions)
+1. Beginner Level (10 Questions)
+What is Ansible primarily used for? a) Configuration management and automation b) Database replication c) File storage d) Monitoring
+Which language is used to write Ansible playbooks? a) JSON b) YAML c) XML d) INI
+What is the default inventory file location in Ansible? a) /etc/ansible/hosts b) /etc/ansible/inventory c) /etc/hosts d) /etc/ansible/config
+Which command runs an Ansible playbook? a) ansible-run b) ansible-playbook c) ansible-exec d) ansible-start
+What is the purpose of Ansible modules? a) Perform specific tasks like package install or file copy b) Store secrets c) Monitor logs d) Backup data
+Which Ansible command tests connectivity to hosts? a) ansible -m ping b) ansible ping c) ansible test d) ansible check
+What is the default transport protocol used by Ansible? a) SSH b) HTTP c) FTP d) Telnet
+Which Ansible file defines global configuration? a) ansible.cfg b) playbook.yml c) hosts d) inventory.ini
+What is the purpose of Ansible facts? a) Gather system information about hosts b) Store secrets c) Backup data d) Monitor logs
+Which Ansible command lists all available modules? a) ansible-doc -l b) ansible -m list c) ansible modules d) ansible-show
+Beginner Answer Key & Explanations
+a) Automation — Ansible automates configuration.
+b) YAML — Playbooks are written in YAML.
+a) /etc/ansible/hosts — Default inventory file.
+b) ansible-playbook — Runs playbooks.
+a) Modules — Perform tasks.
+a) ansible -m ping — Tests connectivity.
+a) SSH — Default transport.
+a) ansible.cfg — Global config file.
+a) Facts — Gather host info.
+a) ansible-doc -l — Lists modules.
+2. Intermediate Level (10 Questions)
+What is the difference between a playbook and an ad-hoc command? a) Playbook = reusable automation, ad-hoc = one-time tasks b) Ad-hoc is faster c) Both are identical d) Playbook is deprecated
+Which Ansible feature allows conditional execution? a) when b) if c) condition d) only
+What is the purpose of Ansible roles? a) Organize playbooks into reusable components b) Store secrets c) Monitor logs d) Backup data
+Which Ansible command checks playbook syntax? a) ansible-playbook --syntax-check b) ansible-check c) ansible-verify d) ansible-test
+What is the purpose of Ansible vault? a) Encrypt sensitive data like passwords b) Backup secrets c) Monitor logs d) Store facts
+Which Ansible feature allows looping over items? a) with_items b) loop c) repeat d) for_each
+What is the difference between handlers and tasks in Ansible? a) Handlers run only when notified, tasks run always b) Tasks are faster c) Both are identical d) Handlers are deprecated
+Which Ansible command shows gathered facts? a) ansible -m setup b) ansible facts c) ansible show d) ansible-info
+What is the purpose of Ansible Galaxy? a) Share and download roles/playbooks b) Backup data c) Monitor logs d) Encrypt secrets
+Which Ansible feature allows execution on specific hosts? a) inventory groups b) host_vars c) limit d) All of the above
+Intermediate Answer Key & Explanations
+a) Playbook = reusable, ad-hoc = one-time.
+a) when — Conditional execution.
+a) Roles — Organize playbooks.
+a) --syntax-check — Validates syntax.
+a) Vault — Encrypts sensitive data.
+b) loop — Iterates items.
+a) Handlers run when notified.
+a) setup — Gathers facts.
+a) Galaxy — Community roles/playbooks.
+d) All of the above — Multiple ways to target hosts.
+3. Advanced Level (10 Questions)
+What is the purpose of Ansible dynamic inventory? a) Generate inventory from external sources like cloud APIs b) Store secrets c) Backup data d) Monitor logs
+Which Ansible feature allows parallel execution across hosts? a) forks b) async c) serial d) batch
+What is the difference between serial and parallel execution in Ansible? a) serial = batch execution, parallel = simultaneous execution b) serial is faster c) Both are identical d) parallel is deprecated
+Which Ansible plugin allows custom logging? a) callback plugin b) filter plugin c) lookup plugin d) connection plugin
+What is the purpose of Ansible Tower (AWX)? a) Web-based UI and enterprise features for Ansible b) Backup secrets c) Monitor logs d) Encrypt data
+Which Ansible feature allows delegation of tasks to another host? a) delegate_to b) proxy c) forward d) redirect
+What is the difference between block and rescue in Ansible? a) block groups tasks, rescue handles errors b) rescue is faster c) Both are identical d) block is deprecated
+Which Ansible feature allows execution of tasks asynchronously? a) async b) parallel c) serial d) loop
+What is the purpose of Ansible filters? a) Transform data in playbooks b) Encrypt secrets c) Backup data d) Monitor logs
+Which Ansible feature allows execution of tasks only once per playbook run? a) run_once b) once c) single d) unique
+Advanced Answer Key & Explanations
+a) Dynamic inventory — Generates inventory from APIs.
+a) forks — Controls parallelism.
+a) serial = batch, parallel = simultaneous.
+a) callback plugin — Custom logging.
+a) Tower/AWX — Web UI for Ansible.
+a) delegate_to — Runs tasks on another host.
+a) block = group, rescue = error handling.
+a) async — Runs tasks asynchronously.
+a) Filters — Transform data.
+a) run_once — Executes task once.
+☕ Java Programming Practice Exam (30 Questions)
+1. Beginner Level (10 Questions)
+Which keyword is used to define a class in Java? a) class b) def c) struct d) object
+What is the default value of an uninitialized int variable in a class? a) 0 b) null c) undefined d) garbage
+Which method is the entry point of a Java program? a) start() b) run() c) main() d) init()
+Which keyword is used to create an object in Java? a) new b) create c) object d) alloc
+Which Java data type stores true/false values? a) int b) boolean c) char d) String
+Which operator is used for string concatenation? a) + b) & c) * d) concat
+Which package contains the Scanner class? a) java.io b) java.util c) java.lang d) java.sql
+Which keyword prevents a class from being inherited? a) final b) static c) private d) protected
+Which Java loop executes at least once regardless of condition? a) for b) while c) do-while d) foreach
+Which keyword is used to inherit a class? a) extends b) implements c) inherits d) super
+Beginner Answer Key & Explanations
+a) class — Defines a class.
+a) 0 — Default for int.
+c) main() — Entry point.
+a) new — Creates objects.
+b) boolean — Stores true/false.
+a) + — Concatenates strings.
+b) java.util — Contains Scanner.
+a) final — Prevents inheritance.
+c) do-while — Executes at least once.
+a) extends — Inherits a class.
+2. Intermediate Level (10 Questions)
+What is the difference between == and .equals() in Java? a) == compares references, .equals() compares values b) Both compare values c) Both compare references d) .equals() is deprecated
+Which Java keyword is used to implement an interface? a) extends b) implements c) interface d) inherit
+What is the purpose of the this keyword? a) Refers to current object instance b) Refers to parent class c) Refers to static methods d) Refers to global variables
+Which Java collection does not allow duplicate elements? a) List b) Set c) Map d) Array
+What is the difference between ArrayList and LinkedList? a) ArrayList = dynamic array, LinkedList = doubly linked list b) LinkedList is faster always c) Both are identical d) ArrayList is deprecated
+Which exception is thrown when dividing by zero? a) ArithmeticException b) NullPointerException c) IOException d) IndexOutOfBoundsException
+Which Java keyword is used to handle exceptions? a) try-catch b) if-else c) throw-catch d) error
+Which Java class is used for thread creation? a) Thread b) Runnable c) Executor d) All of the above
+What is the difference between checked and unchecked exceptions? a) Checked must be handled/declared, unchecked do not b) Unchecked are faster c) Both are identical d) Checked are deprecated
+Which Java keyword is used to call parent class constructor? a) super b) this c) parent d) extends
+Intermediate Answer Key & Explanations
+a) == = reference, .equals() = value.
+b) implements — Implements interfaces.
+a) this — Refers to current object.
+b) Set — No duplicates.
+a) ArrayList = dynamic array, LinkedList = doubly linked list.
+a) ArithmeticException — Division by zero.
+a) try-catch — Handles exceptions.
+d) All of the above — Multiple ways to create threads.
+a) Checked must be handled, unchecked do not.
+a) super — Calls parent constructor.
+3. Advanced Level (10 Questions)
+What is the purpose of the Java Virtual Machine (JVM)? a) Executes Java bytecode b) Compiles Java source code c) Stores data d) Manages threads only
+What is the difference between JDK, JRE, and JVM? a) JDK = development kit, JRE = runtime, JVM = executes bytecode b) JDK = runtime, JRE = compiler c) JVM = compiler d) All are identical
+What is the purpose of the volatile keyword? a) Ensures visibility of variable changes across threads b) Makes variable immutable c) Speeds up execution d) Prevents inheritance
+What is the difference between HashMap and ConcurrentHashMap? a) HashMap is not thread-safe, ConcurrentHashMap is b) Both are identical c) ConcurrentHashMap is slower always d) HashMap is deprecated
+Which Java feature allows multiple methods with same name but different parameters? a) Overloading b) Overriding c) Polymorphism d) Encapsulation
+Which Java feature allows subclass to redefine parent class method? a) Overriding b) Overloading c) Polymorphism d) Abstraction
+What is the difference between abstract class and interface in Java? a) Abstract class can have concrete methods, interface cannot (before Java 8) b) Interface is faster c) Both are identical d) Abstract class is deprecated
+What is the purpose of Java Garbage Collector? a) Automatically frees memory by removing unused objects b) Deletes files c) Manages threads d) Encrypts data
+Which Java keyword is used to prevent method overriding? a) final b) static c) private d) protected
+What is the difference between StringBuilder and StringBuffer? a) StringBuilder is not synchronized, StringBuffer is b) StringBuffer is faster c) Both are identical d) StringBuilder is deprecated
+Advanced Answer Key & Explanations
+a) JVM — Executes bytecode.
+a) JDK = dev kit, JRE = runtime, JVM = executor.
+a) volatile — Ensures visibility across threads.
+a) HashMap = not thread-safe, ConcurrentHashMap = thread-safe.
+a) Overloading — Same name, different parameters.
+a) Overriding — Redefines parent method.
+a) Abstract class = concrete methods allowed, interface = pure abstraction (pre-Java 8).
+a) Garbage Collector — Frees memory.
+a) final — Prevents overriding.
+a) StringBuilder = not synchronized, StringBuffer = synchronized.
+🔒 Docker & Kubernetes Security Practices Exam (30 Questions)
+1. Beginner Level (10 Questions)
+What is the purpose of Docker Content Trust (DCT)? a) Encrypt container logs b) Sign and verify images c) Backup containers d) Monitor usage
+Which command enables Docker Content Trust? a) export DOCKER_CONTENT_TRUST=1 b) docker trust enable c) docker secure on d) docker sign
+What is the purpose of Kubernetes Secrets? a) Store sensitive data like passwords and tokens b) Backup Pods c) Encrypt logs d) Monitor traffic
+Which Kubernetes object controls access to resources? a) RBAC Roles b) ConfigMap c) Pod d) Service
+What is the default user inside a Docker container if not specified? a) root b) admin c) nobody d) guest
+Which Kubernetes command shows current RBAC roles? a) kubectl get roles b) kubectl get rbac c) kubectl get policies d) kubectl get auth
+What is the purpose of Docker namespaces? a) Isolate processes and resources b) Encrypt secrets c) Backup containers d) Monitor logs
+Which Kubernetes feature limits CPU/memory usage per Pod? a) Resource quotas b) Pod limits c) Node limits d) ConfigMap
+Which Dockerfile instruction should be avoided for security? a) USER nonroot b) RUN curl | bash c) COPY files d) CMD
+What is the purpose of Kubernetes Network Policies? a) Control traffic between Pods b) Encrypt secrets c) Backup data d) Monitor logs
+Beginner Answer Key
+b) Sign/verify images — Ensures authenticity.
+a) DOCKER_CONTENT_TRUST=1 — Enables trust.
+a) Secrets — Store sensitive data.
+a) RBAC Roles — Control access.
+a) root — Default user.
+a) kubectl get roles — Lists RBAC roles.
+a) Namespaces — Provide isolation.
+a) Resource quotas — Limit usage.
+b) RUN curl | bash — Risky practice.
+a) Network Policies — Control Pod traffic.
+2. Intermediate Level (10 Questions)
+What is the purpose of Docker seccomp profiles? a) Restrict system calls for containers b) Encrypt secrets c) Backup containers d) Monitor logs
+Which Kubernetes feature enforces Pod security standards? a) PodSecurityPolicy (deprecated) / Pod Security Admission b) ConfigMap c) RBAC d) Secrets
+What is the difference between Kubernetes ConfigMap and Secret? a) ConfigMap stores non-sensitive config, Secret stores sensitive data b) Both are identical c) Secret is faster d) ConfigMap is encrypted
+Which Dockerfile instruction reduces attack surface? a) USER nonroot b) RUN apt-get install all c) EXPOSE 22 d) ADD *
+What is the purpose of Kubernetes admission controllers? a) Enforce policies during object creation b) Encrypt secrets c) Backup data d) Monitor logs
+Which Kubernetes feature isolates workloads at the node level? a) Taints and tolerations b) RBAC c) Secrets d) ConfigMap
+Which Docker command scans images for vulnerabilities? a) docker scan b) docker inspect c) docker verify d) docker secure
+What is the purpose of Kubernetes ServiceAccount? a) Provide identity for Pods to access API b) Encrypt secrets c) Backup Pods d) Monitor logs
+Which Kubernetes feature enforces TLS for API communication? a) kube-apiserver b) kubelet c) etcd d) controller-manager
+What is the purpose of Kubernetes etcd encryption? a) Protect secrets stored in etcd b) Backup data c) Monitor logs d) Encrypt traffic
+Intermediate Answer Key
+a) seccomp — Restricts syscalls.
+a) Pod Security Admission — Enforces standards.
+a) ConfigMap = non-sensitive, Secret = sensitive.
+a) USER nonroot — Reduces attack surface.
+a) Admission controllers — Enforce policies.
+a) Taints/tolerations — Isolate workloads.
+a) docker scan — Vulnerability scanning.
+a) ServiceAccount — Pod identity.
+a) kube-apiserver — Enforces TLS.
+a) etcd encryption — Protects secrets.
+3. Advanced Level (10 Questions)
+What is the purpose of Kubernetes RBAC? a) Role-Based Access Control for fine-grained permissions b) Encrypt secrets c) Backup data d) Monitor logs
+Which Kubernetes feature enforces runtime security? a) Falco b) PodSecurityPolicy c) ConfigMap d) Secrets
+What is the difference between Docker rootless mode and normal mode? a) Rootless runs containers without root privileges b) Normal mode is faster c) Both are identical d) Rootless is deprecated
+Which Kubernetes feature provides workload isolation across namespaces? a) Network Policies b) RBAC c) Secrets d) ConfigMap
+What is the purpose of Kubernetes audit logs? a) Track API requests for compliance/security b) Encrypt secrets c) Backup data d) Monitor logs
+Which Kubernetes feature integrates with external identity providers? a) OIDC authentication b) RBAC c) Secrets d) ConfigMap
+What is the purpose of Docker capabilities? a) Limit container privileges by dropping unnecessary capabilities b) Encrypt secrets c) Backup containers d) Monitor logs
+Which Kubernetes feature provides secret rotation? a) External Secrets Operator b) ConfigMap c) RBAC d) Pod
+What is the purpose of Kubernetes PSP replacement? a) Pod Security Admission — Enforces security levels b) ConfigMap c) RBAC d) Secrets
+Which Kubernetes feature integrates with service mesh for security? a) mTLS (mutual TLS) b) ConfigMap c) RBAC d) Secrets
+Advanced Answer Key
+a) RBAC — Fine-grained permissions.
+a) Falco — Runtime security monitoring.
+a) Rootless = no root privileges.
+a) Network Policies — Isolate namespaces.
+a) Audit logs — Track API requests.
+a) OIDC — External identity integration.
+a) Capabilities — Limit privileges.
+a) External Secrets Operator — Rotates secrets.
+a) Pod Security Admission — PSP replacement.
+a) mTLS — Secures service mesh traffic.
+💻 C# & .NET Practice Exam (30 Questions)
+1. Beginner Level (10 Questions)
+Which keyword is used to define a class in C#? a) class b) def c) struct d) object
+What is the default value of an uninitialized int field in C#? a) 0 b) null c) undefined d) garbage
+Which method is the entry point of a C# program? a) Start() b) Run() c) Main() d) Init()
+Which keyword is used to create an object in C#? a) new b) create c) object d) alloc
+Which C# data type stores true/false values? a) int b) bool c) char d) string
+Which operator is used for string concatenation in C#? a) + b) & c) * d) concat
+Which namespace contains basic classes like Console? a) System b) Microsoft c) Core d) Net
+Which keyword prevents a class from being inherited? a) sealed b) static c) private d) protected
+Which loop executes at least once regardless of condition? a) for b) while c) do-while d) foreach
+Which keyword is used to inherit a class in C#? a) : b) extends c) inherits d) super
+Beginner Answer Key
+a) class — Defines a class.
+a) 0 — Default for int.
+c) Main() — Entry point.
+a) new — Creates objects.
+b) bool — Stores true/false.
+a) + — Concatenates strings.
+a) System — Contains Console.
+a) sealed — Prevents inheritance.
+c) do-while — Executes at least once.
+a) : — Used for inheritance.
+2. Intermediate Level (10 Questions)
+What is the difference between == and .Equals() in C#? a) == compares references (for objects), .Equals() compares values b) Both compare values c) Both compare references d) .Equals() is deprecated
+Which keyword is used to implement an interface in C#? a) : b) implements c) interface d) inherit
+What is the purpose of the this keyword? a) Refers to current object instance b) Refers to parent class c) Refers to static methods d) Refers to global variables
+Which C# collection does not allow duplicate elements? a) List b) HashSet c) Dictionary d) Array
+What is the difference between ArrayList and List<T>? a) ArrayList is non-generic, List<T> is generic b) List<T> is slower c) Both are identical d) ArrayList is deprecated
+Which exception is thrown when dividing by zero in C#? a) DivideByZeroException b) NullReferenceException c) IOException d) IndexOutOfRangeException
+Which keywords are used to handle exceptions in C#? a) try-catch b) if-else c) throw-catch d) error
+Which C# class is used for thread creation? a) Thread b) Task c) BackgroundWorker d) All of the above
+What is the difference between checked and unchecked exceptions in C#? a) C# does not enforce checked exceptions like Java b) Checked must be handled c) Both are identical d) Checked are deprecated
+Which keyword is used to call parent class constructor in C#? a) base b) this c) parent d) super
+Intermediate Answer Key
+a) == = reference, .Equals() = value.
+a) : — Implements interfaces.
+a) this — Refers to current object.
+b) HashSet — No duplicates.
+a) ArrayList = non-generic, List<T> = generic.
+a) DivideByZeroException — Division by zero.
+a) try-catch — Handles exceptions.
+d) All of the above — Multiple threading options.
+a) C# does not enforce checked exceptions.
+a) base — Calls parent constructor.
+3. Advanced Level (10 Questions)
+What is the purpose of the Common Language Runtime (CLR)? a) Executes .NET code and manages memory b) Compiles C# source code c) Stores data d) Manages threads only
+What is the difference between .NET Framework, .NET Core, and .NET 5+? a) Framework = Windows-only, Core = cross-platform, .NET 5+ = unified platform b) Core is deprecated c) Framework is faster d) All are identical
+What is the purpose of the volatile keyword in C#? a) Ensures visibility of variable changes across threads b) Makes variable immutable c) Speeds up execution d) Prevents inheritance
+What is the difference between Dictionary and ConcurrentDictionary? a) Dictionary is not thread-safe, ConcurrentDictionary is b) Both are identical c) ConcurrentDictionary is slower always d) Dictionary is deprecated
+Which C# feature allows multiple methods with same name but different parameters? a) Overloading b) Overriding c) Polymorphism d) Encapsulation
+Which C# feature allows subclass to redefine parent class method? a) Overriding b) Overloading c) Polymorphism d) Abstraction
+What is the difference between abstract class and interface in C#? a) Abstract class can have concrete methods, interface cannot (before C# 8) b) Interface is faster c) Both are identical d) Abstract class is deprecated
+What is the purpose of the Garbage Collector in .NET? a) Automatically frees memory by removing unused objects b) Deletes files c) Manages threads d) Encrypts data
+Which keyword prevents method overriding in C#? a) sealed b) static c) private d) protected
+What is the difference between StringBuilder and String? a) StringBuilder is mutable, String is immutable b) String is faster c) Both are identical d) StringBuilder is deprecated
+Advanced Answer Key
+a) CLR — Executes .NET code.
+a) Framework = Windows-only, Core = cross-platform, .NET 5+ = unified.
+a) volatile — Ensures visibility across threads.
+a) Dictionary = not thread-safe, ConcurrentDictionary = thread-safe.
+a) Overloading — Same name, different parameters.
+a) Overriding — Redefines parent method.
+a) Abstract = concrete methods allowed, interface = pure abstraction (pre-C# 8).
+a) Garbage Collector — Frees memory.
+a) sealed — Prevents overriding.
+a) StringBuilder = mutable, String = immutable.
+🌍 Terraform Practice Exam (30 Questions)
+1. Beginner Level (10 Questions)
+What is Terraform primarily used for? a) Configuration management b) Infrastructure provisioning as code c) Monitoring d) Secrets management
+Which language is used to write Terraform configuration files? a) YAML b) JSON c) HCL (HashiCorp Configuration Language) d) XML
+What is the default file extension for Terraform configuration files? a) .tf b) .yaml c) .json d) .cfg
+Which command initializes a Terraform working directory? a) terraform init b) terraform start c) terraform setup d) terraform config
+Which command shows the execution plan before applying changes? a) terraform plan b) terraform preview c) terraform show d) terraform dry-run
+Which command applies the changes defined in Terraform configuration? a) terraform run b) terraform apply c) terraform exec d) terraform deploy
+Which command destroys all managed infrastructure? a) terraform delete b) terraform destroy c) terraform remove d) terraform reset
+What is the purpose of Terraform providers? a) Enable interaction with cloud platforms and services b) Encrypt secrets c) Backup data d) Monitor logs
+Which file stores Terraform state by default? a) terraform.tfstate b) state.json c) infra.state d) config.tfstate
+Which command formats Terraform configuration files? a) terraform fmt b) terraform format c) terraform clean d) terraform tidy
+Beginner Answer Key
+b) Infrastructure as code — Terraform provisions infra.
+c) HCL — HashiCorp Configuration Language.
+a) .tf — Default extension.
+a) terraform init — Initializes directory.
+a) terraform plan — Shows execution plan.
+b) terraform apply — Applies changes.
+b) terraform destroy — Removes infra.
+a) Providers — Connect Terraform to services.
+a) terraform.tfstate — Default state file.
+a) terraform fmt — Formats configs.
+2. Intermediate Level (10 Questions)
+What is the purpose of Terraform state? a) Track resources managed by Terraform b) Encrypt secrets c) Backup data d) Monitor logs
+Which backend allows storing Terraform state remotely? a) S3 b) Consul c) Azure Blob Storage d) All of the above
+What is the difference between terraform plan and terraform apply? a) Plan shows changes, apply executes them b) Apply is faster c) Both are identical d) Plan is deprecated
+Which Terraform feature allows reusing configurations? a) Modules b) Providers c) Variables d) Outputs
+What is the purpose of Terraform variables? a) Parameterize configurations b) Encrypt secrets c) Backup data d) Monitor logs
+Which command shows current state of resources? a) terraform show b) terraform state list c) terraform inspect d) terraform get
+What is the difference between input and output variables? a) Input = parameters, Output = expose values b) Output is faster c) Both are identical d) Input is deprecated
+Which Terraform feature allows conditional logic? a) count and for_each b) if-else c) switch-case d) loop
+Which command imports existing infrastructure into Terraform state? a) terraform import b) terraform add c) terraform include d) terraform attach
+Which command upgrades Terraform providers? a) terraform init -upgrade b) terraform upgrade c) terraform update d) terraform refresh
+Intermediate Answer Key
+a) State — Tracks resources.
+d) All of the above — Multiple backends supported.
+a) Plan = preview, Apply = execute.
+a) Modules — Reusable configs.
+a) Variables — Parameterize configs.
+a) terraform show — Displays state.
+a) Input = parameters, Output = expose values.
+a) count/for_each — Conditional logic.
+a) terraform import — Imports infra.
+a) init -upgrade — Upgrades providers.
+3. Advanced Level (10 Questions)
+What is the purpose of Terraform workspaces? a) Manage multiple environments (dev, prod) b) Encrypt secrets c) Backup data d) Monitor logs
+Which Terraform feature allows dependency management between resources? a) depends_on b) modules c) variables d) outputs
+What is the difference between count and for_each in Terraform? a) count = numeric replication, for_each = map/set iteration b) for_each is faster c) Both are identical d) count is deprecated
+Which Terraform feature allows policy enforcement? a) Sentinel b) Vault c) RBAC d) ConfigMap
+What is the purpose of Terraform Cloud? a) Remote state management, collaboration, policy enforcement b) Encrypt secrets c) Backup data d) Monitor logs
+Which Terraform feature allows running code before/after resource creation? a) Provisioners b) Modules c) Variables d) Outputs
+What is the difference between local and remote backends? a) Local stores state on disk, remote stores in cloud/service b) Remote is faster c) Both are identical d) Local is deprecated
+Which Terraform feature allows dynamic values in configuration? a) Expressions and interpolation b) Variables only c) Outputs only d) Modules only
+What is the purpose of terraform taint? a) Marks a resource for recreation on next apply b) Deletes resource immediately c) Encrypts secrets d) Monitors logs
+Which Terraform feature integrates with CI/CD pipelines for automation? a) Terraform CLI + Cloud API b) Providers c) Variables d) Outputs
+Advanced Answer Key
+a) Workspaces — Manage environments.
+a) depends_on — Defines dependencies.
+a) count = numeric, for_each = map/set.
+a) Sentinel — Policy enforcement.
+a) Terraform Cloud — Collaboration + remote state.
+a) Provisioners — Run scripts.
+a) Local = disk, Remote = cloud.
+a) Expressions/interpolation — Dynamic values.
+a) taint — Marks for recreation.
+a) CLI + Cloud API — CI/CD integration.
+🐹 Go (Golang) Practice Exam (30 Questions)
+1. Beginner Level (10 Questions)
+Which keyword is used to define a package in Go? a) package b) import c) module d) pkg
+Which keyword is used to import libraries in Go? a) include b) import c) use d) require
+What is the entry point function in a Go program? a) start() b) run() c) main() d) init()
+Which keyword is used to declare a variable in Go? a) var b) let c) define d) declare
+Which Go data type stores true/false values? a) int b) bool c) string d) rune
+Which operator is used for string concatenation in Go? a) + b) & c) concat d) *
+Which Go keyword defines a constant? a) const b) static c) final d) immutable
+Which Go keyword is used to create a new Goroutine? a) thread b) go c) async d) spawn
+Which Go keyword is used to define a function? a) func b) def c) function d) fn
+Which Go keyword is used to handle errors? a) try-catch b) panic/recover c) throw d) error
+Beginner Answer Key
+a) package — Defines package.
+b) import — Imports libraries.
+c) main() — Entry point.
+a) var — Declares variables.
+b) bool — True/false values.
+a) + — Concatenates strings.
+a) const — Defines constants.
+b) go — Starts Goroutine.
+a) func — Defines functions.
+b) panic/recover — Error handling.
+2. Intermediate Level (10 Questions)
+What is the purpose of Go channels? a) Communicate between Goroutines b) Encrypt data c) Backup logs d) Monitor usage
+Which keyword is used to send data into a channel? a) <- b) => c) -> d) send
+Which Go keyword is used for conditional branching? a) if b) switch c) select d) All of the above
+What is the difference between slice and array in Go? a) Slice is dynamic, array is fixed size b) Array is faster c) Both are identical d) Slice is deprecated
+Which Go keyword is used to define a struct? a) struct b) class c) object d) record
+Which Go keyword is used to define an interface? a) interface b) trait c) protocol d) abstract
+Which Go keyword is used to defer execution of a function? a) defer b) delay c) wait d) postpone
+Which Go keyword is used to initialize packages before main()? a) init b) start c) setup d) pre
+Which Go keyword is used to handle multiple channel operations? a) select b) switch c) case d) choose
+Which Go keyword is used to terminate a Goroutine abnormally? a) panic b) exit c) stop d) kill
+Intermediate Answer Key
+a) Channels — Communicate between Goroutines.
+a) <- — Send data into channel.
+d) All of the above — if, switch, select.
+a) Slice = dynamic, Array = fixed.
+a) struct — Defines struct.
+a) interface — Defines interface.
+a) defer — Delays execution.
+a) init — Initializes before main.
+a) select — Handles multiple channels.
+a) panic — Terminates Goroutine.
+3. Advanced Level (10 Questions)
+What is the purpose of Go’s garbage collector? a) Automatically frees unused memory b) Deletes files c) Manages threads d) Encrypts data
+What is the difference between buffered and unbuffered channels? a) Buffered can store values, unbuffered requires sender/receiver sync b) Unbuffered is faster c) Both are identical d) Buffered is deprecated
+What is the purpose of Go’s race detector? a) Detects concurrent access issues b) Encrypts secrets c) Backup data d) Monitor logs
+Which Go keyword is used for type assertion? a) .(type) b) assert c) cast d) check
+What is the difference between value receiver and pointer receiver in Go methods? a) Value receiver copies object, pointer receiver modifies original b) Pointer receiver is faster c) Both are identical d) Value receiver is deprecated
+What is the purpose of Go’s context package? a) Manage deadlines, cancellations, and request-scoped values b) Encrypt secrets c) Backup data d) Monitor logs
+Which Go keyword is used for type switches? a) switch x.(type) b) select type c) case type d) choose type
+What is the difference between panic and fatal error in Go? a) Panic can be recovered, fatal cannot b) Fatal is faster c) Both are identical d) Panic is deprecated
+What is the purpose of Go’s sync.WaitGroup? a) Wait for Goroutines to finish b) Encrypt secrets c) Backup data d) Monitor logs
+What is the difference between Go’s map and sync.Map? a) map is not thread-safe, sync.Map is b) Both are identical c) sync.Map is slower d) map is deprecated
+Advanced Answer Key
+a) Garbage Collector — Frees memory.
+a) Buffered stores values, Unbuffered syncs sender/receiver.
+a) Race detector — Finds concurrency issues.
+a) .(type) — Type assertion.
+a) Value = copy, Pointer = modify original.
+a) context — Manages deadlines/cancellations.
+a) switch x.(type) — Type switch.
+a) Panic = recoverable, Fatal = not.
+a) WaitGroup — Waits for Goroutines.
+a) map = not thread-safe, sync.Map = thread-safe.
+🦀 Rust Programming Practice Exam (30 Questions)
+1. Beginner Level (10 Questions)
+Which keyword is used to define a function in Rust? a) fn b) def c) function d) proc
+Which keyword is used to declare a variable in Rust? a) var b) let c) define d) declare
+What is the default mutability of variables in Rust? a) mutable b) immutable c) dynamic d) constant
+Which keyword makes a variable mutable? a) mut b) var c) change d) dynamic
+Which macro is used to print output in Rust? a) println! b) print() c) echo d) write
+Which Rust data type stores true/false values? a) int b) bool c) char d) str
+Which keyword is used to define a constant? a) const b) static c) final d) immutable
+Which Rust keyword is used to define a module? a) mod b) package c) namespace d) module
+Which Rust keyword is used to handle errors? a) try-catch b) Result c) panic! d) recover
+Which Rust keyword is used to define a struct? a) struct b) class c) object d) record
+Beginner Answer Key
+a) fn — Defines functions.
+b) let — Declares variables.
+b) immutable — Default mutability.
+a) mut — Makes variable mutable.
+a) println! — Prints output.
+b) bool — True/false values.
+a) const — Defines constants.
+a) mod — Defines modules.
+b) Result — Error handling type.
+a) struct — Defines struct.
+2. Intermediate Level (10 Questions)
+What is the purpose of Rust’s ownership system? a) Manage memory safely without garbage collector b) Encrypt data c) Backup logs d) Monitor usage
+What is the difference between String and &str in Rust? a) String = owned, &str = borrowed slice b) String is faster c) Both are identical d) &str is deprecated
+Which Rust keyword is used to implement traits for a type? a) impl b) trait c) extend d) implements
+Which Rust keyword is used to define an enumeration? a) enum b) choice c) select d) option
+Which Rust keyword is used to match patterns? a) match b) switch c) case d) select
+Which Rust keyword is used to define a trait? a) trait b) interface c) protocol d) abstract
+Which Rust keyword is used to handle multiple threads? a) thread::spawn b) go c) async d) spawn
+Which Rust keyword is used to define asynchronous functions? a) async fn b) fn async c) future fn d) await fn
+Which Rust keyword is used to wait for async results? a) await b) wait c) block d) future
+Which Rust keyword is used to define lifetimes? a) 'a b) life c) scope d) ref
+Intermediate Answer Key
+a) Ownership — Safe memory management.
+a) String = owned, &str = borrowed.
+a) impl — Implements traits.
+a) enum — Defines enumerations.
+a) match — Pattern matching.
+a) trait — Defines traits.
+a) thread::spawn — Creates threads.
+a) async fn — Defines async functions.
+a) await — Waits for async results.
+a) 'a — Defines lifetimes.
+3. Advanced Level (10 Questions)
+What is the purpose of Rust’s borrow checker? a) Enforces ownership and borrowing rules at compile time b) Encrypts secrets c) Backup data d) Monitor logs
+What is the difference between Box<T> and Rc<T>? a) Box = single ownership, Rc = reference counting for shared ownership b) Rc is faster c) Both are identical d) Box is deprecated
+What is the difference between Arc<T> and Rc<T>? a) Arc is thread-safe, Rc is not b) Rc is faster c) Both are identical d) Arc is deprecated
+Which Rust keyword is used for unsafe code blocks? a) unsafe b) danger c) risky d) raw
+What is the purpose of Rust’s Send and Sync traits? a) Define concurrency safety for types b) Encrypt secrets c) Backup data d) Monitor logs
+What is the difference between Copy and Clone traits? a) Copy = implicit duplication, Clone = explicit duplication b) Clone is faster c) Both are identical d) Copy is deprecated
+What is the purpose of Rust macros? a) Generate code at compile time b) Encrypt secrets c) Backup data d) Monitor logs
+Which Rust feature allows zero-cost abstractions? a) Traits and generics b) Macros c) Modules d) Ownership
+What is the difference between synchronous and asynchronous Rust runtimes? a) Async runtimes use event loops, sync executes directly b) Sync is faster c) Both are identical d) Async is deprecated
+Which Rust feature allows memory-safe concurrency without data races? a) Ownership + borrow checker b) Garbage collector c) Locks only d) Unsafe code
+Advanced Answer Key
+a) Borrow checker — Enforces rules.
+a) Box = single owner, Rc = shared.
+a) Arc = thread-safe, Rc = not.
+a) unsafe — Marks unsafe code.
+a) Send/Sync — Concurrency safety.
+a) Copy = implicit, Clone = explicit.
+a) Macros — Generate code.
+a) Traits/generics — Zero-cost abstractions.
+a) Async = event loop, Sync = direct.
+a) Ownership + borrow checker — Prevents data races.
+🐘 PostgreSQL Practice Exam (30 Questions)
+1. Beginner Level (10 Questions)
+What is PostgreSQL primarily used for? a) Operating system b) Relational database management system (RDBMS) c) Web server d) File storage
+What is the default port number for PostgreSQL? a) 3306 b) 1521 c) 5432 d) 8080
+Which command connects to a PostgreSQL database from the terminal? a) psql b) mysql c) sqlplus d) connect
+Which PostgreSQL data type stores variable-length character strings? a) CHAR b) VARCHAR c) TEXT d) Both b and c
+Which SQL command creates a new table in PostgreSQL? a) CREATE TABLE b) ADD TABLE c) NEW TABLE d) MAKE TABLE
+Which PostgreSQL function returns the current date and time? a) SYSDATE b) NOW() c) CURRENT_DATE d) GETDATE()
+Which PostgreSQL command lists all databases? a) \l b) SHOW DATABASES c) LIST DB d) \db
+Which PostgreSQL command lists all tables in the current database? a) \dt b) SHOW TABLES c) LIST TABLES d) \tb
+Which PostgreSQL keyword removes duplicate rows in a query? a) UNIQUE b) DISTINCT c) FILTER d) CLEAN
+Which PostgreSQL command deletes a database? a) DROP DATABASE b) DELETE DATABASE c) REMOVE DATABASE d) TRUNCATE DATABASE
+Beginner Answer Key
+b) RDBMS — PostgreSQL is a relational database.
+c) 5432 — Default port.
+a) psql — Connects to PostgreSQL.
+d) VARCHAR and TEXT — Both store variable-length strings.
+a) CREATE TABLE — Creates tables.
+b) NOW() — Returns current date/time.
+a) \l — Lists databases.
+a) \dt — Lists tables.
+b) DISTINCT — Removes duplicates.
+a) DROP DATABASE — Deletes database.
+2. Intermediate Level (10 Questions)
+What is the purpose of PostgreSQL schemas? a) Organize database objects logically b) Encrypt data c) Backup tables d) Monitor logs
+Which PostgreSQL command shows the query execution plan? a) EXPLAIN b) PLAN c) SHOW PLAN d) ANALYZE
+What is the difference between PRIMARY KEY and UNIQUE constraints? a) PRIMARY KEY enforces uniqueness + not null, UNIQUE only enforces uniqueness b) Both are identical c) UNIQUE is faster d) PRIMARY KEY is deprecated
+Which PostgreSQL feature allows storing JSON data? a) JSON and JSONB data types b) TEXT c) VARCHAR d) XML
+Which PostgreSQL command creates an index? a) CREATE INDEX b) ADD INDEX c) NEW INDEX d) MAKE INDEX
+Which PostgreSQL feature allows materialized query results? a) Materialized Views b) Normal Views c) Tables d) Functions
+Which PostgreSQL command grants privileges to a user? a) GRANT b) ALLOW c) PERMIT d) AUTHORIZE
+Which PostgreSQL command revokes privileges from a user? a) REVOKE b) REMOVE c) DENY d) DROP
+Which PostgreSQL feature supports full-text search? a) tsvector and tsquery b) LIKE operator only c) Regex only d) None
+Which PostgreSQL command creates a new role? a) CREATE ROLE b) ADD ROLE c) NEW ROLE d) MAKE ROLE
+Intermediate Answer Key
+a) Schemas — Organize objects.
+a) EXPLAIN — Shows execution plan.
+a) PRIMARY KEY = unique + not null.
+a) JSON/JSONB — Store JSON data.
+a) CREATE INDEX — Creates index.
+a) Materialized Views — Store query results.
+a) GRANT — Grants privileges.
+a) REVOKE — Removes privileges.
+a) tsvector/tsquery — Full-text search.
+a) CREATE ROLE — Creates role.
+3. Advanced Level (10 Questions)
+What is the purpose of PostgreSQL WAL (Write-Ahead Logging)? a) Ensure durability and crash recovery b) Encrypt secrets c) Backup data d) Monitor logs
+What is the difference between synchronous and asynchronous replication in PostgreSQL? a) Synchronous waits for confirmation, asynchronous does not b) Asynchronous is faster c) Both are identical d) Synchronous is deprecated
+Which PostgreSQL feature allows partitioning of large tables? a) Table Partitioning b) Sharding c) Clustering d) Materialized Views
+Which PostgreSQL feature allows logical replication? a) Publications and Subscriptions b) WAL only c) Streaming replication only d) Backups
+Which PostgreSQL command creates a stored procedure? a) CREATE PROCEDURE b) CREATE FUNCTION c) ADD PROCEDURE d) MAKE PROCEDURE
+What is the difference between VACUUM and ANALYZE? a) VACUUM reclaims space, ANALYZE updates statistics b) Both are identical c) ANALYZE deletes rows d) VACUUM is deprecated
+Which PostgreSQL feature allows row-level security? a) RLS policies b) RBAC c) GRANT d) Views
+Which PostgreSQL feature allows parallel query execution? a) Parallel Query b) Multi-threading c) Sharding d) Indexing
+Which PostgreSQL feature allows foreign data access? a) Foreign Data Wrappers (FDW) b) Linked Servers c) External Tables d) None
+Which PostgreSQL feature allows point-in-time recovery? a) PITR using WAL archives b) Backups only c) Replication only d) Snapshots only
+Advanced Answer Key
+a) WAL — Ensures durability.
+a) Sync = waits, Async = does not.
+a) Partitioning — Splits large tables.
+a) Publications/Subscriptions — Logical replication.
+a) CREATE PROCEDURE — Defines procedures.
+a) VACUUM = reclaim space, ANALYZE = update stats.
+a) RLS — Row-level security.
+a) Parallel Query — Executes in parallel.
+a) FDW — Access external data.
+a) PITR — Recovery using WAL archives.
+🤖 Machine Learning Fundamentals Exam (30 Questions)
+1. Beginner Level (10 Questions)
+What is the primary goal of machine learning? a) Write code manually b) Enable systems to learn patterns from data c) Encrypt data d) Backup logs
+Which type of ML uses labeled data? a) Supervised learning b) Unsupervised learning c) Reinforcement learning d) Semi-supervised learning
+Which type of ML uses unlabeled data? a) Supervised learning b) Unsupervised learning c) Reinforcement learning d) Semi-supervised learning
+Which ML algorithm is commonly used for classification? a) Logistic Regression b) Linear Regression c) K-Means d) PCA
+Which ML algorithm is commonly used for clustering? a) K-Means b) Logistic Regression c) Decision Trees d) Naive Bayes
+Which ML algorithm is commonly used for dimensionality reduction? a) PCA (Principal Component Analysis) b) KNN c) Decision Trees d) Random Forest
+Which ML metric measures accuracy of classification? a) Accuracy b) RMSE c) MAE d) R²
+Which ML metric measures error in regression? a) RMSE (Root Mean Square Error) b) Accuracy c) Precision d) Recall
+Which ML algorithm is inspired by biological neurons? a) Neural Networks b) Decision Trees c) KNN d) Naive Bayes
+Which ML algorithm is commonly used for spam detection? a) Naive Bayes b) K-Means c) PCA d) Linear Regression
+2. Intermediate Level (10 Questions)
+What is overfitting in ML? a) Model performs well on training data but poorly on unseen data b) Model performs poorly on training data c) Model ignores data d) Model is too simple
+What is underfitting in ML? a) Model is too simple and fails to capture patterns b) Model performs well on training data c) Model memorizes data d) Model is too complex
+Which technique reduces overfitting? a) Regularization (L1/L2) b) Increasing complexity c) Removing data d) Ignoring features
+Which ML algorithm uses decision boundaries for classification? a) SVM (Support Vector Machine) b) KNN c) Naive Bayes d) PCA
+Which ML algorithm builds trees for decision-making? a) Decision Trees b) Logistic Regression c) PCA d) K-Means
+Which ML ensemble method combines multiple weak learners? a) Boosting b) Bagging c) Random Forest d) All of the above
+Which ML technique splits data into training and testing sets? a) Cross-validation b) Bootstrapping c) Sampling d) Clustering
+Which ML metric measures precision? a) True Positives / (True Positives + False Positives) b) True Positives / (True Positives + False Negatives) c) Accuracy d) RMSE
+Which ML metric measures recall? a) True Positives / (True Positives + False Negatives) b) True Positives / (True Positives + False Positives) c) Accuracy d) RMSE
+Which ML technique is used for feature scaling? a) Normalization / Standardization b) Clustering c) PCA d) Bagging
+3. Advanced Level (10 Questions)
+What is the purpose of gradient descent? a) Optimize model parameters by minimizing loss b) Encrypt data c) Backup logs d) Monitor usage
+What is the difference between batch and stochastic gradient descent? a) Batch uses all data per step, stochastic uses one sample b) Stochastic is slower c) Both are identical d) Batch is deprecated
+What is the vanishing gradient problem? a) Gradients become too small in deep networks, slowing learning b) Gradients explode c) Model ignores data d) Model overfits
+Which activation function helps mitigate vanishing gradients? a) ReLU b) Sigmoid c) Tanh d) Linear
+Which ML algorithm is used for reinforcement learning? a) Q-Learning b) K-Means c) Logistic Regression d) PCA
+What is the difference between CNN and RNN? a) CNN = spatial data (images), RNN = sequential data (text/time series) b) RNN is faster c) Both are identical d) CNN is deprecated
+What is the purpose of dropout in neural networks? a) Prevent overfitting by randomly disabling neurons during training b) Encrypt data c) Backup logs d) Monitor usage
+Which ML technique is used for dimensionality reduction in deep learning? a) Autoencoders b) PCA c) KNN d) Decision Trees
+Which ML optimization algorithm adapts learning rates per parameter? a) Adam b) SGD c) RMSProp d) All of the above
+Which ML concept is used in transfer learning? a) Reusing pre-trained models for new tasks b) Training from scratch c) Clustering d) Bagging
+☁️ Cloud Computing (AWS, Azure, GCP) Exam (30 Questions)
+1. Beginner Level (10 Questions)
+What is cloud computing? a) Hosting services on the internet b) Local file storage c) Manual server setup d) Offline computing
+Which AWS service provides virtual servers? a) EC2 b) S3 c) RDS d) Lambda
+Which Azure service provides virtual machines? a) Azure VM b) Azure Blob c) Azure SQL d) Azure Functions
+Which GCP service provides virtual machines? a) Compute Engine b) Cloud Storage c) BigQuery d) Cloud Functions
+Which AWS service provides object storage? a) S3 b) EC2 c) RDS d) DynamoDB
+Which Azure service provides object storage? a) Blob Storage b) Azure VM c) Azure SQL d) Cosmos DB
+Which GCP service provides object storage? a) Cloud Storage b) Compute Engine c) BigQuery d) Cloud SQL
+Which AWS service provides managed relational databases? a) RDS b) DynamoDB c) S3 d) EC2
+Which Azure service provides managed relational databases? a) Azure SQL Database b) Blob Storage c) Cosmos DB d) Azure VM
+Which GCP service provides managed relational databases? a) Cloud SQL b) BigQuery c) Cloud Storage d) Compute Engine
+2. Intermediate Level (10 Questions)
+What is the purpose of AWS IAM? a) Manage users and permissions b) Encrypt data c) Backup logs d) Monitor traffic
+What is the purpose of Azure Active Directory? a) Identity and access management b) Object storage c) Database management d) Monitoring
+What is the purpose of GCP IAM? a) Manage roles and permissions b) Encrypt secrets c) Backup data d) Monitor logs
+Which AWS service provides serverless computing? a) Lambda b) EC2 c) S3 d) RDS
+Which Azure service provides serverless computing? a) Azure Functions b) Azure VM c) Blob Storage d) Cosmos DB
+Which GCP service provides serverless computing? a) Cloud Functions b) Compute Engine c) Cloud Storage d) BigQuery
+Which AWS service provides monitoring and logging? a) CloudWatch b) CloudTrail c) S3 d) EC2
+Which Azure service provides monitoring and logging? a) Azure Monitor b) Blob Storage c) Azure SQL d) Azure Functions
+Which GCP service provides monitoring and logging? a) Stackdriver (now Cloud Operations) b) BigQuery c) Cloud SQL d) Cloud Storage
+Which AWS service provides CDN (Content Delivery Network)? a) CloudFront b) S3 c) EC2 d) RDS
+3. Advanced Level (10 Questions)
+What is the purpose of AWS CloudFormation? a) Infrastructure as Code (IaC) b) Object storage c) Database management d) Monitoring
+What is the purpose of Azure Resource Manager (ARM)? a) Infrastructure as Code (IaC) b) Object storage c) Database management d) Monitoring
+What is the purpose of GCP Deployment Manager? a) Infrastructure as Code (IaC) b) Object storage c) Database management d) Monitoring
+Which AWS service provides container orchestration? a) ECS / EKS b) Lambda c) S3 d) RDS
+Which Azure service provides container orchestration? a) AKS (Azure Kubernetes Service) b) Blob Storage c) Azure Functions d) Cosmos DB
+Which GCP service provides container orchestration? a) GKE (Google Kubernetes Engine) b) Cloud SQL c) BigQuery d) Cloud Functions
+What is the purpose of AWS CloudTrail? a) Track API calls for auditing b) Encrypt secrets c) Backup data d) Monitor logs
+What is the purpose of Azure Key Vault? a) Store and manage secrets securely b) Object storage c) Database management d) Monitoring
+What is the purpose of GCP Secret Manager? a) Store and manage secrets securely b) Object storage c) Database management d) Monitoring
+Which cloud computing model provides both infrastructure and platform services? a) PaaS + IaaS hybrid b) SaaS only c) On-premises only d) None
+🛡️ Cybersecurity Advanced (Red Team / Blue Team) Exam (30 Questions)
+1. Beginner Level (10 Questions)
+What is the primary goal of a Red Team? a) Simulate real-world attacks to test defenses b) Monitor logs c) Encrypt data d) Backup systems
+What is the primary goal of a Blue Team? a) Defend systems against attacks b) Launch attacks c) Encrypt secrets d) Backup data
+Which tool is commonly used by Red Teams for penetration testing? a) Metasploit b) Wireshark c) Nessus d) Splunk
+Which tool is commonly used by Blue Teams for log analysis? a) Splunk b) Metasploit c) Burp Suite d) Nmap
+Which attack involves tricking users into revealing credentials? a) Phishing b) SQL Injection c) Buffer Overflow d) DDoS
+Which defensive technique detects anomalies in network traffic? a) Intrusion Detection System (IDS) b) Firewall c) VPN d) Proxy
+Which Red Team technique exploits unpatched software? a) Vulnerability exploitation b) Encryption c) Backup d) Monitoring
+Which Blue Team technique applies patches to systems? a) Vulnerability management b) Exploitation c) Reconnaissance d) Phishing
+Which Red Team phase involves gathering information about targets? a) Reconnaissance b) Exploitation c) Persistence d) Exfiltration
+Which Blue Team phase involves incident response? a) Detection and containment b) Reconnaissance c) Exploitation d) Persistence
+2. Intermediate Level (10 Questions)
+Which Red Team technique involves escalating privileges? a) Privilege escalation b) Reconnaissance c) Persistence d) Exfiltration
+Which Blue Team technique involves monitoring system integrity? a) File integrity monitoring b) Privilege escalation c) Reconnaissance d) Exploitation
+Which Red Team tool is used for password cracking? a) John the Ripper b) Splunk c) Nessus d) Wireshark
+Which Blue Team tool is used for endpoint detection and response (EDR)? a) CrowdStrike Falcon b) Metasploit c) Burp Suite d) Nmap
+Which Red Team technique involves maintaining access after exploitation? a) Persistence b) Reconnaissance c) Privilege escalation d) Exfiltration
+Which Blue Team technique involves isolating compromised systems? a) Containment b) Exploitation c) Reconnaissance d) Persistence
+Which Red Team technique involves extracting sensitive data? a) Exfiltration b) Persistence c) Privilege escalation d) Reconnaissance
+Which Blue Team technique involves restoring systems after attacks? a) Recovery b) Exploitation c) Reconnaissance d) Persistence
+Which Red Team technique involves bypassing authentication? a) Credential stuffing b) Encryption c) Backup d) Monitoring
+Which Blue Team technique involves simulating attacks to improve defenses? a) Purple Teaming b) Exploitation c) Reconnaissance d) Persistence
+3. Advanced Level (10 Questions)
+Which Red Team framework standardizes penetration testing? a) MITRE ATT&CK b) NIST CSF c) ISO 27001 d) CIS Controls
+Which Blue Team framework standardizes defensive techniques? a) MITRE ATT&CK (defensive mapping) b) NIST CSF c) ISO 27001 d) CIS Controls
+Which Red Team technique involves lateral movement? a) Moving between systems after initial compromise b) Encrypting data c) Backup d) Monitoring
+Which Blue Team technique detects lateral movement? a) Network segmentation + monitoring b) Privilege escalation c) Reconnaissance d) Exploitation
+Which Red Team technique involves creating fake domains for phishing? a) Domain spoofing b) Persistence c) Privilege escalation d) Exfiltration
+Which Blue Team technique involves DNS monitoring? a) Detect domain spoofing b) Exploitation c) Reconnaissance d) Persistence
+Which Red Team technique involves exploiting misconfigured cloud services? a) Cloud exploitation b) Persistence c) Privilege escalation d) Exfiltration
+Which Blue Team technique involves enforcing least privilege in cloud? a) IAM hardening b) Exploitation c) Reconnaissance d) Persistence
+Which Red Team technique involves evading detection tools? a) Defense evasion b) Persistence c) Privilege escalation d) Exfiltration
+Which Blue Team technique involves threat hunting? a) Proactively searching for hidden threats b) Exploitation c) Reconnaissance d) Persistence
+📚 Data Structures & Algorithms Exam (30 Questions)
+1. Beginner Level (10 Questions)
+Which data structure uses FIFO (First In, First Out)? a) Stack b) Queue c) Linked List d) Tree
+Which data structure uses LIFO (Last In, First Out)? a) Stack b) Queue c) Array d) Graph
+What is the time complexity of searching in a sorted array using binary search? a) O(n) b) O(log n) c) O(1) d) O(n²)
+Which data structure is used to implement recursion? a) Stack b) Queue c) Array d) Linked List
+Which traversal method visits nodes in the order: Left → Root → Right? a) Inorder b) Preorder c) Postorder d) Level-order
+Which data structure is used to represent hierarchical data? a) Tree b) Array c) Stack d) Queue
+Which graph traversal algorithm uses a queue? a) BFS (Breadth-First Search) b) DFS (Depth-First Search) c) Dijkstra d) Bellman-Ford
+Which graph traversal algorithm uses a stack (or recursion)? a) DFS b) BFS c) Dijkstra d) Kruskal
+What is the time complexity of accessing an element in an array by index? a) O(1) b) O(n) c) O(log n) d) O(n²)
+Which data structure is used in hashing? a) Hash Table b) Stack c) Queue d) Tree
+2. Intermediate Level (10 Questions)
+What is the time complexity of inserting into a balanced BST (like AVL)? a) O(log n) b) O(n) c) O(1) d) O(n²)
+Which sorting algorithm has the best average-case complexity? a) Merge Sort b) Quick Sort c) Bubble Sort d) Insertion Sort
+Which sorting algorithm is stable? a) Merge Sort b) Quick Sort c) Heap Sort d) Selection Sort
+Which algorithm is used to find the shortest path in a weighted graph (non-negative weights)? a) Dijkstra’s Algorithm b) BFS c) DFS d) Kruskal
+Which algorithm is used to find the minimum spanning tree? a) Kruskal’s Algorithm b) Prim’s Algorithm c) Both a and b d) Bellman-Ford
+What is the time complexity of heap insertion? a) O(log n) b) O(n) c) O(1) d) O(n²)
+Which data structure is used in implementing priority queues? a) Heap b) Stack c) Queue d) Array
+Which algorithm is used for cycle detection in graphs? a) DFS b) BFS c) Dijkstra d) Kruskal
+Which algorithm is used for topological sorting? a) DFS b) BFS (Kahn’s Algorithm) c) Both a and b d) Dijkstra
+Which hashing technique resolves collisions by chaining? a) Linked List chaining b) Linear probing c) Quadratic probing d) Double hashing
+3. Advanced Level (10 Questions)
+What is the time complexity of matrix multiplication using Strassen’s Algorithm? a) O(n^2.81) b) O(n³) c) O(n²) d) O(log n)
+Which algorithm is used for maximum flow in a network? a) Ford-Fulkerson b) Dijkstra c) Kruskal d) Prim
+Which algorithm is used for all-pairs shortest path? a) Floyd-Warshall b) Dijkstra c) Bellman-Ford d) Kruskal
+What is the time complexity of searching in a Trie? a) O(m) where m = length of key b) O(n) c) O(log n) d) O(1)
+Which algorithm is used for string pattern matching? a) KMP (Knuth-Morris-Pratt) b) Rabin-Karp c) Naive search d) All of the above
+Which data structure is used in implementing LRU cache? a) HashMap + Doubly Linked List b) Stack c) Queue d) Heap
+Which algorithm is used for finding strongly connected components in a graph? a) Kosaraju’s Algorithm b) Tarjan’s Algorithm c) Both a and b d) Kruskal
+Which algorithm is used for convex hull computation? a) Graham’s Scan b) Jarvis March c) Both a and b d) Dijkstra
+Which algorithm is used for approximate string matching? a) Levenshtein Distance b) KMP c) Rabin-Karp d) Trie
+Which algorithm is used for dynamic programming optimization in matrix chain multiplication? a) Matrix Chain DP b) Divide and Conquer c) Greedy d) Backtracking
+💻 Operating Systems Concepts Exam (30 Questions)
+1. Beginner Level (10 Questions)
+What is the primary purpose of an operating system? a) Manage hardware and software resources b) Encrypt data c) Backup files d) Monitor logs
+Which of the following is NOT an operating system? a) Windows b) Linux c) Oracle d) macOS
+Which OS component manages CPU scheduling? a) Kernel b) Shell c) File system d) User interface
+Which OS component manages files and directories? a) File system b) Kernel c) Scheduler d) Shell
+Which OS component provides user interaction? a) Shell b) Kernel c) File system d) Scheduler
+Which type of OS allows multiple users at the same time? a) Multi-user OS b) Single-user OS c) Real-time OS d) Embedded OS
+Which type of OS executes tasks within strict time limits? a) Real-time OS b) Multi-user OS c) Batch OS d) Distributed OS
+Which OS scheduling algorithm executes processes in arrival order? a) FCFS (First-Come, First-Served) b) Round Robin c) Priority Scheduling d) Shortest Job First
+Which OS scheduling algorithm gives each process equal time slices? a) Round Robin b) FCFS c) Priority Scheduling d) Shortest Job First
+Which OS concept prevents multiple processes from accessing the same resource simultaneously? a) Mutual exclusion b) Deadlock c) Starvation d) Paging
+2. Intermediate Level (10 Questions)
+What is the difference between process and thread? a) Process = independent execution, Thread = lightweight unit within process b) Thread is faster c) Both are identical d) Process is deprecated
+What is the purpose of virtual memory? a) Extend physical memory using disk space b) Encrypt data c) Backup files d) Monitor logs
+Which OS concept divides memory into fixed-size blocks? a) Paging b) Segmentation c) Swapping d) Fragmentation
+Which OS concept divides memory into variable-size blocks? a) Segmentation b) Paging c) Swapping d) Fragmentation
+What is the difference between internal and external fragmentation? a) Internal = wasted space inside blocks, External = scattered free space b) External is faster c) Both are identical d) Internal is deprecated
+Which OS concept allows multiple processes to share CPU time? a) Time-sharing b) Paging c) Segmentation d) Swapping
+Which OS concept occurs when processes wait indefinitely for resources? a) Deadlock b) Starvation c) Paging d) Segmentation
+Which OS concept prevents deadlock by resource ordering? a) Banker's Algorithm b) Round Robin c) FCFS d) Paging
+Which OS concept swaps processes between memory and disk? a) Swapping b) Paging c) Segmentation d) Fragmentation
+Which OS concept allows multiple processors to work together? a) Multiprocessing b) Multithreading c) Multitasking d) Time-sharing
+3. Advanced Level (10 Questions)
+What is the purpose of the OS kernel? a) Core component managing hardware and processes b) Encrypt data c) Backup files d) Monitor logs
+What is the difference between monolithic and microkernel architecture? a) Monolithic = all services in kernel, Microkernel = minimal kernel + user services b) Microkernel is faster c) Both are identical d) Monolithic is deprecated
+Which OS concept allows processes to communicate? a) IPC (Inter-Process Communication) b) Paging c) Segmentation d) Swapping
+Which IPC mechanism uses shared memory? a) Shared Memory b) Message Passing c) Signals d) Pipes
+Which IPC mechanism uses message queues? a) Message Passing b) Shared Memory c) Signals d) Pipes
+Which OS concept ensures fairness in CPU scheduling? a) Fair-share scheduling b) Priority scheduling c) FCFS d) Round Robin
+Which OS concept allows distributed systems to appear as a single system? a) Distributed OS b) Real-time OS c) Multi-user OS d) Batch OS
+Which OS concept allows virtualization of hardware resources? a) Hypervisor b) Kernel c) Shell d) Scheduler
+Which OS concept detects and recovers from deadlocks? a) Deadlock detection and recovery b) Paging c) Segmentation d) Swapping
+Which OS concept allows secure isolation of processes? a) Sandboxing b) Paging c) Segmentation d) Swapping
+🌐 Computer Networks Exam (30 Questions)
+1. Beginner Level (10 Questions)
+What does LAN stand for? a) Local Area Network b) Large Access Network c) Logical Area Node d) Linked Access Network
+What does WAN stand for? a) Wide Area Network b) Wireless Access Network c) Web Area Node d) World Access Network
+Which device connects multiple networks together? a) Router b) Switch c) Hub d) Repeater
+Which device connects multiple computers in a LAN? a) Switch b) Router c) Firewall d) Modem
+Which protocol is used for web communication? a) HTTP/HTTPS b) FTP c) SMTP d) SNMP
+Which protocol is used for email transfer? a) SMTP b) HTTP c) FTP d) SNMP
+Which protocol is used for file transfer? a) FTP b) SMTP c) HTTP d) SNMP
+Which protocol is used for secure remote login? a) SSH b) Telnet c) FTP d) SMTP
+Which protocol is used for domain name resolution? a) DNS b) DHCP c) ARP d) ICMP
+Which protocol is used to assign IP addresses dynamically? a) DHCP b) DNS c) ARP d) ICMP
+2. Intermediate Level (10 Questions)
+What is the difference between TCP and UDP? a) TCP is connection-oriented, UDP is connectionless b) UDP is faster always c) Both are identical d) TCP is deprecated
+Which layer of the OSI model handles routing? a) Network Layer b) Transport Layer c) Data Link Layer d) Application Layer
+Which layer of the OSI model handles encryption and compression? a) Presentation Layer b) Application Layer c) Transport Layer d) Network Layer
+Which layer of the OSI model handles end-to-end communication? a) Transport Layer b) Network Layer c) Data Link Layer d) Application Layer
+Which protocol is used for network troubleshooting (ping)? a) ICMP b) ARP c) DHCP d) DNS
+Which protocol is used for secure web communication? a) HTTPS b) HTTP c) FTP d) SMTP
+Which protocol is used for network management? a) SNMP b) SMTP c) FTP d) HTTP
+Which protocol is used for routing updates? a) OSPF / BGP b) DNS c) DHCP d) ICMP
+Which addressing scheme is used in IPv6? a) 128-bit addresses b) 32-bit addresses c) 64-bit addresses d) 256-bit addresses
+Which protocol is used for secure VPN connections? a) IPSec b) HTTP c) FTP d) SMTP
+3. Advanced Level (10 Questions)
+What is the purpose of NAT (Network Address Translation)? a) Map private IPs to public IPs b) Encrypt data c) Backup logs d) Monitor traffic
+What is the difference between static and dynamic routing? a) Static = manual routes, Dynamic = automatic updates b) Dynamic is faster c) Both are identical d) Static is deprecated
+Which protocol is used for secure email transfer? a) SMTPS b) SMTP c) FTP d) SNMP
+Which protocol is used for secure file transfer? a) SFTP b) FTP c) HTTP d) SNMP
+Which protocol is used for secure remote desktop? a) RDP b) SSH c) Telnet d) VNC
+Which protocol is used for multicast communication? a) IGMP b) ICMP c) ARP d) DHCP
+Which protocol is used for link-state routing? a) OSPF b) BGP c) RIP d) EIGRP
+Which protocol is used for path-vector routing? a) BGP b) OSPF c) RIP d) EIGRP
+Which protocol is used for distance-vector routing? a) RIP b) OSPF c) BGP d) EIGRP
+Which protocol is used for hybrid routing? a) EIGRP b) RIP c) OSPF d) BGP
+🔐 DevSecOps Practices Exam (30 Questions)
+1. Beginner Level (10 Questions)
+What does DevSecOps stand for? a) Development, Security, Operations b) Development, Secrets, Optimization c) Deployment, Security, Optimization d) Development, Secure Operations
+What is the primary goal of DevSecOps? a) Integrate security into DevOps pipelines b) Encrypt all data c) Replace developers with security engineers d) Monitor logs only
+Which tool is commonly used for CI/CD pipelines? a) Jenkins b) Wireshark c) Splunk d) Metasploit
+Which tool is commonly used for container orchestration? a) Kubernetes b) Docker Compose c) Terraform d) Ansible
+Which tool is commonly used for Infrastructure as Code (IaC)? a) Terraform b) Jenkins c) Splunk d) Wireshark
+Which tool is commonly used for container security scanning? a) Trivy b) Jenkins c) Splunk d) Nmap
+Which tool is commonly used for dependency vulnerability scanning? a) OWASP Dependency-Check b) Jenkins c) Splunk d) Wireshark
+Which tool is commonly used for secrets management? a) HashiCorp Vault b) Jenkins c) Splunk d) Wireshark
+Which tool is commonly used for monitoring logs in DevSecOps? a) Splunk b) Jenkins c) Wireshark d) Terraform
+Which practice ensures code is reviewed for security before deployment? a) Secure code review b) Encryption c) Backup d) Monitoring
+2. Intermediate Level (10 Questions)
+What is the purpose of shift-left security? a) Integrate security early in the SDLC b) Encrypt data at rest c) Backup logs d) Monitor traffic
+Which DevSecOps practice automates vulnerability detection in CI/CD? a) Static Application Security Testing (SAST) b) Dynamic Application Security Testing (DAST) c) Interactive Application Security Testing (IAST) d) All of the above
+Which DevSecOps practice tests applications during runtime? a) DAST b) SAST c) IAST d) Code review
+Which DevSecOps practice analyzes source code for vulnerabilities? a) SAST b) DAST c) IAST d) Penetration testing
+Which DevSecOps practice combines static and dynamic testing? a) IAST b) SAST c) DAST d) Code review
+Which DevSecOps practice simulates real-world attacks? a) Penetration testing b) SAST c) DAST d) IAST
+Which DevSecOps practice ensures compliance with security policies? a) Policy as Code b) Encryption c) Backup d) Monitoring
+Which DevSecOps practice enforces least privilege access? a) Role-Based Access Control (RBAC) b) Encryption c) Backup d) Monitoring
+Which DevSecOps practice ensures containers run with minimal privileges? a) Rootless containers b) Encryption c) Backup d) Monitoring
+Which DevSecOps practice ensures secrets are not hardcoded in code? a) Secrets management b) Encryption c) Backup d) Monitoring
+3. Advanced Level (10 Questions)
+Which DevSecOps practice integrates security checks into IaC? a) IaC scanning (e.g., Checkov) b) Encryption c) Backup d) Monitoring
+Which DevSecOps practice enforces compliance in Kubernetes clusters? a) OPA (Open Policy Agent) b) Encryption c) Backup d) Monitoring
+Which DevSecOps practice ensures secure container images? a) Image signing and verification b) Encryption c) Backup d) Monitoring
+Which DevSecOps practice ensures secure software supply chain? a) SBOM (Software Bill of Materials) b) Encryption c) Backup d) Monitoring
+Which DevSecOps practice ensures secure CI/CD pipelines? a) Pipeline hardening b) Encryption c) Backup d) Monitoring
+Which DevSecOps practice ensures secure API communication? a) mTLS (mutual TLS) b) Encryption only c) Backup d) Monitoring
+Which DevSecOps practice ensures secure secrets rotation? a) Automated secrets rotation b) Encryption c) Backup d) Monitoring
+Which DevSecOps practice ensures secure logging and auditing? a) Centralized logging with audit trails b) Encryption c) Backup d) Monitoring
+Which DevSecOps practice ensures secure deployment in cloud environments? a) Cloud security posture management (CSPM) b) Encryption c) Backup d) Monitoring
+Which DevSecOps practice ensures resilience against supply chain attacks? a) Zero Trust + SBOM validation b) Encryption c) Backup d) Monitoring
+🗄️ Database Design & Normalization Exam (30 Questions)
+1. Beginner Level (10 Questions)
+What is the primary purpose of database normalization? a) Reduce redundancy and improve data integrity b) Encrypt data c) Backup logs d) Monitor usage
+What is the first normal form (1NF)? a) No repeating groups, atomic values only b) No transitive dependencies c) No partial dependencies d) No redundancy
+What is the second normal form (2NF)? a) No partial dependency on a composite key b) No repeating groups c) No transitive dependencies d) No redundancy
+What is the third normal form (3NF)? a) No transitive dependency between non-key attributes b) No repeating groups c) No partial dependencies d) No redundancy
+Which SQL command creates a new database? a) CREATE DATABASE b) NEW DATABASE c) ADD DATABASE d) MAKE DATABASE
+Which SQL command creates a new table? a) CREATE TABLE b) NEW TABLE c) ADD TABLE d) MAKE TABLE
+Which SQL command removes a table? a) DROP TABLE b) DELETE TABLE c) REMOVE TABLE d) TRUNCATE TABLE
+Which SQL command removes all rows but keeps the table structure? a) TRUNCATE TABLE b) DROP TABLE c) DELETE TABLE d) REMOVE TABLE
+Which SQL keyword enforces uniqueness in a column? a) UNIQUE b) PRIMARY KEY c) FOREIGN KEY d) CHECK
+Which SQL keyword enforces referential integrity between tables? a) FOREIGN KEY b) PRIMARY KEY c) UNIQUE d) CHECK
+2. Intermediate Level (10 Questions)
+What is Boyce-Codd Normal Form (BCNF)? a) Every determinant must be a candidate key b) No repeating groups c) No partial dependencies d) No redundancy
+What is the difference between primary key and foreign key? a) Primary key uniquely identifies rows, foreign key references another table’s primary key b) Both are identical c) Foreign key is faster d) Primary key is deprecated
+Which SQL command adds a new column to a table? a) ALTER TABLE ADD COLUMN b) CREATE COLUMN c) NEW COLUMN d) ADD FIELD
+Which SQL command modifies a column definition? a) ALTER TABLE MODIFY COLUMN b) CHANGE COLUMN c) UPDATE COLUMN d) ALTER FIELD
+Which SQL command creates an index? a) CREATE INDEX b) ADD INDEX c) NEW INDEX d) MAKE INDEX
+Which SQL command creates a view? a) CREATE VIEW b) ADD VIEW c) NEW VIEW d) MAKE VIEW
+Which SQL command enforces a condition on column values? a) CHECK b) UNIQUE c) FOREIGN KEY d) PRIMARY KEY
+Which SQL command enforces that a column cannot be empty? a) NOT NULL b) UNIQUE c) CHECK d) FOREIGN KEY
+Which SQL command enforces that a column must have a value? a) DEFAULT b) NOT NULL c) UNIQUE d) CHECK
+Which SQL command enforces automatic value generation for a column? a) AUTO_INCREMENT / SERIAL b) DEFAULT c) UNIQUE d) CHECK
+3. Advanced Level (10 Questions)
+What is the purpose of denormalization? a) Improve query performance by adding redundancy b) Encrypt data c) Backup logs d) Monitor usage
+What is the difference between OLTP and OLAP databases? a) OLTP = transactional, OLAP = analytical b) OLAP is faster c) Both are identical d) OLTP is deprecated
+Which SQL command enforces cascading updates/deletes? a) ON UPDATE CASCADE / ON DELETE CASCADE b) DEFAULT c) UNIQUE d) CHECK
+Which SQL concept ensures atomicity, consistency, isolation, durability? a) ACID properties b) BASE properties c) Normalization d) Indexing
+Which SQL concept ensures eventual consistency in distributed systems? a) BASE properties b) ACID properties c) Normalization d) Indexing
+Which SQL command creates a stored procedure? a) CREATE PROCEDURE b) CREATE FUNCTION c) ADD PROCEDURE d) MAKE PROCEDURE
+Which SQL command creates a trigger? a) CREATE TRIGGER b) ADD TRIGGER c) NEW TRIGGER d) MAKE TRIGGER
+Which SQL concept ensures data integrity across multiple tables? a) Referential integrity b) Normalization c) Indexing d) Denormalization
+Which SQL concept ensures consistency in distributed transactions? a) Two-Phase Commit (2PC) b) BASE properties c) Indexing d) Normalization
+Which SQL concept ensures scalability in distributed databases? a) Sharding b) Normalization c) Indexing d) Referential integrity
+⚖️ Artificial Intelligence Ethics Exam (30 Questions)
+1. Beginner Level (10 Questions)
+What is the primary goal of AI ethics? a) Ensure AI systems are fair, transparent, and accountable b) Encrypt data c) Backup logs d) Monitor usage
+Which principle ensures AI systems do not discriminate? a) Fairness b) Transparency c) Accountability d) Privacy
+Which principle ensures AI decisions can be explained? a) Transparency b) Fairness c) Accountability d) Privacy
+Which principle ensures AI systems respect user data? a) Privacy b) Transparency c) Accountability d) Fairness
+Which principle ensures AI developers are responsible for outcomes? a) Accountability b) Transparency c) Fairness d) Privacy
+Which principle ensures AI systems do not cause harm? a) Non-maleficence b) Transparency c) Accountability d) Privacy
+Which principle ensures AI systems benefit society? a) Beneficence b) Transparency c) Accountability d) Privacy
+Which principle ensures AI systems respect human autonomy? a) Human agency b) Transparency c) Accountability d) Privacy
+Which principle ensures AI systems are secure against misuse? a) Robustness & Security b) Transparency c) Accountability d) Fairness
+Which principle ensures AI systems are inclusive? a) Fairness & Inclusivity b) Transparency c) Accountability d) Privacy
+2. Intermediate Level (10 Questions)
+What is algorithmic bias? a) Systematic unfairness in AI outputs due to biased data or design b) Encryption error c) Backup failure d) Monitoring issue
+What is explainable AI (XAI)? a) AI systems whose decisions can be understood by humans b) AI systems that encrypt data c) AI systems that backup logs d) AI systems that monitor usage
+What is the difference between transparency and accountability in AI? a) Transparency = explain decisions, Accountability = responsibility for outcomes b) Both are identical c) Accountability is faster d) Transparency is deprecated
+Which ethical issue arises when AI replaces human jobs? a) Employment displacement b) Encryption c) Backup d) Monitoring
+Which ethical issue arises when AI makes decisions without human oversight? a) Autonomy risk b) Encryption c) Backup d) Monitoring
+Which ethical issue arises when AI systems reinforce stereotypes? a) Bias & discrimination b) Transparency c) Accountability d) Privacy
+Which ethical issue arises when AI systems collect personal data? a) Privacy concerns b) Transparency c) Accountability d) Fairness
+Which ethical issue arises when AI systems are used in surveillance? a) Privacy & civil liberties b) Transparency c) Accountability d) Fairness
+Which ethical issue arises when AI systems are used in autonomous weapons? a) Lethal autonomy concerns b) Transparency c) Accountability d) Fairness
+Which ethical issue arises when AI systems are used in healthcare? a) Patient safety & informed consent b) Transparency c) Accountability d) Fairness
+3. Advanced Level (10 Questions)
+What is the purpose of AI governance frameworks? a) Establish rules and standards for ethical AI use b) Encrypt data c) Backup logs d) Monitor usage
+Which organization developed the AI Ethics Guidelines for Trustworthy AI in Europe? a) European Commission’s High-Level Expert Group on AI b) IEEE c) UNESCO d) OECD
+Which organization developed the AI Principles adopted by G20 countries? a) OECD b) IEEE c) UNESCO d) EU
+Which organization developed the AI Ethics recommendations in 2021? a) UNESCO b) OECD c) IEEE d) EU
+Which organization developed the Ethically Aligned Design framework? a) IEEE b) OECD c) UNESCO d) EU
+Which principle ensures AI systems are aligned with human values? a) Value alignment b) Transparency c) Accountability d) Privacy
+Which principle ensures AI systems are resilient against adversarial attacks? a) Robustness b) Transparency c) Accountability d) Fairness
+Which principle ensures AI systems respect cultural diversity? a) Inclusivity b) Transparency c) Accountability d) Privacy
+Which principle ensures AI systems are auditable? a) Accountability & auditability b) Transparency c) Fairness d) Privacy
+Which principle ensures AI systems are sustainable? a) Environmental responsibility b) Transparency c) Accountability d) Fairness

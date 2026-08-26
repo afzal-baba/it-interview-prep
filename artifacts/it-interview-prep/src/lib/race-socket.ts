@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { createContext, createElement, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 
 export type Level = "beginner" | "intermediate" | "advanced";
 
@@ -18,6 +18,7 @@ export interface AnswerResult {
 export interface LobbyPlayer {
   id: string;
   name: string;
+  country: string | null;
   inRace: boolean;
 }
 
@@ -103,7 +104,21 @@ function wsUrl(): string {
   return `${proto}://${window.location.host}/api/race/ws`;
 }
 
-export function useRaceSocket() {
+function approximateCountry(): string | null {
+  const locale = navigator.language?.match(/[-_]([A-Z]{2})$/i)?.[1]?.toUpperCase();
+  if (locale) return locale;
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone ?? "";
+  const timezoneCountries: Record<string, string> = {
+    "Asia/Calcutta": "IN", "Asia/Kolkata": "IN", "Asia/Tokyo": "JP",
+    "Asia/Shanghai": "CN", "Asia/Singapore": "SG", "Asia/Dubai": "AE",
+    "Europe/London": "GB", "Europe/Paris": "FR", "Europe/Berlin": "DE",
+    "America/New_York": "US", "America/Los_Angeles": "US", "America/Chicago": "US",
+    "America/Toronto": "CA", "Australia/Sydney": "AU", "Pacific/Auckland": "NZ",
+  };
+  return timezoneCountries[timezone] ?? null;
+}
+
+function useRaceSocketImpl() {
   const wsRef = useRef<WebSocket | null>(null);
   const [state, setState] = useState<RaceSocketState>(initialState);
 
@@ -195,7 +210,7 @@ export function useRaceSocket() {
     }
   }, []);
 
-  const register = useCallback((name: string) => sendMsg({ type: "hello", name }), [sendMsg]);
+  const register = useCallback((name: string) => sendMsg({ type: "hello", name, country: approximateCountry() }), [sendMsg]);
   const createChallenge = useCallback(
     (courseId: number, level: Level, targetName: string | null) =>
       sendMsg({ type: "create_challenge", courseId, level, targetName }),
@@ -231,4 +246,18 @@ export function useRaceSocket() {
     clearError,
     resetRace,
   };
+}
+
+type RaceSocketApi = ReturnType<typeof useRaceSocketImpl>;
+const RaceSocketContext = createContext<RaceSocketApi | null>(null);
+
+export function RaceSocketProvider({ children }: { children: ReactNode }) {
+  const socket = useRaceSocketImpl();
+  return createElement(RaceSocketContext.Provider, { value: socket }, children);
+}
+
+export function useRaceSocket(): RaceSocketApi {
+  const socket = useContext(RaceSocketContext);
+  if (!socket) throw new Error("useRaceSocket must be used inside RaceSocketProvider");
+  return socket;
 }

@@ -1,0 +1,5 @@
+import type { ResumeData } from "@/lib/resume";
+import { BasicSections } from "./template-utils";
+export default function PurpleSidebar({ data }: { data: ResumeData }) {
+  return <div className="resume-template purple-sidebar"><aside><div className="photo-circle">{(data.contact.name || "Y").slice(0, 1)}</div><h1>{data.contact.name || "Your Name"}</h1><p>{data.contact.role}</p><div className="stack-contact">{data.contact.email}<br />{data.contact.phone}<br />{data.contact.location}</div><h2>Skills</h2>{data.skills.map((skill) => <span key={skill}>{skill}</span>)}</aside><main><h2>About me</h2><p>{data.summary}</p><h2>Career</h2>{data.experience.map((item) => <article key={item.id}><h3>{item.role}</h3><b>{item.company}</b><time>{item.dates}</time>{item.bullets.map((bullet, i) => <p key={i}>• {bullet}</p>)}</article>)}<BasicSections data={data} /></main></div>;
+}

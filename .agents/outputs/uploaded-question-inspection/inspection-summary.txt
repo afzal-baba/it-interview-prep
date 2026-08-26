@@ -1,0 +1,279 @@
+warning: The `fitz` API is deprecated and will be removed in future. Use `import pymupdf` instead.
+
+=== All-Courses-Complete-41_1787047718025.pdf ===
+pages=215 metadata={'format': 'PDF 1.4', 'title': '(anonymous)', 'author': '(anonymous)', 'subject': '(unspecified)', 'keywords': '', 'creator': '(unspecified)', 'producer': 'ReportLab PDF Library - www.reportlab.com', 'creationDate': "D:20260817031614+08'00'", 'modDate': "D:20260817031614+08'00'", 'trapped': '', 'encryption': None}
+text_chars=551905 renders=3
+
+--- PAGE 1 ---
+Complete IT Certification Practice Exams - 41 Courses in One PDF
+Total Courses: 41 | Total Questions: 1230 = 1230 | Structure: 10 Beginner + 10 Intermediate + 10 Advanced per course | 2024-2026 Syllabus
+
+--- PAGE 2 ---
+01_AWS_Cloud.md
+# AWS Cloud Practitioner & Solutions Architect - Comprehensive Exam
+**Course:** 01_AWS_Cloud
+**Level:** Beginner to Advanced
+**Version:** 2024-2026 Aligned (Includes Graviton4, S3 Express One Zone, Bedrock, Q, m8g/c8g, Aurora Limitless)
+**Total Questions:** 30
+**Format:** Multiple Choice (4 options)
+---
+PART 1: BEGINNER LEVEL (Questions 1-10)
+Q1. What is the AWS Shared Responsibility Model for S3?
+A) AWS is responsible for everything in S3
+B) AWS is responsible for security OF the cloud (infrastructure, hardware, software patching of S3 service), customer is responsible for security IN
+the cloud (bucket policies, object ACLs, data encryption, versioning)
+C) Customer is responsible for physical security of S3 servers
+D) Responsibility is shared 50/50 for all configuration
+Q2. Which AWS Region concept provides fault isolation within a Region?
+A) Edge Location
+B) Availability Zone (AZ)
+C) Local Zone
+D) Wavelength Zone
+Q3. You need to store 10 TB of static website images with millisecond access and 99.99%
+availability at lowest cost. Which S3 storage class is MOST appropriate for frequently
+accessed data?
+A) S3 Glacier Deep Archive
+B) S3 Standard
+C) S3 Standard-Infrequent Access (S3 Standard-IA)
+D) S3 Intelligent-Tiering
+Q4. What is the purpose of IAM?
+A) To create virtual servers
+B) Identity and Access Management - to securely control who can access what AWS resources
+C) To monitor billing only
+D) To provide internet gateway for VPC
+Q5. Which EC2 pricing option gives you up to 72% discount for a 1 or 3-year commitment
+for steady-state workloads?
+A) On-Demand
+B) Spot Instances
+C) Reserved Instances / Savings Plans
+D) Dedicated Hosts
+Q6. Which service provides a virtual firewall at the subnet level in a VPC?
+A) Security Group
+B) Network ACL (NACL)
+C) AWS WAF
+D) AWS Shield
+Q7. What does Amazon CloudFront provide?
+A) Relational database service
+B) Content Delivery Network (CDN) with edge locations to cache and deliver content with low latency
+C) Code deployment service
+D) File storage for EC2
+
+--- PAGE 3 ---
+Q8. A company needs to run a web server that can be stopped and started without losing
+its root volume data. Which storage should be used for the root volume?
+A) Instance Store (Ephemeral)
+B) Amazon EBS (Elastic Block Store) - e.g., gp3 volume
+C) S3
+D) EFS
+Q9. Which AWS support plan includes a Technical Account Manager (TAM) and access
+within 15 minutes for Business-Critical system down?
+A) Developer
+B) Business
+C) Enterprise On-Ramp and Enterprise Support
+D) Basic
+Q10. Which AWS service is used to estimate the cost of your AWS architecture?
+A) AWS Cost Explorer
+B) AWS Pricing Calculator
+C) AWS Budgets
+D) AWS Trusted Advisor
+---
+ANSWER KEY - BEGINNER
+**Q1 Answer: B** - AWS manages physical infrastructur
+
+=== All-Courses-Complete-Exams_1787047718026.pdf ===
+pages=251 metadata={'format': 'PDF 1.4', 'title': '(anonymous)', 'author': '(anonymous)', 'subject': '(unspecified)', 'keywords': '', 'creator': '(unspecified)', 'producer': 'ReportLab PDF Library - www.reportlab.com', 'creationDate': "D:20260817014814+08'00'", 'modDate': "D:20260817014814+08'00'", 'trapped': '', 'encryption': None}
+text_chars=629594 renders=3
+
+--- PAGE 1 ---
+Complete IT Certification Practice Exams - All Courses in
+One PDF
+Total Courses: 36 | Total Questions: 1080 | 10 Beginner + 10 Intermediate + 10 Advanced per course | Generated 2026
+
+--- PAGE 2 ---
+Course File: 01_AWS_Cloud.md
+Course: AWS Cloud
+1. Beginner Level (10 Questions)
+**Q1. A startup wants to deploy a web application without managing servers, but needs to run custom Docker containers.
+Which AWS service should they choose?**
+A. Amazon EC2
+B. AWS Lambda
+C. AWS Fargate with Amazon ECS
+D. Amazon Lightsail
+**Q2. You store 10 TB of financial reports that must be retained for 7 years for compliance, accessed less than once a year,
+with retrieval in 12 hours acceptable. Which S3 storage class is MOST cost-effective?**
+A. S3 Standard
+B. S3 Glacier Flexible Retrieval
+C. S3 Glacier Deep Archive
+D. S3 Intelligent-Tiering
+**Q3. A company wants to isolate its production VPC traffic from the internet while still allowing EC2 instances to download
+security updates. What should they implement?**
+A. Internet Gateway with restrictive Security Group
+B. NAT Gateway in a public subnet and route private subnet traffic to it
+C. VPN Gateway
+D. Place all instances in public subnets and disable Elastic IPs
+**Q4. An IAM user needs permission to start/stop EC2 instances tagged with Env=Dev but not production. What is the best
+approach?**
+A. Give AmazonEC2FullAccess managed policy
+B. Create a custom IAM policy with ec2:StartInstances, ec2:StopInstances and Condition aws:ResourceTag/Env = Dev
+C. Put Dev and Prod in separate AWS accounts and use SCPs
+D. Use IAM role with AdministratorAccess and rely on MFA
+**Q5. Your RDS MySQL instance is experiencing high read traffic. You need to scale reads without affecting the primary.
+What should you do?**
+A. Increase the instance class to db.r6g.4xlarge
+B. Enable Multi-AZ
+C. Create RDS Read Replicas
+D. Move data to DynamoDB
+**Q6. You have an Application Load Balancer (ALB) in front of 3 EC2 instances. A user reports that their shopping cart
+empties on every request. What is the likely fix?**
+A. Enable Sticky Sessions (session affinity) on the ALB target group, or better, externalize session to ElastiCache/DynamoDB
+B. Enable Cross-Zone Load Balancing
+C. Switch ALB to NLB
+D. Attach a WAF to the ALB
+**Q7. Which AWS service provides a managed, highly available DNS service with routing policies like latency-based and
+geolocation routing?**
+A. AWS Direct Connect
+B. Amazon Route 53
+C. AWS Global Accelerator
+
+--- PAGE 3 ---
+D. Amazon CloudFront
+**Q8. You accidentally deleted an S3 bucket containing critical data, with no versioning enabled. How could you have
+prevented permanent loss?**
+A. Enable S3 Versioning and MFA Delete, and use S3 Object Lock for compliance
+B. Enable S3 Transfer Acceleration
+C. Enable S3 Access Points
+D. Use S3 Replication alone
+**Q9. A developer wants to run code in response to an S3 object upload without provisioning servers and only paying for
+execution time. Which service fits?**
+A. Amazon EC2 
+
+=== IT_56_Topics_30_Question_Practice_Exam_1787047718026.pdf ===
+pages=281 metadata={'format': 'PDF 1.4', 'title': '', 'author': '', 'subject': '', 'keywords': '', 'creator': '', 'producer': '', 'creationDate': '', 'modDate': '', 'trapped': '', 'encryption': None}
+text_chars=501523 renders=3
+
+--- PAGE 1 ---
+IT Certification Practice Exams • Page 1
+IT Certification & Technical Interview Practice Exams
+56 Topics × 30 Questions = 1,680 Questions
+Each topic contains 10 Beginner, 10 Intermediate, and 10 Advanced questions. Answer keys follow each tier with the
+correct answer and a brief explanation.
+
+--- PAGE 2 ---
+IT Certification Practice Exams • Page 2
+1. Deep Learning & PyTorch
+Category: AI & ML    Exam: 30 Questions
+Beginner Level (10 Questions)
+1. In Deep Learning & PyTorch, which statement best describes a core concept?
+A. The primary mechanism used by Deep Learning & PyTorch
+B. A filesystem permission unrelated to the technology
+C. A hardware-only feature
+D. A deprecated convention
+2. Which practice is generally recommended when working with Deep Learning & PyTorch?
+A. Use version control, testing, and least privilege
+B. Disable all logging
+C. Hard-code every environment value
+D. Avoid monitoring
+3. A production issue occurs in a Deep Learning & PyTorch component. What should you check first?
+A. Logs, metrics, recent changes, and reproducible symptoms
+B. Delete the component immediately
+C. Disable security controls
+D. Randomly change configuration
+4. Which design goal is most important for a production Deep Learning & PyTorch solution?
+A. Reliability, security, maintainability, and observability
+B. Maximum complexity
+C. No documentation
+D. Single points of failure
+5. What is a common reason to automate Deep Learning & PyTorch operations?
+A. Consistency and repeatability
+B. To eliminate all testing
+C. To hide failures
+D. To prevent versioning
+6. In Deep Learning & PyTorch, which statement best describes a core concept is the best choice?
+A. The primary mechanism used by Deep Learning & PyTorch
+B. A filesystem permission unrelated to the technology
+C. A hardware-only feature
+D. A deprecated convention
+7. Which practice is generally recommended when working with Deep Learning & PyTorch?
+A. Use version control, testing, and least privilege
+B. Disable all logging
+C. Hard-code every environment value
+D. Avoid monitoring
+8. A production issue occurs in a Deep Learning & PyTorch component. What should you check first? Choose the most appropriate
+option.
+A. Logs, metrics, recent changes, and reproducible symptoms
+B. Delete the component immediately
+C. Disable security controls
+D. Randomly change configuration
+9. Which design goal is most important for a production Deep Learning & PyTorch solution in a troubleshooting context?
+
+--- PAGE 3 ---
+IT Certification Practice Exams • Page 3
+A. Reliability, security, maintainability, and observability
+B. Maximum complexity
+C. No documentation
+D. Single points of failure
+10. What is a common reason to automate Deep Learning & PyTorch operations?
+A. Consistency and repeatability
+B. To eliminate all testing
+C. To hide failures
+D. To prevent versioning
+Beginner Level Answer Key & Explanations
+1. A — The first option represents a central concept used in Deep Learning & PyTorch. The other options are dist
+
+=== New_Microsoft_Word_Document_(2)_1787047718026.docx ===
+paragraphs=1540 tables=0
+📝 AWS Cloud Practice Exam (30 Questions)
+1. Beginner Level (10 Questions)
+Which AWS service is primarily used for object storage? a) EC2 b) S3 c) RDS d) Lambda
+What does IAM stand for in AWS? a) Internet Access Management b) Identity and Access Management c) Internal Application Monitoring d) Infrastructure and Application Management
+Which AWS service provides scalable compute capacity in the cloud? a) EC2 b) DynamoDB c) CloudFront d) SNS
+What is the default pricing model for AWS services? a) Subscription-based b) Pay-as-you-go c) Annual contract d) Free for all
+Which AWS service is used for relational databases? a) DynamoDB b) RDS c) S3 d) CloudWatch
+What is an AWS Region? a) A single data center b) A geographic area containing multiple Availability Zones c) A virtual private cloud d) A subnet
+Which AWS service is serverless compute? a) EC2 b) Lambda c) EBS d) CloudFormation
+What does CloudFront provide? a) Content Delivery Network (CDN) b) Database replication c) Compute scaling d) Monitoring
+Which AWS service is used for monitoring and logging? a) CloudWatch b) S3 c) IAM d) Route 53
+What is the purpose of Route 53? a) DNS and domain name management b) File storage c) Compute scaling d) Security monitoring
+Beginner Answer Key & Explanations
+b) S3 — Amazon S3 stores objects like files and backups.
+b) Identity and Access Management — IAM controls user access and permissions.
+a) EC2 — Elastic Compute Cloud provides virtual servers.
+b) Pay-as-you-go — AWS charges only for resources used.
+b) RDS — Relational Database Service supports MySQL, PostgreSQL, etc.
+b) Region — A region contains multiple isolated Availability Zones.
+b) Lambda — AWS Lambda runs code without managing servers.
+a) CDN — CloudFront distributes content globally with low latency.
+a) CloudWatch — Monitors metrics, logs, and alarms.
+a) Route 53 — AWS’s DNS service for domain resolution.
+2. Intermediate Level (10 Questions)
+You need to host a static website. Which AWS service is most suitable? a) EC2 b) S3 c) RDS d) DynamoDB
+A company wants to store session data with millisecond latency. Which service should they use? a) RDS b) DynamoDB c) S3 d) CloudFront
+Which AWS service automates infrastructure provisioning using templates? a) CloudFormation b) CloudWatch c) IAM d) Lambda
+You want to run containers without managing servers. Which service is best? a) ECS with Fargate b) EC2 c) EBS d) CloudFront
+What is the purpose of AWS Auto Scaling? a) To monitor logs b) To adjust compute capacity based on demand c) To replicate databases d) To manage DNS
+Which AWS service provides managed Kubernetes? a) ECS b) EKS c) Lambda d) CloudFormation
+A company needs to analyze large-scale log data quickly. Which service should they use? a) CloudWatch b) Athena c) RDS d) DynamoDB
+Which AWS service provides a fully managed data warehouse? a) Redshift b) RDS c) DynamoDB d) S3
+You want to secure secrets like API keys. Which service is best? a) IAM b) Secrets Manager c) CloudWatch d) Route 53
+Which AWS service provides a managed message queue? a) SNS b) SQS c) CloudFront d) DynamoDB
+Intermediate Answer Key & Explanations
+b) S3 — S3 can host static websites directly.
+b) DynamoDB — NoSQL database with low-latency performance.
+a) CloudFormation — Automates infrastructure deployment via templates.
+a) ECS with Fargate — Runs containers without managing servers.
+b) Auto Scaling — Dynamically adjusts EC2 instances based on demand.
+b) EKS — Elastic Kubernetes Service manages Kubernetes clusters.
+b) Athena — Query S3 data using SQL without infrastructure.
+a) Redshift — AWS’s managed data warehouse.
+b) Secrets Manager — Stores and rotates secrets securely.
+b) SQS — Simple Queue Service provides reliable message queuing.
+3. Advanced Level (10 Questions)
+A company needs multi-region disaster recovery for its database. Which AWS service combination is best? a) RDS with Multi-AZ b) DynamoDB Global Tables c) S3 with Cross-Region Replication d) All of the above
+Which AWS service provides distributed denial-of-service (DDoS) protection? a) CloudWatch b) Shield c) WAF d) GuardDuty
+You need fine-grained access control for API Gateway. Which AWS service should you integrate? a) IAM b) Cognito c) Secrets Manager d) CloudFormation
+Which AWS service provides centralized logging across multiple accounts? a) CloudWatch Logs b) CloudTrail with Organization-level aggregation c) S3 d) Athena
+A company wants to enforce compliance policies across multiple AWS accounts. Which service is best? a) Config b) Organizations c) Control Tower d) Inspector
+Which AWS service provides intrusion detection and threat intelligence? a) GuardDuty b) Shield c) WAF d) CloudWatch
+You need to optimize cost by automatically stopping unused EC2 instances. Which service helps? a) Auto Scaling b) Lambda with CloudWatch Events c) Config d) Inspector
+Which AWS service provides hybrid cloud storage integration with on-premises? a) Storage Gateway b) S3 c) EBS d) CloudFront
+A company wants to run machine learning models at sca

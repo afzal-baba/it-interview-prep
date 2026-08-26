@@ -133,7 +133,8 @@ router.post("/codelab-scores", async (req, res): Promise<void> => {
 
   const { playerName, techSlug, techTitle, points } = parsed.data;
 
-  // Upsert: update if (playerName, techSlug) already exists, insert otherwise
+  // Preserve the best score for each player and challenge. A later retry or
+  // lower re-submission must never replace a higher score already stored.
   const existing = await db
     .select()
     .from(codelabScoresTable)
@@ -149,7 +150,11 @@ router.post("/codelab-scores", async (req, res): Promise<void> => {
   if (existing.length > 0) {
     const [updated] = await db
       .update(codelabScoresTable)
-      .set({ points, techTitle, updatedAt: new Date() })
+      .set({
+        points: sql`GREATEST(${codelabScoresTable.points}, ${points})`,
+        techTitle,
+        updatedAt: sql`CASE WHEN ${points} > ${codelabScoresTable.points} THEN NOW() ELSE ${codelabScoresTable.updatedAt} END`,
+      })
       .where(eq(codelabScoresTable.id, existing[0].id))
       .returning();
     entry = updated;

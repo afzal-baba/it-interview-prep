@@ -1,0 +1,5 @@
+import type { ResumeData } from "@/lib/resume";
+import { BasicSections } from "./template-utils";
+export default function OffWhiteCorporate({ data }: { data: ResumeData }) {
+  return <div className="resume-template offwhite-corporate"><header><h1>{data.contact.name || "Your Name"}</h1><p>{data.contact.role}</p><address>{data.contact.email} | {data.contact.phone} | {data.contact.location}</address></header><h2>Executive profile</h2><p>{data.summary}</p><h2>Professional history</h2><div className="corporate-rows">{data.experience.map((item) => <div className="corporate-row" key={item.id}><div><b>{item.role}</b><br />{item.company}</div><time>{item.dates}</time><ul>{item.bullets.map((bullet, i) => <li key={i}>{bullet}</li>)}</ul></div>)}</div><h2>Expertise</h2><p>{data.skills.join("  /  ")}</p><BasicSections data={data} /></div>;
+}

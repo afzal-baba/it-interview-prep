@@ -1,39 +1,30 @@
 import { Link, useLocation } from "wouter";
 import { useEffect, useRef, useState } from "react";
-
-function useOnlineCount() {
-  const [count, setCount] = useState<number | null>(null);
-  useEffect(() => {
-    const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-    const fetchCount = () =>
-      fetch(`${base}/api/online`)
-        .then((r) => r.json())
-        .then((d) => setCount(d.count))
-        .catch(() => {});
-    fetchCount();
-    const interval = setInterval(fetchCount, 15_000);
-    return () => clearInterval(interval);
-  }, []);
-  return count;
-}
+import { ChevronDown, Globe2, Loader2, MessageCircle, Send, Swords, X } from "lucide-react";
+import { useListCourses } from "@workspace/api-client-react";
+import { useRaceSocket, type Level } from "@/lib/race-socket";
 
 const LINKS = [
   { href: "/", label: "Courses" },
   { href: "/leaderboard", label: "Leaderboard" },
   { href: "/race", label: "Challenge" },
   { href: "/lab", label: "Code Lab" },
+  { href: "/resume-builder", label: "Resume Builder", badge: "NEW FREE" },
+  { href: "/community", label: "Community" },
   { href: "/about", label: "About" },
 ];
 
 function NavLink({
   href,
   label,
+  badge,
   location,
   onClick,
   mobile,
 }: {
   href: string;
   label: string;
+  badge?: string;
   location: string;
   onClick?: () => void;
   mobile?: boolean;
@@ -60,7 +51,7 @@ function NavLink({
           transition: "background 0.15s",
         }}
       >
-        {label}
+        {label}{badge && <span style={{ marginLeft: 6, padding: "2px 4px", borderRadius: 4, background: "rgba(91,227,216,0.14)", color: "var(--cin-cyan)", fontSize: 8, fontWeight: 800, letterSpacing: "0.02em", verticalAlign: "middle" }}>{badge}</span>}
       </Link>
     );
   }
@@ -82,7 +73,7 @@ function NavLink({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {label}
+      {label}{badge && <span style={{ marginLeft: 6, padding: "2px 4px", borderRadius: 4, background: "rgba(91,227,216,0.14)", color: "var(--cin-cyan)", fontSize: 8, fontWeight: 800, letterSpacing: "0.02em", verticalAlign: "middle" }}>{badge}</span>}
       {active && (
         <span
           style={{
@@ -100,9 +91,63 @@ function NavLink({
   );
 }
 
-function OnlineBadge({ count }: { count: number }) {
+function OnlineBadge() {
+  const [open, setOpen] = useState(false);
+  const [draft, setDraft] = useState("");
+  const [name, setName] = useState(() => localStorage.getItem("race-player-name") ?? "");
+  const [courseId, setCourseId] = useState<number | null>(null);
+  const [level, setLevel] = useState<Level>("beginner");
+  const [target, setTarget] = useState<string | null>(null);
+  const socket = useRaceSocket();
+  const { data: courses } = useListCourses();
+  const [, navigate] = useLocation();
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (courses?.length && courseId === null) setCourseId(courses[0].id);
+  }, [courses, courseId]);
+
+  useEffect(() => {
+    if (socket.connected && !socket.registered && name.trim().length >= 2) socket.register(name.trim());
+  }, [socket.connected, socket.registered, name, socket]);
+
+  useEffect(() => {
+    if (socket.race) navigate("/race");
+  }, [socket.race, navigate]);
+
+  useEffect(() => {
+    if (!open) return;
+    const close = (event: MouseEvent) => {
+      if (panelRef.current && !panelRef.current.contains(event.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, [open]);
+
+  const submitName = () => {
+    const next = name.trim();
+    if (next.length < 2) return;
+    localStorage.setItem("race-player-name", next);
+    setName(next);
+    socket.register(next);
+  };
+  const sendMessage = () => {
+    const text = draft.trim();
+    if (!text) return;
+    socket.sendChat(text);
+    setDraft("");
+  };
+  const incoming = socket.challenges.filter((challenge) =>
+    challenge.fromName !== name && (challenge.targetName === null || challenge.targetName === name),
+  );
+  const others = socket.players.filter((player) => player.name !== name);
+  const waiting = socket.myChallengeId !== null;
   return (
-    <div
+    <div style={{ position: "relative" }} ref={panelRef}>
+      <button
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+        aria-label="Show online players, chat, and challenges"
       style={{
         display: "flex",
         alignItems: "center",
@@ -117,8 +162,8 @@ function OnlineBadge({ count }: { count: number }) {
         color: "var(--cin-dim)",
         animation: "cin-pulseSubtle 2.5s ease-in-out infinite",
         whiteSpace: "nowrap",
-      }}
-    >
+      }}>
+      <Globe2 size={14} color="var(--cin-cyan)" />
       <span
         style={{
           width: 6,
@@ -130,7 +175,64 @@ function OnlineBadge({ count }: { count: number }) {
           flexShrink: 0,
         }}
       />
-      {count} online
+      {socket.connected ? `${socket.players.length} online` : "reconnecting"}
+      </button>
+      {open && (
+        <div style={{ position: "absolute", top: "calc(100% + 10px)", right: 0, width: 340, padding: 16, borderRadius: 14, background: "rgba(10,15,42,0.98)", border: "1px solid var(--cin-border-strong)", boxShadow: "0 16px 40px rgba(0,0,0,0.4)", zIndex: 70 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 5 }}>
+            <div style={{ color: "var(--cin-text)", fontSize: 13, fontWeight: 700 }}>Live arena</div>
+            <button onClick={() => setOpen(false)} aria-label="Close live arena" style={{ background: "none", border: 0, color: "var(--cin-dim)", cursor: "pointer" }}><X size={15} /></button>
+          </div>
+          <div style={{ color: "var(--cin-faint)", fontSize: 10, marginBottom: 12 }}>Anonymous display names · chat and quick challenges</div>
+          {!socket.registered ? (
+            <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
+              <input value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => e.key === "Enter" && submitName()} placeholder="Choose a racer name" maxLength={30} style={{ flex: 1, minWidth: 0, borderRadius: 8, border: "1px solid var(--cin-border)", background: "rgba(255,255,255,.05)", color: "var(--cin-text)", padding: "8px 9px", fontSize: 11 }} />
+              <button onClick={submitName} disabled={!socket.connected || name.trim().length < 2} style={{ border: 0, borderRadius: 8, background: "var(--cin-cyan)", color: "#071018", fontWeight: 800, fontSize: 11, padding: "0 10px", cursor: "pointer" }}>Join</button>
+            </div>
+          ) : (
+            <>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 7 }}>
+                <span style={{ color: "var(--cin-dim)", fontSize: 11 }}>{socket.players.length} online now</span>
+                <button onClick={() => navigate("/race")} style={{ border: 0, background: "none", color: "var(--cin-cyan)", fontSize: 10, cursor: "pointer" }}>Open arena →</button>
+              </div>
+              <div style={{ maxHeight: 118, overflowY: "auto", borderTop: "1px solid var(--cin-border)", borderBottom: "1px solid var(--cin-border)", padding: "5px 0", marginBottom: 10 }}>
+                {others.length === 0 ? <div style={{ color: "var(--cin-dim)", fontSize: 11, padding: "7px 0" }}>No other racers yet.</div> : others.map((player) => (
+                  <div key={player.id} style={{ display: "flex", alignItems: "center", gap: 7, padding: "5px 0" }}>
+                    <span style={{ width: 6, height: 6, borderRadius: "50%", background: player.inRace ? "var(--cin-amber)" : "#22c55e", flexShrink: 0 }} />
+                    <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "var(--cin-text)", fontSize: 11 }}>{player.name}{player.country ? ` · ${player.country}` : ""}</span>
+                    <button disabled={player.inRace || waiting} onClick={() => setTarget(player.name)} style={{ border: "1px solid var(--cin-border)", borderRadius: 6, background: target === player.name ? "rgba(91,227,216,.12)" : "transparent", color: target === player.name ? "var(--cin-cyan)" : "var(--cin-dim)", fontSize: 9, padding: "3px 6px", cursor: player.inRace ? "not-allowed" : "pointer" }}>{player.inRace ? "Racing" : target === player.name ? "Selected" : "Challenge"}</button>
+                  </div>
+                ))}
+              </div>
+              {incoming.map((challenge) => (
+                <div key={challenge.id} style={{ display: "flex", alignItems: "center", gap: 7, padding: "7px 8px", marginBottom: 8, borderRadius: 8, background: "rgba(240,184,79,.1)", border: "1px solid rgba(240,184,79,.25)" }}>
+                  <Swords size={14} color="var(--cin-amber)" />
+                  <span style={{ flex: 1, color: "var(--cin-text)", fontSize: 10 }}>{challenge.fromName} wants to race</span>
+                  <button onClick={() => socket.acceptChallenge(challenge.id)} style={{ border: 0, borderRadius: 6, background: "var(--cin-amber)", color: "#171006", fontWeight: 800, fontSize: 9, padding: "5px 7px", cursor: "pointer" }}>Accept</button>
+                </div>
+              ))}
+              <div style={{ display: "flex", gap: 6, marginBottom: 9 }}>
+                <select value={courseId ?? ""} onChange={(e) => setCourseId(Number(e.target.value))} style={{ flex: 1, minWidth: 0, borderRadius: 7, border: "1px solid var(--cin-border)", background: "#0c1230", color: "var(--cin-dim)", fontSize: 10, padding: "6px 4px" }}>
+                  {courses?.map((course) => <option key={course.id} value={course.id}>{course.name}</option>)}
+                </select>
+                <select value={level} onChange={(e) => setLevel(e.target.value as Level)} style={{ width: 92, borderRadius: 7, border: "1px solid var(--cin-border)", background: "#0c1230", color: "var(--cin-dim)", fontSize: 10, padding: "6px 4px" }}>
+                  <option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option>
+                </select>
+              </div>
+              <button disabled={courseId === null || waiting} onClick={() => socket.createChallenge(courseId as number, level, target)} style={{ width: "100%", border: 0, borderRadius: 8, background: waiting ? "rgba(255,255,255,.08)" : "linear-gradient(90deg, var(--cin-cyan), var(--cin-violet))", color: waiting ? "var(--cin-dim)" : "#071018", fontWeight: 800, fontSize: 11, padding: "8px", cursor: waiting ? "not-allowed" : "pointer", marginBottom: 10 }}>{waiting ? "Challenge waiting…" : target ? `Challenge ${target}` : "Find a random rival"}</button>
+              {waiting && <button onClick={() => { socket.cancelChallenge(); setTarget(null); }} style={{ display: "block", margin: "-4px auto 9px", border: 0, background: "none", color: "var(--cin-rose)", fontSize: 10, cursor: "pointer" }}>Cancel challenge</button>}
+              <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 5, color: "var(--cin-dim)", fontSize: 10 }}><MessageCircle size={13} /> Lobby chat</div>
+              <div style={{ maxHeight: 92, overflowY: "auto", padding: "5px 0", borderTop: "1px solid var(--cin-border)", marginBottom: 7 }}>
+                {socket.chatMessages.slice(-8).map((message, index) => <div key={`${message.at}-${index}`} style={{ fontSize: 10, color: "var(--cin-dim)", padding: "2px 0", overflowWrap: "anywhere" }}><strong style={{ color: message.fromName === name ? "var(--cin-cyan)" : "var(--cin-text)" }}>{message.fromName}:</strong> {message.text}</div>)}
+              </div>
+              <div style={{ display: "flex", gap: 6 }}>
+                <input value={draft} onChange={(e) => setDraft(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendMessage()} placeholder="Say something…" maxLength={200} style={{ flex: 1, minWidth: 0, borderRadius: 7, border: "1px solid var(--cin-border)", background: "rgba(255,255,255,.05)", color: "var(--cin-text)", padding: "7px 8px", fontSize: 10 }} />
+                <button onClick={sendMessage} disabled={!draft.trim()} aria-label="Send chat message" style={{ border: 0, borderRadius: 7, background: "rgba(91,227,216,.15)", color: "var(--cin-cyan)", width: 30, cursor: "pointer" }}><Send size={13} /></button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -346,7 +448,6 @@ function FeedbackButton() {
 
 export function Navbar() {
   const [location] = useLocation();
-  const online = useOnlineCount();
   const [menuOpen, setMenuOpen] = useState(false);
 
   // Close menu on navigation
@@ -370,7 +471,7 @@ export function Navbar() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "20px 56px",
+           padding: "18px 32px",
           backdropFilter: "blur(10px)",
           borderBottom: "1px solid var(--cin-border)",
           backgroundColor: "rgba(5,7,15,0.88)",
@@ -428,32 +529,18 @@ export function Navbar() {
         {/* Desktop nav links */}
         <div
           className="cin-nav-links"
-          style={{ display: "flex", alignItems: "center", gap: 38 }}
+           style={{ display: "flex", alignItems: "center", gap: 22, flexShrink: 0 }}
         >
-          {LINKS.map(({ href, label }) => (
-            <NavLink key={href} href={href} label={label} location={location} />
+          {LINKS.map(({ href, label, badge }) => (
+            <NavLink key={href} href={href} label={label} badge={badge} location={location} />
           ))}
-          {online !== null && <OnlineBadge count={online} />}
+          <OnlineBadge />
           <FeedbackButton />
         </div>
 
         {/* Mobile right side: online badge + hamburger */}
         <div className="cin-mobile-controls" style={{ display: "none", alignItems: "center", gap: 10 }}>
-          {online !== null && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize: 11,
-                color: "var(--cin-dim)",
-              }}
-            >
-              <span style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: "#22c55e", boxShadow: "0 0 8px #22c55e", display: "inline-block", flexShrink: 0 }} />
-              {online}
-            </div>
-          )}
+          <OnlineBadge />
           <button
             onClick={() => setMenuOpen((p) => !p)}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -514,17 +601,16 @@ export function Navbar() {
                 key={href}
                 href={href}
                 label={label}
+                badge={LINKS.find((item) => item.href === href)?.badge}
                 location={location}
                 onClick={() => setMenuOpen(false)}
                 mobile
               />
             ))}
-            {online !== null && (
-              <div style={{ padding: "14px 24px", display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: "#22c55e", boxShadow: "0 0 8px #22c55e", display: "inline-block" }} />
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: "var(--cin-dim)" }}>{online} online now</span>
-              </div>
-            )}
+            <div style={{ padding: "14px 24px", display: "flex", alignItems: "center", gap: 8, color: "var(--cin-dim)", fontSize: 12 }}>
+              <span style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: "#22c55e", boxShadow: "0 0 8px #22c55e", display: "inline-block" }} />
+              <OnlineBadge />
+            </div>
           </div>
         </>
       )}

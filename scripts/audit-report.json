@@ -1,0 +1,2612 @@
+{
+  "generatedAt": "2026-08-21T14:52:08.490Z",
+  "tech": "all",
+  "total": 5390,
+  "biased": 0,
+  "biasedPct": 0,
+  "strictViolations": 5217,
+  "strictReviewNote": "Strict 28-50 character normalization is reported for review; technically meaningful short answers are not mechanically padded.",
+  "invalid": {
+    "total": 21,
+    "ids": [
+      4380,
+      4382,
+      4383,
+      4384,
+      2873,
+      2855,
+      2861,
+      4379,
+      4385,
+      4381,
+      4386,
+      4639,
+      2832,
+      2853,
+      2883,
+      2858,
+      2885,
+      3247,
+      2560,
+      4637,
+      3608
+    ]
+  },
+  "worstExamples": [],
+  "examplesByTechnology": {
+    "git": [
+      {
+        "id": 361,
+        "level": "beginner",
+        "question": "What does git init do?",
+        "beforeOptions": [
+          "Downloads a remote repository and checks out its default branch locally",
+          "Initialises a new Git repository in the current directory",
+          "Records all current file changes as the first commit in the repository",
+          "Creates a new remote-tracking branch from the current repository configuration"
+        ],
+        "afterOptions": [
+          "Downloads a remote repository and checks out its default branch locally",
+          "Initialises a new Git repository in the current directory",
+          "Records all current file changes as the first commit in the repository",
+          "Creates a new remote-tracking branch from the current repository configuration"
+        ],
+        "beforeLengths": [
+          71,
+          57,
+          70,
+          78
+        ],
+        "afterLengths": [
+          71,
+          57,
+          70,
+          78
+        ]
+      },
+      {
+        "id": 363,
+        "level": "beginner",
+        "question": "What does git status show?",
+        "beforeOptions": [
+          "Displays the complete sequence of commits and their messages for the current branch",
+          "The current state of the working directory and staging area compared to the last commit",
+          "Lists every local and remote branch with its latest commit reference",
+          "Reports the configured remote repositories and their fetch and push URLs"
+        ],
+        "afterOptions": [
+          "Displays the complete sequence of commits and their messages for the current branch",
+          "The current state of the working directory and staging area compared to the last commit",
+          "Lists every local and remote branch with its latest commit reference",
+          "Reports the configured remote repositories and their fetch and push URLs"
+        ],
+        "beforeLengths": [
+          83,
+          87,
+          68,
+          72
+        ],
+        "afterLengths": [
+          83,
+          87,
+          68,
+          72
+        ]
+      },
+      {
+        "id": 364,
+        "level": "beginner",
+        "question": "What is the staging area in Git?",
+        "beforeOptions": [
+          "A server-side location where shared repository changes are stored",
+          "A preparation zone where you place changes before committing them",
+          "A permanent record containing the files from the most recent commit",
+          "A named pointer that selects one line of development in the repository"
+        ],
+        "afterOptions": [
+          "A server-side location where shared repository changes are stored",
+          "A preparation zone where you place changes before committing them",
+          "A permanent record containing the files from the most recent commit",
+          "A named pointer that selects one line of development in the repository"
+        ],
+        "beforeLengths": [
+          65,
+          65,
+          67,
+          70
+        ],
+        "afterLengths": [
+          65,
+          65,
+          67,
+          70
+        ]
+      }
+    ],
+    "docker-k8s": [
+      {
+        "id": 184,
+        "level": "beginner",
+        "question": "What does the docker ps command show?",
+        "beforeOptions": [
+          "All images on disk",
+          "Currently running containers",
+          "Network configuration",
+          "Volume list"
+        ],
+        "afterOptions": [
+          "All locally stored container images",
+          "Currently running containers",
+          "Container network settings and endpoints",
+          "Docker-managed volume definitions"
+        ],
+        "beforeLengths": [
+          18,
+          28,
+          21,
+          11
+        ],
+        "afterLengths": [
+          35,
+          28,
+          40,
+          33
+        ]
+      },
+      {
+        "id": 190,
+        "level": "beginner",
+        "question": "What does the Dockerfile FROM instruction specify?",
+        "beforeOptions": [
+          "The output image name",
+          "The base image to build from",
+          "The exposed port",
+          "The run command"
+        ],
+        "afterOptions": [
+          "The name assigned to the resulting image",
+          "The base image to build from",
+          "The network port exposed by the image",
+          "The default command executed at runtime"
+        ],
+        "beforeLengths": [
+          21,
+          28,
+          16,
+          15
+        ],
+        "afterLengths": [
+          40,
+          28,
+          37,
+          39
+        ]
+      },
+      {
+        "id": 182,
+        "level": "beginner",
+        "question": "Which command runs a Docker container from an image?",
+        "beforeOptions": [
+          "docker build",
+          "docker run",
+          "docker push",
+          "docker start"
+        ],
+        "afterOptions": [
+          "docker build",
+          "docker run",
+          "docker push",
+          "docker start"
+        ],
+        "beforeLengths": [
+          12,
+          10,
+          11,
+          12
+        ],
+        "afterLengths": [
+          12,
+          10,
+          11,
+          12
+        ]
+      }
+    ],
+    "python": [
+      {
+        "id": 97,
+        "level": "beginner",
+        "question": "Which keyword is used for a conditional statement in Python?",
+        "beforeOptions": [
+          "when",
+          "case",
+          "if",
+          "check"
+        ],
+        "afterOptions": [
+          "when",
+          "case",
+          "if",
+          "check"
+        ],
+        "beforeLengths": [
+          4,
+          4,
+          2,
+          5
+        ],
+        "afterLengths": [
+          4,
+          4,
+          2,
+          5
+        ]
+      },
+      {
+        "id": 93,
+        "level": "beginner",
+        "question": "What data type is the result of 5 / 2 in Python 3?",
+        "beforeOptions": [
+          "int (2)",
+          "float (2.5)",
+          "str (2.5)",
+          "Error"
+        ],
+        "afterOptions": [
+          "int (2, due to integer division)",
+          "float (2.5)",
+          "str ('2.5' as text)",
+          "Error (division is invalid in Python)"
+        ],
+        "beforeLengths": [
+          7,
+          11,
+          9,
+          5
+        ],
+        "afterLengths": [
+          32,
+          11,
+          19,
+          37
+        ]
+      },
+      {
+        "id": 94,
+        "level": "beginner",
+        "question": "What is a Python list?",
+        "beforeOptions": [
+          "An immutable sequence of items",
+          "A mutable, ordered collection of items that allows duplicates",
+          "An unordered collection of unique items",
+          "A key-value mapping"
+        ],
+        "afterOptions": [
+          "An immutable, ordered sequence whose elements cannot change",
+          "A mutable, ordered collection of items that allows duplicates",
+          "An unordered collection that automatically removes duplicate items",
+          "A key-value mapping used to associate unique keys with values"
+        ],
+        "beforeLengths": [
+          30,
+          61,
+          39,
+          19
+        ],
+        "afterLengths": [
+          59,
+          61,
+          66,
+          61
+        ]
+      }
+    ],
+    "aws": [
+      {
+        "id": 2395,
+        "level": "beginner",
+        "question": "What does IAM stand for in AWS?",
+        "beforeOptions": [
+          "Internet Access Management",
+          "Identity and Access Management",
+          "Internal Application Monitoring",
+          "Infrastructure and Application Management"
+        ],
+        "afterOptions": [
+          "Internet Access Management",
+          "Identity and Access Management",
+          "Internal Application Monitoring",
+          "Infrastructure and Application Management"
+        ],
+        "beforeLengths": [
+          26,
+          30,
+          31,
+          41
+        ],
+        "afterLengths": [
+          26,
+          30,
+          31,
+          41
+        ]
+      },
+      {
+        "id": 2396,
+        "level": "beginner",
+        "question": "Which AWS service provides scalable compute capacity in the cloud?",
+        "beforeOptions": [
+          "EC2",
+          "DynamoDB",
+          "CloudFront",
+          "SNS"
+        ],
+        "afterOptions": [
+          "EC2",
+          "DynamoDB",
+          "CloudFront",
+          "SNS"
+        ],
+        "beforeLengths": [
+          3,
+          8,
+          10,
+          3
+        ],
+        "afterLengths": [
+          3,
+          8,
+          10,
+          3
+        ]
+      },
+      {
+        "id": 2397,
+        "level": "beginner",
+        "question": "What is the default pricing model for AWS services?",
+        "beforeOptions": [
+          "Subscription-based",
+          "Pay-as-you-go",
+          "Annual contract",
+          "Free for all"
+        ],
+        "afterOptions": [
+          "Subscription-based",
+          "Pay-as-you-go",
+          "Annual contract",
+          "Free for all"
+        ],
+        "beforeLengths": [
+          18,
+          13,
+          15,
+          12
+        ],
+        "afterLengths": [
+          18,
+          13,
+          15,
+          12
+        ]
+      }
+    ],
+    "react": [
+      {
+        "id": 610,
+        "level": "beginner",
+        "question": "How do you navigate between pages in Next.js?",
+        "beforeOptions": [
+          "Using <a> tags only",
+          "Using React Router's <Link>",
+          "Using Next.js's <Link> from next/link",
+          "Using window.location.href only"
+        ],
+        "afterOptions": [
+          "Using standard <a> tags as the sole routing mechanism",
+          "Using React Router's <Link> instead of next/link",
+          "Using Next.js's <Link> from next/link",
+          "Using window.location.href for every page transition"
+        ],
+        "beforeLengths": [
+          19,
+          27,
+          37,
+          31
+        ],
+        "afterLengths": [
+          53,
+          48,
+          37,
+          52
+        ]
+      },
+      {
+        "id": 617,
+        "level": "intermediate",
+        "question": "What does useReducer do in React?",
+        "beforeOptions": [
+          "Combines multiple context providers",
+          "Manages complex state logic with a reducer function",
+          "Reduces bundle size",
+          "Memoizes API responses"
+        ],
+        "afterOptions": [
+          "Combines several context providers into a single provider component",
+          "Manages complex state logic with a reducer function",
+          "Reduces the JavaScript bundle by removing unused state-management code",
+          "Memoizes API response data to prevent repeated network requests"
+        ],
+        "beforeLengths": [
+          35,
+          51,
+          19,
+          22
+        ],
+        "afterLengths": [
+          67,
+          51,
+          70,
+          63
+        ]
+      },
+      {
+        "id": 602,
+        "level": "beginner",
+        "question": "Which hook is used to manage local component state in React?",
+        "beforeOptions": [
+          "useEffect",
+          "useContext",
+          "useState",
+          "useRef"
+        ],
+        "afterOptions": [
+          "useEffect",
+          "useContext",
+          "useState",
+          "useRef"
+        ],
+        "beforeLengths": [
+          9,
+          10,
+          8,
+          6
+        ],
+        "afterLengths": [
+          9,
+          10,
+          8,
+          6
+        ]
+      }
+    ],
+    "kubernetes-adv": [
+      {
+        "id": 2667,
+        "level": "advanced",
+        "question": "What is a readiness probe used for?",
+        "beforeOptions": [
+          "Determining whether a container is ready to receive traffic",
+          "Detecting a failed container and triggering its restart automatically",
+          "Creating a container image from source files during a deployment",
+          "Encrypting application secrets before they are mounted into a container"
+        ],
+        "afterOptions": [
+          "Determining whether a container is ready to receive traffic",
+          "Detecting a failed container and triggering its restart automatically",
+          "Creating a container image from source files during a deployment",
+          "Encrypting application secrets before they are mounted into a container"
+        ],
+        "beforeLengths": [
+          59,
+          69,
+          64,
+          71
+        ],
+        "afterLengths": [
+          59,
+          69,
+          64,
+          71
+        ]
+      },
+      {
+        "id": 2668,
+        "level": "advanced",
+        "question": "What is a container image is the best choice?",
+        "beforeOptions": [
+          "An immutable template used to create containers",
+          "A running virtual machine with its own guest operating system",
+          "A worker machine that schedules and executes pods in a cluster",
+          "A physical network connection used to move container traffic"
+        ],
+        "afterOptions": [
+          "An immutable template used to create containers",
+          "A running virtual machine with its own guest operating system",
+          "A worker machine that schedules and executes pods in a cluster",
+          "A physical network connection used to move container traffic"
+        ],
+        "beforeLengths": [
+          47,
+          61,
+          62,
+          60
+        ],
+        "afterLengths": [
+          47,
+          61,
+          62,
+          60
+        ]
+      },
+      {
+        "id": 2666,
+        "level": "advanced",
+        "question": "Which Kubernetes object exposes an application through a stable network endpoint?",
+        "beforeOptions": [
+          "Service",
+          "ConfigMap",
+          "Secret",
+          "Job"
+        ],
+        "afterOptions": [
+          "Service",
+          "ConfigMap",
+          "Secret",
+          "Job"
+        ],
+        "beforeLengths": [
+          7,
+          9,
+          6,
+          3
+        ],
+        "afterLengths": [
+          7,
+          9,
+          6,
+          3
+        ]
+      }
+    ],
+    "typescript": [
+      {
+        "id": 541,
+        "level": "beginner",
+        "question": "What is TypeScript?",
+        "beforeOptions": [
+          "A standalone programming language with its own runtime and syntax, designed to replace JavaScript in browsers rather than compile into JavaScript for execution",
+          "A typed superset of JavaScript that compiles to plain JavaScript, adding static types and modern features",
+          "A runtime environment for executing JavaScript applications on servers, providing type checking and package management but not introducing a separate compile step",
+          "A JavaScript UI framework for building component-based web applications, providing rendering, routing, and state management instead of static typing"
+        ],
+        "afterOptions": [
+          "A standalone programming language with its own runtime and syntax, designed to replace JavaScript in browsers rather than compile into JavaScript for execution",
+          "A typed superset of JavaScript that compiles to plain JavaScript, adding static types and modern features",
+          "A runtime environment for executing JavaScript applications on servers, providing type checking and package management but not introducing a separate compile step",
+          "A JavaScript UI framework for building component-based web applications, providing rendering, routing, and state management instead of static typing"
+        ],
+        "beforeLengths": [
+          159,
+          105,
+          162,
+          148
+        ],
+        "afterLengths": [
+          159,
+          105,
+          162,
+          148
+        ]
+      },
+      {
+        "id": 543,
+        "level": "beginner",
+        "question": "What is the key difference between interface and type in TypeScript?",
+        "beforeOptions": [
+          "interface and type are interchangeable in every context; neither supports capabilities that the other lacks, including object composition and reusable declarations",
+          "interface defines object shapes and supports declaration merging; type supports unions, intersections, and primitives",
+          "type cannot describe object structures and is limited to aliases for primitive values, while interface is required for every object-shaped contract",
+          "interface supports unions and conditional combinations directly, whereas type can define only named object shapes and cannot represent primitive aliases"
+        ],
+        "afterOptions": [
+          "interface and type are interchangeable in every context; neither supports capabilities that the other lacks, including object composition and reusable declarations",
+          "interface defines object shapes and supports declaration merging; type supports unions, intersections, and primitives",
+          "type cannot describe object structures and is limited to aliases for primitive values, while interface is required for every object-shaped contract",
+          "interface supports unions and conditional combinations directly, whereas type can define only named object shapes and cannot represent primitive aliases"
+        ],
+        "beforeLengths": [
+          163,
+          117,
+          147,
+          152
+        ],
+        "afterLengths": [
+          163,
+          117,
+          147,
+          152
+        ]
+      },
+      {
+        "id": 553,
+        "level": "intermediate",
+        "question": "What are TypeScript utility types?",
+        "beforeOptions": [
+          "Runtime helper functions such as Partial and Pick that clone objects and remove or add properties while the program runs",
+          "Built-in generic types like Partial<T>, Required<T>, Pick<T,K>, Omit<T,K>, and Record<K,V> that transform existing types",
+          "Custom modules exported by an application to reuse interfaces, classes, and aliases across independently compiled packages",
+          "Interface extension declarations that automatically merge properties from several object types into a single generated runtime schema"
+        ],
+        "afterOptions": [
+          "Runtime helper functions such as Partial and Pick that clone objects and remove or add properties while the program runs",
+          "Built-in generic types like Partial<T>, Required<T>, Pick<T,K>, Omit<T,K>, and Record<K,V> that transform existing types",
+          "Custom modules exported by an application to reuse interfaces, classes, and aliases across independently compiled packages",
+          "Interface extension declarations that automatically merge properties from several object types into a single generated runtime schema"
+        ],
+        "beforeLengths": [
+          120,
+          120,
+          122,
+          133
+        ],
+        "afterLengths": [
+          120,
+          120,
+          122,
+          133
+        ]
+      }
+    ],
+    "sql": [
+      {
+        "id": 272,
+        "level": "beginner",
+        "question": "Which SQL clause filters rows?",
+        "beforeOptions": [
+          "ORDER BY",
+          "GROUP BY",
+          "WHERE",
+          "HAVING"
+        ],
+        "afterOptions": [
+          "ORDER BY",
+          "GROUP BY",
+          "WHERE",
+          "HAVING"
+        ],
+        "beforeLengths": [
+          8,
+          8,
+          5,
+          6
+        ],
+        "afterLengths": [
+          8,
+          8,
+          5,
+          6
+        ]
+      },
+      {
+        "id": 276,
+        "level": "beginner",
+        "question": "Which JOIN type returns only rows with matches in both tables?",
+        "beforeOptions": [
+          "LEFT JOIN",
+          "RIGHT JOIN",
+          "FULL OUTER JOIN",
+          "INNER JOIN"
+        ],
+        "afterOptions": [
+          "LEFT JOIN",
+          "RIGHT JOIN",
+          "FULL OUTER JOIN",
+          "INNER JOIN"
+        ],
+        "beforeLengths": [
+          9,
+          10,
+          15,
+          10
+        ],
+        "afterLengths": [
+          9,
+          10,
+          15,
+          10
+        ]
+      },
+      {
+        "id": 271,
+        "level": "beginner",
+        "question": "What does SELECT * FROM users do?",
+        "beforeOptions": [
+          "Deletes all rows in the users table but keeps the table structure",
+          "Retrieves all columns and rows from the users table",
+          "Changes every users row to the same specified values",
+          "Creates a saved view named users from another query"
+        ],
+        "afterOptions": [
+          "Deletes all rows in the users table but keeps the table structure",
+          "Retrieves all columns and rows from the users table",
+          "Changes every users row to the same specified values",
+          "Creates a saved view named users from another query"
+        ],
+        "beforeLengths": [
+          65,
+          51,
+          52,
+          51
+        ],
+        "afterLengths": [
+          65,
+          51,
+          52,
+          51
+        ]
+      }
+    ],
+    "java": [
+      {
+        "id": 61,
+        "level": "beginner",
+        "question": "What is the entry point of a Java application?",
+        "beforeOptions": [
+          "init()",
+          "start()",
+          "main()",
+          "run()"
+        ],
+        "afterOptions": [
+          "init()",
+          "start()",
+          "main()",
+          "run()"
+        ],
+        "beforeLengths": [
+          6,
+          7,
+          6,
+          5
+        ],
+        "afterLengths": [
+          6,
+          7,
+          6,
+          5
+        ]
+      },
+      {
+        "id": 62,
+        "level": "beginner",
+        "question": "Which keyword is used to create a class in Java?",
+        "beforeOptions": [
+          "define",
+          "create",
+          "class",
+          "struct"
+        ],
+        "afterOptions": [
+          "define",
+          "create",
+          "class",
+          "struct"
+        ],
+        "beforeLengths": [
+          6,
+          6,
+          5,
+          6
+        ],
+        "afterLengths": [
+          6,
+          6,
+          5,
+          6
+        ]
+      },
+      {
+        "id": 63,
+        "level": "beginner",
+        "question": "What does JVM stand for?",
+        "beforeOptions": [
+          "Java Virtual Memory",
+          "Java Virtual Machine",
+          "Java Variable Manager",
+          "Java Version Module"
+        ],
+        "afterOptions": [
+          "Java Virtual Memory",
+          "Java Virtual Machine",
+          "Java Variable Manager",
+          "Java Version Module"
+        ],
+        "beforeLengths": [
+          19,
+          20,
+          21,
+          19
+        ],
+        "afterLengths": [
+          19,
+          20,
+          21,
+          19
+        ]
+      }
+    ]
+  },
+  "byTechnology": {
+    "oracle": {
+      "total": 84,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 82,
+      "levels": {
+        "beginner": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 27
+        },
+        "intermediate": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 27
+        },
+        "advanced": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 28
+        }
+      }
+    },
+    "jira-agile": {
+      "total": 54,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 54,
+      "levels": {
+        "intermediate": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        },
+        "advanced": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        },
+        "beginner": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        }
+      }
+    },
+    "aws": {
+      "total": 140,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 137,
+      "levels": {
+        "beginner": {
+          "total": 47,
+          "biased": 0,
+          "strictViolations": 46
+        },
+        "intermediate": {
+          "total": 47,
+          "biased": 0,
+          "strictViolations": 45
+        },
+        "advanced": {
+          "total": 46,
+          "biased": 0,
+          "strictViolations": 46
+        }
+      }
+    },
+    "sap": {
+      "total": 54,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 53,
+      "levels": {
+        "beginner": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        },
+        "intermediate": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        },
+        "advanced": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 17
+        }
+      }
+    },
+    "system-design": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 30,
+      "levels": {
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    },
+    "java": {
+      "total": 75,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 73,
+      "levels": {
+        "beginner": {
+          "total": 26,
+          "biased": 0,
+          "strictViolations": 26
+        },
+        "intermediate": {
+          "total": 24,
+          "biased": 0,
+          "strictViolations": 23
+        },
+        "advanced": {
+          "total": 25,
+          "biased": 0,
+          "strictViolations": 24
+        }
+      }
+    },
+    "python": {
+      "total": 96,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 94,
+      "levels": {
+        "beginner": {
+          "total": 36,
+          "biased": 0,
+          "strictViolations": 36
+        },
+        "intermediate": {
+          "total": 29,
+          "biased": 0,
+          "strictViolations": 27
+        },
+        "advanced": {
+          "total": 31,
+          "biased": 0,
+          "strictViolations": 31
+        }
+      }
+    },
+    "terraform": {
+      "total": 110,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 102,
+      "levels": {
+        "beginner": {
+          "total": 38,
+          "biased": 0,
+          "strictViolations": 36
+        },
+        "intermediate": {
+          "total": 36,
+          "biased": 0,
+          "strictViolations": 32
+        },
+        "advanced": {
+          "total": 36,
+          "biased": 0,
+          "strictViolations": 34
+        }
+      }
+    },
+    "javascript": {
+      "total": 113,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 108,
+      "levels": {
+        "beginner": {
+          "total": 38,
+          "biased": 0,
+          "strictViolations": 35
+        },
+        "intermediate": {
+          "total": 38,
+          "biased": 0,
+          "strictViolations": 37
+        },
+        "advanced": {
+          "total": 37,
+          "biased": 0,
+          "strictViolations": 36
+        }
+      }
+    },
+    "linux": {
+      "total": 111,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 109,
+      "levels": {
+        "intermediate": {
+          "total": 37,
+          "biased": 0,
+          "strictViolations": 36
+        },
+        "beginner": {
+          "total": 36,
+          "biased": 0,
+          "strictViolations": 35
+        },
+        "advanced": {
+          "total": 38,
+          "biased": 0,
+          "strictViolations": 38
+        }
+      }
+    },
+    "docker-k8s": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 28,
+      "levels": {
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 8
+        },
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    },
+    "golang": {
+      "total": 116,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 112,
+      "levels": {
+        "intermediate": {
+          "total": 36,
+          "biased": 0,
+          "strictViolations": 34
+        },
+        "beginner": {
+          "total": 36,
+          "biased": 0,
+          "strictViolations": 35
+        },
+        "advanced": {
+          "total": 44,
+          "biased": 0,
+          "strictViolations": 43
+        }
+      }
+    },
+    "scala": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 29,
+      "levels": {
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 9
+        },
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    },
+    "vault": {
+      "total": 107,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 105,
+      "levels": {
+        "intermediate": {
+          "total": 37,
+          "biased": 0,
+          "strictViolations": 37
+        },
+        "beginner": {
+          "total": 37,
+          "biased": 0,
+          "strictViolations": 36
+        },
+        "advanced": {
+          "total": 33,
+          "biased": 0,
+          "strictViolations": 32
+        }
+      }
+    },
+    "cybersecurity": {
+      "total": 139,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 133,
+      "levels": {
+        "beginner": {
+          "total": 47,
+          "biased": 0,
+          "strictViolations": 44
+        },
+        "intermediate": {
+          "total": 46,
+          "biased": 0,
+          "strictViolations": 45
+        },
+        "advanced": {
+          "total": 46,
+          "biased": 0,
+          "strictViolations": 44
+        }
+      }
+    },
+    "sql": {
+      "total": 110,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 109,
+      "levels": {
+        "beginner": {
+          "total": 38,
+          "biased": 0,
+          "strictViolations": 38
+        },
+        "intermediate": {
+          "total": 37,
+          "biased": 0,
+          "strictViolations": 36
+        },
+        "advanced": {
+          "total": 35,
+          "biased": 0,
+          "strictViolations": 35
+        }
+      }
+    },
+    "fastapi": {
+      "total": 54,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 53,
+      "levels": {
+        "beginner": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 17
+        },
+        "intermediate": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        },
+        "advanced": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        }
+      }
+    },
+    "networking": {
+      "total": 139,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 136,
+      "levels": {
+        "beginner": {
+          "total": 47,
+          "biased": 0,
+          "strictViolations": 45
+        },
+        "intermediate": {
+          "total": 46,
+          "biased": 0,
+          "strictViolations": 45
+        },
+        "advanced": {
+          "total": 46,
+          "biased": 0,
+          "strictViolations": 46
+        }
+      }
+    },
+    "azure": {
+      "total": 112,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 111,
+      "levels": {
+        "beginner": {
+          "total": 38,
+          "biased": 0,
+          "strictViolations": 38
+        },
+        "intermediate": {
+          "total": 38,
+          "biased": 0,
+          "strictViolations": 37
+        },
+        "advanced": {
+          "total": 36,
+          "biased": 0,
+          "strictViolations": 36
+        }
+      }
+    },
+    "git": {
+      "total": 115,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 115,
+      "levels": {
+        "beginner": {
+          "total": 39,
+          "biased": 0,
+          "strictViolations": 39
+        },
+        "intermediate": {
+          "total": 38,
+          "biased": 0,
+          "strictViolations": 38
+        },
+        "advanced": {
+          "total": 38,
+          "biased": 0,
+          "strictViolations": 38
+        }
+      }
+    },
+    "cicd": {
+      "total": 136,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 134,
+      "levels": {
+        "beginner": {
+          "total": 48,
+          "biased": 0,
+          "strictViolations": 47
+        },
+        "intermediate": {
+          "total": 47,
+          "biased": 0,
+          "strictViolations": 46
+        },
+        "advanced": {
+          "total": 41,
+          "biased": 0,
+          "strictViolations": 41
+        }
+      }
+    },
+    "gcp": {
+      "total": 113,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 102,
+      "levels": {
+        "beginner": {
+          "total": 38,
+          "biased": 0,
+          "strictViolations": 33
+        },
+        "intermediate": {
+          "total": 38,
+          "biased": 0,
+          "strictViolations": 35
+        },
+        "advanced": {
+          "total": 37,
+          "biased": 0,
+          "strictViolations": 34
+        }
+      }
+    },
+    "sre": {
+      "total": 75,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 72,
+      "levels": {
+        "beginner": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 19
+        },
+        "intermediate": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 26
+        },
+        "advanced": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 27
+        }
+      }
+    },
+    "generative-ai": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 30,
+      "levels": {
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    },
+    "ansible": {
+      "total": 108,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 103,
+      "levels": {
+        "beginner": {
+          "total": 37,
+          "biased": 0,
+          "strictViolations": 35
+        },
+        "intermediate": {
+          "total": 36,
+          "biased": 0,
+          "strictViolations": 35
+        },
+        "advanced": {
+          "total": 35,
+          "biased": 0,
+          "strictViolations": 33
+        }
+      }
+    },
+    "bash": {
+      "total": 57,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 57,
+      "levels": {
+        "beginner": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 19
+        },
+        "intermediate": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 19
+        },
+        "advanced": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 19
+        }
+      }
+    },
+    "typescript": {
+      "total": 84,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 81,
+      "levels": {
+        "beginner": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 27
+        },
+        "intermediate": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 27
+        },
+        "advanced": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 27
+        }
+      }
+    },
+    "dotnet": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 30,
+      "levels": {
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    },
+    "react": {
+      "total": 84,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 82,
+      "levels": {
+        "beginner": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 26
+        },
+        "intermediate": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 28
+        },
+        "advanced": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 28
+        }
+      }
+    },
+    "nodejs": {
+      "total": 54,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 52,
+      "levels": {
+        "beginner": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        },
+        "intermediate": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 17
+        },
+        "advanced": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 17
+        }
+      }
+    },
+    "django": {
+      "total": 54,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 51,
+      "levels": {
+        "beginner": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 16
+        },
+        "intermediate": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        },
+        "advanced": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 17
+        }
+      }
+    },
+    "php": {
+      "total": 84,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 81,
+      "levels": {
+        "intermediate": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 27
+        },
+        "beginner": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 27
+        },
+        "advanced": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 27
+        }
+      }
+    },
+    "spring-boot": {
+      "total": 54,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 53,
+      "levels": {
+        "beginner": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 17
+        },
+        "intermediate": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        },
+        "advanced": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        }
+      }
+    },
+    "vue-angular": {
+      "total": 84,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 82,
+      "levels": {
+        "advanced": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 27
+        },
+        "beginner": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 28
+        },
+        "intermediate": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 27
+        }
+      }
+    },
+    "mongodb": {
+      "total": 84,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 82,
+      "levels": {
+        "beginner": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 26
+        },
+        "intermediate": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 28
+        },
+        "advanced": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 28
+        }
+      }
+    },
+    "rust": {
+      "total": 107,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 104,
+      "levels": {
+        "beginner": {
+          "total": 37,
+          "biased": 0,
+          "strictViolations": 36
+        },
+        "intermediate": {
+          "total": 36,
+          "biased": 0,
+          "strictViolations": 36
+        },
+        "advanced": {
+          "total": 34,
+          "biased": 0,
+          "strictViolations": 32
+        }
+      }
+    },
+    "redis": {
+      "total": 57,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 51,
+      "levels": {
+        "beginner": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 17
+        },
+        "intermediate": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 17
+        },
+        "advanced": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 17
+        }
+      }
+    },
+    "postgresql": {
+      "total": 81,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 78,
+      "levels": {
+        "intermediate": {
+          "total": 27,
+          "biased": 0,
+          "strictViolations": 26
+        },
+        "beginner": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 27
+        },
+        "advanced": {
+          "total": 26,
+          "biased": 0,
+          "strictViolations": 25
+        }
+      }
+    },
+    "machine-learning": {
+      "total": 54,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 52,
+      "levels": {
+        "beginner": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        },
+        "intermediate": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 17
+        },
+        "advanced": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 17
+        }
+      }
+    },
+    "kafka": {
+      "total": 57,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 46,
+      "levels": {
+        "beginner": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 16
+        },
+        "intermediate": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 15
+        },
+        "advanced": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 15
+        }
+      }
+    },
+    "elasticsearch": {
+      "total": 116,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 113,
+      "levels": {
+        "beginner": {
+          "total": 39,
+          "biased": 0,
+          "strictViolations": 38
+        },
+        "advanced": {
+          "total": 39,
+          "biased": 0,
+          "strictViolations": 39
+        },
+        "intermediate": {
+          "total": 38,
+          "biased": 0,
+          "strictViolations": 36
+        }
+      }
+    },
+    "rabbitmq": {
+      "total": 87,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 83,
+      "levels": {
+        "beginner": {
+          "total": 29,
+          "biased": 0,
+          "strictViolations": 29
+        },
+        "intermediate": {
+          "total": 29,
+          "biased": 0,
+          "strictViolations": 27
+        },
+        "advanced": {
+          "total": 29,
+          "biased": 0,
+          "strictViolations": 27
+        }
+      }
+    },
+    "nestjs": {
+      "total": 54,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 51,
+      "levels": {
+        "intermediate": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 17
+        },
+        "beginner": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 16
+        },
+        "advanced": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        }
+      }
+    },
+    "data-warehouse": {
+      "total": 54,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 53,
+      "levels": {
+        "beginner": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 17
+        },
+        "intermediate": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        },
+        "advanced": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        }
+      }
+    },
+    "virtualization": {
+      "total": 54,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 53,
+      "levels": {
+        "beginner": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 17
+        },
+        "intermediate": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        },
+        "advanced": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        }
+      }
+    },
+    "testing-qa": {
+      "total": 113,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 109,
+      "levels": {
+        "beginner": {
+          "total": 37,
+          "biased": 0,
+          "strictViolations": 36
+        },
+        "intermediate": {
+          "total": 38,
+          "biased": 0,
+          "strictViolations": 36
+        },
+        "advanced": {
+          "total": 38,
+          "biased": 0,
+          "strictViolations": 37
+        }
+      }
+    },
+    "mysql": {
+      "total": 57,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 56,
+      "levels": {
+        "intermediate": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 19
+        },
+        "beginner": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 18
+        },
+        "advanced": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 19
+        }
+      }
+    },
+    "rails": {
+      "total": 54,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 52,
+      "levels": {
+        "intermediate": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        },
+        "beginner": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 17
+        },
+        "advanced": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 17
+        }
+      }
+    },
+    "graphql": {
+      "total": 54,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 51,
+      "levels": {
+        "beginner": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        },
+        "intermediate": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 17
+        },
+        "advanced": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 16
+        }
+      }
+    },
+    "deep-learning": {
+      "total": 54,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 52,
+      "levels": {
+        "beginner": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 17
+        },
+        "intermediate": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 17
+        },
+        "advanced": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        }
+      }
+    },
+    "kubernetes-adv": {
+      "total": 166,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 161,
+      "levels": {
+        "advanced": {
+          "total": 55,
+          "biased": 0,
+          "strictViolations": 54
+        },
+        "beginner": {
+          "total": 56,
+          "biased": 0,
+          "strictViolations": 55
+        },
+        "intermediate": {
+          "total": 55,
+          "biased": 0,
+          "strictViolations": 52
+        }
+      }
+    },
+    "dotnet-csharp": {
+      "total": 107,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 106,
+      "levels": {
+        "intermediate": {
+          "total": 35,
+          "biased": 0,
+          "strictViolations": 34
+        },
+        "advanced": {
+          "total": 36,
+          "biased": 0,
+          "strictViolations": 36
+        },
+        "beginner": {
+          "total": 36,
+          "biased": 0,
+          "strictViolations": 36
+        }
+      }
+    },
+    "spark": {
+      "total": 54,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 54,
+      "levels": {
+        "beginner": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        },
+        "intermediate": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        },
+        "advanced": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        }
+      }
+    },
+    "airflow": {
+      "total": 57,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 52,
+      "levels": {
+        "beginner": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 18
+        },
+        "intermediate": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 17
+        },
+        "advanced": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 17
+        }
+      }
+    },
+    "data-viz": {
+      "total": 54,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 50,
+      "levels": {
+        "beginner": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 17
+        },
+        "intermediate": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 17
+        },
+        "advanced": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 16
+        }
+      }
+    },
+    "prometheus-grafana": {
+      "total": 57,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 49,
+      "levels": {
+        "beginner": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 17
+        },
+        "intermediate": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 13
+        },
+        "advanced": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 19
+        }
+      }
+    },
+    "splunk": {
+      "total": 87,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 82,
+      "levels": {
+        "intermediate": {
+          "total": 29,
+          "biased": 0,
+          "strictViolations": 28
+        },
+        "beginner": {
+          "total": 29,
+          "biased": 0,
+          "strictViolations": 27
+        },
+        "advanced": {
+          "total": 29,
+          "biased": 0,
+          "strictViolations": 27
+        }
+      }
+    },
+    "powershell": {
+      "total": 57,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 57,
+      "levels": {
+        "beginner": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 19
+        },
+        "intermediate": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 19
+        },
+        "advanced": {
+          "total": 19,
+          "biased": 0,
+          "strictViolations": 19
+        }
+      }
+    },
+    "active-directory": {
+      "total": 108,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 104,
+      "levels": {
+        "advanced": {
+          "total": 36,
+          "biased": 0,
+          "strictViolations": 34
+        },
+        "beginner": {
+          "total": 37,
+          "biased": 0,
+          "strictViolations": 36
+        },
+        "intermediate": {
+          "total": 35,
+          "biased": 0,
+          "strictViolations": 34
+        }
+      }
+    },
+    "playwright": {
+      "total": 84,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 82,
+      "levels": {
+        "intermediate": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 28
+        },
+        "beginner": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 26
+        },
+        "advanced": {
+          "total": 28,
+          "biased": 0,
+          "strictViolations": 28
+        }
+      }
+    },
+    "llm-apis": {
+      "total": 54,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 54,
+      "levels": {
+        "beginner": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        },
+        "intermediate": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        },
+        "advanced": {
+          "total": 18,
+          "biased": 0,
+          "strictViolations": 18
+        }
+      }
+    },
+    "microservices": {
+      "total": 52,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 52,
+      "levels": {
+        "advanced": {
+          "total": 17,
+          "biased": 0,
+          "strictViolations": 17
+        },
+        "beginner": {
+          "total": 20,
+          "biased": 0,
+          "strictViolations": 20
+        },
+        "intermediate": {
+          "total": 15,
+          "biased": 0,
+          "strictViolations": 15
+        }
+      }
+    },
+    "react-native": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 30,
+      "levels": {
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    },
+    "mlops": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 30,
+      "levels": {
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    },
+    "dbt": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 30,
+      "levels": {
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    },
+    "langchain": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 30,
+      "levels": {
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    },
+    "databricks": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 30,
+      "levels": {
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    },
+    "vector-databases": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 30,
+      "levels": {
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    },
+    "argocd-gitops": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 30,
+      "levels": {
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    },
+    "flink": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 30,
+      "levels": {
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    },
+    "grpc": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 29,
+      "levels": {
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 9
+        },
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    },
+    "flutter": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 29,
+      "levels": {
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 9
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    },
+    "cloud-security": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 30,
+      "levels": {
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    },
+    "zero-trust": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 29,
+      "levels": {
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 9
+        },
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    },
+    "opentelemetry": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 30,
+      "levels": {
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    },
+    "svelte": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 28,
+      "levels": {
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 8
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    },
+    "aem": {
+      "total": 30,
+      "biased": 0,
+      "biasedPct": 0,
+      "strictViolations": 30,
+      "levels": {
+        "beginner": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "intermediate": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        },
+        "advanced": {
+          "total": 10,
+          "biased": 0,
+          "strictViolations": 10
+        }
+      }
+    }
+  }
+}

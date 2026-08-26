@@ -16,6 +16,7 @@ type Level = "beginner" | "intermediate" | "advanced";
 interface Player {
   id: string;
   name: string;
+  country: string | null;
   ws: WebSocket;
   raceId: string | null;
   challengeId: string | null;
@@ -73,6 +74,12 @@ export function getOnlineCount(): number {
   return [...players.values()].filter((p) => p.name).length;
 }
 
+export function getOnlinePlayers(): Array<{ id: string; name: string; country: string | null; inRace: boolean }> {
+  return [...players.values()]
+    .filter((p) => p.name)
+    .map((p) => ({ id: p.id, name: p.name, country: p.country, inRace: p.raceId !== null }));
+}
+
 let nextId = 1;
 function genId(prefix: string): string {
   return `${prefix}_${Date.now().toString(36)}_${(nextId++).toString(36)}`;
@@ -89,7 +96,7 @@ function lobbySnapshot() {
     type: "lobby",
     players: [...players.values()]
       .filter((p) => p.name)
-      .map((p) => ({ id: p.id, name: p.name, inRace: p.raceId !== null })),
+      .map((p) => ({ id: p.id, name: p.name, country: p.country, inRace: p.raceId !== null })),
     challenges: [...challenges.values()].map((c) => ({
       id: c.id,
       fromId: c.fromId,
@@ -302,6 +309,8 @@ function handleMessage(player: Player, raw: string): void {
         return;
       }
       player.name = name;
+      const country = typeof msg.country === "string" ? msg.country.trim().toUpperCase() : "";
+      player.country = /^[A-Z]{2}$/.test(country) ? country : null;
       send(player.ws, { type: "welcome", playerId: player.id, name });
       broadcastLobby();
       break;
@@ -317,7 +326,7 @@ function handleMessage(player: Player, raw: string): void {
         return;
       }
       const targetName =
-        typeof msg.targetName === "string" && msg.targetName.trim() ? msg.targetName.trim() : null;
+        typeof msg.targetName === "string" && msg.targetName.trim() ? msg.targetName.trim().slice(0, 30) : null;
 
       void (async () => {
         const courses = await db.select().from(coursesTable).where(eq(coursesTable.id, courseId)).limit(1);
@@ -516,7 +525,7 @@ export function setupRaceServer(server: HttpServer): void {
   });
 
   wss.on("connection", (ws: WebSocket) => {
-    const player: Player = { id: genId("p"), name: "", ws, raceId: null, challengeId: null };
+    const player: Player = { id: genId("p"), name: "", country: null, ws, raceId: null, challengeId: null };
     players.set(player.id, player);
     send(ws, lobbySnapshot());
 

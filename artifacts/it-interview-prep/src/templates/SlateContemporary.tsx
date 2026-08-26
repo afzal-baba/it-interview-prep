@@ -1,0 +1,5 @@
+import type { ResumeData } from "@/lib/resume";
+import { BasicSections } from "./template-utils";
+export default function SlateContemporary({ data }: { data: ResumeData }) {
+  return <div className="resume-template slate-contemporary"><main><h1>{data.contact.name || "Your Name"}</h1><div className="rule" /><h2>Professional statement</h2><p>{data.summary}</p><h2>Selected experience</h2>{data.experience.map((item) => <article key={item.id}><header><h3>{item.role}</h3><time>{item.dates}</time></header><b>{item.company}</b>{item.bullets.map((bullet, i) => <p key={i}>— {bullet}</p>)}</article>)}<BasicSections data={data} /></main><aside><h2>Contact</h2><p>✉<br />{data.contact.email}</p><p>☎<br />{data.contact.phone}</p><p>⌖<br />{data.contact.location}</p><h2>Toolkit</h2><ul>{data.skills.map((skill) => <li key={skill}>{skill}</li>)}</ul></aside></div>;
+}

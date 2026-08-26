@@ -1,0 +1,459 @@
+warning: The `fitz` API is deprecated and will be removed in future. Use `import pymupdf` instead.
+{
+  "sourceCounts": {
+    "detailed-41": 798,
+    "exams-36": 482,
+    "topics-56": 1680,
+    "docx": 430
+  },
+  "parsedCount": 3390,
+  "deduplicatedCount": 3105,
+  "courseCount": 89,
+  "courseBreakdown": {
+    "AWS_Cloud": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 9
+    },
+    "Azure": {
+      "beginner": 18,
+      "intermediate": 18,
+      "advanced": 17
+    },
+    "GCP": {
+      "beginner": 18,
+      "intermediate": 18,
+      "advanced": 18
+    },
+    "Kubernetes": {
+      "beginner": 20,
+      "intermediate": 20,
+      "advanced": 20
+    },
+    "Terraform Associate & Professional Level (2024-2026)": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 10
+    },
+    "Jenkins CI/CD - Fundamentals to Advanced": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 10
+    },
+    "Networking": {
+      "beginner": 37,
+      "intermediate": 36,
+      "advanced": 36
+    },
+    "CSharp": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 10
+    },
+    "Golang": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 20
+    },
+    "JavaScript": {
+      "beginner": 28,
+      "intermediate": 28,
+      "advanced": 28
+    },
+    "TypeScript - Modern Typed JavaScript Development": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 10
+    },
+    "Python": {
+      "beginner": 18,
+      "intermediate": 18,
+      "advanced": 18
+    },
+    "PHP_Laravel": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 10
+    },
+    "Vue_Angular": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 10
+    },
+    "React": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 10
+    },
+    "Git": {
+      "beginner": 19,
+      "intermediate": 19,
+      "advanced": 19
+    },
+    "RabbitMQ": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 10
+    },
+    "Elasticsearch, Logstash, Kibana (ELK) Stack - Complete Assessment": {
+      "beginner": 10,
+      "intermediate": 9,
+      "advanced": 10
+    },
+    "SRE": {
+      "beginner": 1,
+      "intermediate": 10,
+      "advanced": 10
+    },
+    "Active Directory & LDAP Administration and Troubleshooting": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 10
+    },
+    "Cybersecurity": {
+      "beginner": 37,
+      "intermediate": 36,
+      "advanced": 36
+    },
+    "Modern End-to-End Testing with Playwright & Cypress (2024-2026)": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 10
+    },
+    "Selenium": {
+      "beginner": 19,
+      "intermediate": 20,
+      "advanced": 20
+    },
+    "Rust": {
+      "beginner": 18,
+      "intermediate": 18,
+      "advanced": 18
+    },
+    "SQL": {
+      "beginner": 19,
+      "intermediate": 19,
+      "advanced": 19
+    },
+    "MongoDB": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 10
+    },
+    "Microservices": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 10
+    },
+    "AWS Cloud": {
+      "beginner": 19,
+      "intermediate": 19,
+      "advanced": 19
+    },
+    "Microsoft Azure": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 9
+    },
+    "Google Cloud Platform": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 10
+    },
+    "Ansible": {
+      "beginner": 27,
+      "intermediate": 26,
+      "advanced": 25
+    },
+    "Jenkins": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 10
+    },
+    "Linux": {
+      "beginner": 26,
+      "intermediate": 27,
+      "advanced": 28
+    },
+    "DevOps Fundamentals": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 10
+    },
+    "Git & GitHub": {
+      "beginner": 10,
+      "intermediate": 9,
+      "advanced": 10
+    },
+    "ELK": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 10
+    },
+    "Splunk Enterprise & Splunk Cloud Platform (v9.1 - v9.3) | Aligned to 2024-2026 Syllabus": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 10
+    },
+    "Vault": {
+      "beginner": 10,
+      "intermediate": 10,
+      "advanced": 10
+    },
+    "Deep Learning & PyTorch": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "LLM & OpenAI APIs": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "Machine Learning & AI": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "GraphQL & API Design": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "Django & Flask": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "FastAPI": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "NestJS": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "Node.js": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "Ruby on Rails": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "Spring Boot": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "AWS": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "Apache Airflow": {
+      "beginner": 9,
+      "intermediate": 9,
+      "advanced": 9
+    },
+    "Apache Kafka": {
+      "beginner": 9,
+      "intermediate": 9,
+      "advanced": 9
+    },
+    "Apache Spark": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "Snowflake & Data Warehousing": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "Tableau & Power BI": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "MongoDB & NoSQL": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "MySQL": {
+      "beginner": 9,
+      "intermediate": 9,
+      "advanced": 9
+    },
+    "Oracle Database": {
+      "beginner": 18,
+      "intermediate": 18,
+      "advanced": 18
+    },
+    "PostgreSQL": {
+      "beginner": 18,
+      "intermediate": 17,
+      "advanced": 16
+    },
+    "Redis & Caching": {
+      "beginner": 9,
+      "intermediate": 9,
+      "advanced": 9
+    },
+    "CI/CD & DevOps": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "Docker & Kubernetes": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "Terraform": {
+      "beginner": 18,
+      "intermediate": 16,
+      "advanced": 16
+    },
+    "Jira & Agile": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "SAP": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "React & Next.js": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "Vue.js & Angular": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "PowerShell": {
+      "beginner": 9,
+      "intermediate": 9,
+      "advanced": 9
+    },
+    "VMware & Virtualisation": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "Bash & Shell Scripting": {
+      "beginner": 9,
+      "intermediate": 9,
+      "advanced": 9
+    },
+    "C# & .NET": {
+      "beginner": 17,
+      "intermediate": 15,
+      "advanced": 16
+    },
+    "Go (Golang)": {
+      "beginner": 17,
+      "intermediate": 16,
+      "advanced": 14
+    },
+    "Java": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "PHP & Laravel": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "TypeScript": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "RabbitMQ & Messaging": {
+      "beginner": 9,
+      "intermediate": 9,
+      "advanced": 9
+    },
+    "Elasticsearch & ELK Stack": {
+      "beginner": 9,
+      "intermediate": 9,
+      "advanced": 9
+    },
+    "Prometheus & Grafana": {
+      "beginner": 9,
+      "intermediate": 9,
+      "advanced": 9
+    },
+    "SRE & Observability": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "Splunk": {
+      "beginner": 9,
+      "intermediate": 9,
+      "advanced": 9
+    },
+    "Active Directory & LDAP": {
+      "beginner": 17,
+      "intermediate": 15,
+      "advanced": 16
+    },
+    "HashiCorp Vault": {
+      "beginner": 17,
+      "intermediate": 17,
+      "advanced": 15
+    },
+    "Playwright & Cypress": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "Selenium & Test Automation": {
+      "beginner": 8,
+      "intermediate": 8,
+      "advanced": 8
+    },
+    "Python Programming": {
+      "beginner": 9,
+      "intermediate": 1,
+      "advanced": 3
+    },
+    "Docker & ☸️ Kubernetes": {
+      "beginner": 9,
+      "intermediate": 8,
+      "advanced": 9
+    },
+    "SQL Databases": {
+      "beginner": 9,
+      "intermediate": 8,
+      "advanced": 6
+    },
+    "Java Programming": {
+      "beginner": 9,
+      "intermediate": 6,
+      "advanced": 7
+    },
+    "Docker & Kubernetes Security Practices Exam": {
+      "beginner": 9,
+      "intermediate": 9,
+      "advanced": 8
+    },
+    "Rust Programming": {
+      "beginner": 9,
+      "intermediate": 8,
+      "advanced": 6
+    }
+  }
+}

@@ -126,7 +126,7 @@ router.post("/leaderboard", async (req, res): Promise<void> => {
     return;
   }
 
-  const { sessionId, playerName, gender } = parsed.data;
+  const { sessionId, playerName } = parsed.data;
 
   // Attach the authenticated user's id (if logged in) so scores are tied to accounts
   const userId = req.isAuthenticated() ? req.user.id : null;
@@ -172,7 +172,8 @@ router.post("/leaderboard", async (req, res): Promise<void> => {
       timedMode,
       timeBonus,
       sessionId: session.id,
-      gender: gender ?? null,
+       // Gender is retained only as a nullable legacy database field.
+       gender: null,
     })
     .returning();
 

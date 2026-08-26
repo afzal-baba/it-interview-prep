@@ -7,6 +7,10 @@ import {
   getListQuestionsQueryKey
 } from "@workspace/api-client-react";
 import { useQuizState } from "@/lib/quiz-context";
+import {
+  getRecentQuestionIds,
+  rememberQuestionRotation,
+} from "@/lib/question-rotation";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +22,23 @@ export default function Quiz() {
   const [, setLocation] = useLocation();
   const { currentSession, setResult, timedMode } = useQuizState();
   const submitSession = useSubmitSession();
+  const rotationQuestionIds = useMemo(
+    () =>
+      currentSession
+        ? getRecentQuestionIds(currentSession.courseId, currentSession.level)
+        : [],
+    [currentSession?.courseId, currentSession?.level],
+  );
+  const questionParams = useMemo(
+    () => ({
+      level: currentSession?.level as any,
+      ...(rotationQuestionIds.length > 0
+        ? { excludeIds: rotationQuestionIds.join(",") }
+        : {}),
+    }),
+    [currentSession?.level, rotationQuestionIds],
+  );
+  const recordedRotation = useRef<string | null>(null);
 
   useEffect(() => {
     document.title = "Quiz — TechInterviewPrep";
@@ -25,7 +46,7 @@ export default function Quiz() {
 
   const { data: rawQuestions, isLoading } = useListQuestions(
     currentSession?.courseId || 0,
-    { level: currentSession?.level as any },
+    questionParams,
     { 
       query: { 
         enabled: !!currentSession,
@@ -34,10 +55,24 @@ export default function Quiz() {
         // gcTime: 0 clears the cache on unmount so the next quiz gets a fresh random set.
         staleTime: Infinity,
         gcTime: 0,
-        queryKey: getListQuestionsQueryKey(currentSession?.courseId || 0, { level: currentSession?.level as any })
+        queryKey: getListQuestionsQueryKey(currentSession?.courseId || 0, questionParams)
       } 
     }
   );
+
+  useEffect(() => {
+    if (!currentSession || !rawQuestions || rawQuestions.length === 0) return;
+    const key = `${currentSession.courseId}:${currentSession.level}:${rawQuestions
+      .map((question) => question.id)
+      .join(",")}`;
+    if (recordedRotation.current === key) return;
+    recordedRotation.current = key;
+    rememberQuestionRotation(
+      currentSession.courseId,
+      currentSession.level,
+      rawQuestions.map((question) => question.id),
+    );
+  }, [currentSession, rawQuestions]);
 
   // Shuffle options client-side once per question load. originalIndexMap[shuffledIdx] → DB index.
   const questions = useMemo(() => {

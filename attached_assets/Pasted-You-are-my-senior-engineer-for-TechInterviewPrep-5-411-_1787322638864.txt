@@ -1,0 +1,76 @@
+You are my senior engineer for TechInterviewPrep (5,411+ questions, 77 technologies).
+
+CRITICAL BUGS TO FIX BASED ON SCREENSHOTS:
+1. Length bias: Correct answer is visually longer (2 lines vs 1 line, 60+ chars vs 20 chars). Users click longest without reading.
+   Example: Q "What does git init do?" Correct "Initialises a new Git repository in the current directory" (42 chars) vs distractors "Downloads a repository" (22 chars).
+2. No shuffling: Each course has 30 Qs per level but same order every time. No RANDOM() / $sample.
+
+GOAL: Fix for ALL courses (git, docker, python, aws, react, kubernetes, typescript, javascript, sql, java, etc - 77 total).
+
+STEP 1: AUDIT SCRIPT
+Create scripts/audit-length-bias.mjs:
+- Read questions from: Check in order: /data/questions.json, /artifacts/it-interview-prep/platform-stats.json, Supabase table 'questions', Mongo 'questions' collection. Support all.
+- For each question, compute lengths of 4 options.
+- Flag if: correct is longest AND (max-min > 20 OR max/min > 1.5)
+- Output: audit-report.json with structure: { tech, total, biased, biasedPct, worstExamples[5] }
+- Also print table to console.
+
+STEP 2: AUTO-BALANCE ALL QUESTIONS - CORE FIX
+Create scripts/balance-all-options.mjs that will rewrite ALL 5,411 questions:
+
+Rewriting Rules (MUST FOLLOW):
+- All 4 options: 28-50 chars, max diff 12 chars between longest and shortest
+- Same grammatical structure: If correct starts with verb "Creates...", all must start with verb
+- No filler phrases: Remove "in the current directory and subdirectories for the next commit" -> "for commit"
+- Expand short distractors with plausible detail: "Downloads a repository" -> "Downloads a remote repository locally"
+- Trim long correct: "Stages all changes in the current directory and subdirectories for the next commit" -> "Stages all current changes for commit"
+- No "All of above", "None", "Always", "Never" only in one option
+- Preserve meaning exactly.
+
+Use this balanced style as reference (from approved Git/Docker sets):
+Git example: "Initialises a new local Git repository" / "Downloads a remote repository locally" / "Commits all staged changes to history" / "Creates a new remote tracking branch" -> all 34-38 chars
+Docker example: "A platform to run apps in containers" / "A programming language for backend" etc -> all 31-37 chars
+
+Process:
+- Load backup: Save original as data/questions.backup.json before any change
+- For each question in ALL 77 techs, ALL levels (beginner, intermediate, advanced):
+    - If already balanced (max-min <=12) skip
+    - Else rewrite using LLM or smart rule-based trim/expand
+    - Validate new lengths balanced
+- Save fixed version
+
+STEP 3: FIX SHUFFLING - BACKEND + FRONTEND
+Backend file: Find API route (e.g. server/api/questions.ts, lib/questions.ts, app/api/...):
+- BEFORE: db.find({tech, level}).limit(30)
+- AFTER Mongo: aggregate([{$match:{tech, level}}, {$sample:{size:10}}])
+- AFTER Postgres/Supabase: .select().eq('tech',tech).eq('level',level).order('random()').limit(10)
+- Add caching with key: tech-level-userId-day to prevent abuse but still random per user per day
+
+Frontend file: Find QuestionCard / Quiz component:
+- Add function shuffleOptions(question):
+  const shuffled = [...question.options];
+  for(let i=shuffled.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]] }
+  return {...question, options: shuffled, correctAnswer: question.correctAnswer, correctIndex: shuffled.indexOf(question.correctAnswer)}
+- Call on every new question load
+- Also add useEffect to track correct position distribution - ensure A/B/C/D each ~25% over 100 Qs, if not, re-shuffle bias fix
+
+STEP 4: FIX UI CSS
+File: app/globals.css or components/QuestionCard.tsx:
+- Set .option-card { min-height: 84px; height: 84px; display:flex; align-items:center; }
+- Grid: 2 columns desktop, 1 column mobile, equal height
+- Text: font-size 14px, line-clamp 2, text-wrap balance
+- No auto height based on content
+
+STEP 5: VALIDATION
+Create scripts/validate-fix.mjs:
+- Check all questions now balanced: max-min <=12
+- Check shuffle: Fetch same tech/level 5 times, ensure order differs (at least 3 different orders)
+- Check correct position distribution: Simulate 100 shuffles, count A/B/C/D positions, ensure each 20-30%
+- Fail build if any check fails
+
+REPORT:
+- Print before/after for 3 examples per tech (git, docker, python, aws, react, k8s, ts, sql, java)
+- Show audit: "Fixed 2,143 / 5,411 biased questions (39.6%)"
+- List files changed
+
+Now execute Steps 1-5 for ALL courses. Use the 10 Git and 10 Docker balanced examples I provided as gold standard style.

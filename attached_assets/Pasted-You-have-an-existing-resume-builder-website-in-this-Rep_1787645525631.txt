@@ -1,0 +1,72 @@
+You have an existing resume builder website in this Repl. Your task is to ADD 12 new FREE resume templates to the existing builder.
+
+CONTEXT FROM INTERNET SCAN:
+We scanned free resume sources: Canva (1000+ templates), ResumeGenius (20 CPRW-approved free Canva templates), TheGoodocs (Google Docs/Word), ResumGO (380+ free). All templates must remain 100% FREE.
+
+TASK: INTEGRATE NEW TEMPLATES
+
+1. ANALYZE EXISTING CODEBASE FIRST:
+- Find where current templates are defined (look for /templates, /src/templates, components/ResumeTemplates, or similar)
+- Find how resume data is injected (look for {{name}}, {experience}, or props like resumeData)
+- Find the template selection UI and renderer (canvas, PDF generator, or preview component)
+- KEEP existing architecture. Don't rewrite the builder.
+
+2. CREATE 12 NEW TEMPLATE COMPONENTS:
+Create in `/src/templates/free/` or your existing templates folder:
+
+A. MINIMALIST & ATS (5 templates - ATS-friendly, single/two column, no photos, standard fonts):
+- Template: minimalist-black-white
+- Template: gray-white-timeline
+- Template: white-black-simple-ats
+- Template: infographic-single-column
+- Template: professional-single-column
+
+B. MODERN CREATIVE (4 templates - color accents, sidebar, icons):
+- Template: green-lined-modern
+- Template: purple-professional
+- Template: orange-amber-creative
+- Template: sidebar-contemporary
+
+C. CORPORATE (3 templates - executive, bold headers):
+- Template: corporate-off-white
+- Template: minimalistic-executive
+- Template: blue-modern-formal
+
+For each template, create a React component that receives `data` prop: 
+{ personalInfo: {name, title, email, phone, location, linkedin}, summary, experience[], education[], skills[], certifications[], awards[] }
+
+3. TEMPLATE SPECIFICATIONS (CSS ONLY, NO IMAGES):
+- Use Tailwind / your existing CSS system
+- Each template must be:
+    - A4 size (794px x 1123px), printable
+    - Responsive preview scale
+    - 100% editable via data prop
+    - ATS-compliant: No text in images, no tables for layout, standard headings (use h2 for Experience, Education, Skills)
+- Design details:
+  minimalist-black-white: Two-column, black header, modern icons for contact, line separators
+  gray-white-timeline: Horizontal/vertical lines, timeline dots for experience
+  green-lined-modern: Green #2E8B57 accents, LinkedIn icon, awards section
+  etc. (infer from name - keep it clean)
+
+4. UPDATE TEMPLATE SELECTOR:
+- In your template gallery / selection page, add new section "Free Collection (2026)"
+- Show 12 new cards with CSS mini-previews (scaled down version of template with dummy data)
+- Each card: Name, Badge "FREE", Tags ["ATS", "Minimalist" etc], "Best for: X"
+- On click -> set as active template in builder
+- Add filter: All / ATS / Creative / Corporate / Free Only
+
+5. INTEGRATION:
+- Make new templates work with existing PDF export / download logic (react-to-print, html2pdf, puppeteer - whatever you already use)
+- Make them work with existing editor (when user edits text, it updates in new templates)
+- Add to existing template JSON/config if you have one
+
+6. DO NOT BREAK:
+- Don't remove old templates
+- Don't change data structure
+- Don't add new dependencies unless absolutely needed
+- Keep existing routing
+
+OUTPUT: 
+After integration, I should be able to see 12 new templates in the gallery and use them in the builder to build and download a resume.
+
+Reference design inspiration: Canva resume templates page + resumegenius.com/resume-templates/canva-resume-templates

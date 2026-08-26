@@ -7,7 +7,7 @@ const MonacoEditor = lazy(() => import("@monaco-editor/react"));
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 export interface ChallengeTask {
-  type: "sql" | "python" | "javascript" | "architecture";
+  type: "sql" | "python" | "javascript" | "architecture" | "bash";
   prompt: string;
 }
 export interface ChallengeTab {
@@ -168,7 +168,7 @@ const TECH_CHALLENGES: Record<string, TechChallenge> = {
     description: "Demonstrate Linux command-line proficiency for real sysadmin scenarios.",
     tasks: [
       { type: "architecture", prompt: "A production web server is responding slowly. Write the sequence of Linux commands you'd run to diagnose: CPU usage (top/htop), memory pressure (free, vmstat), disk I/O (iostat, df), and network connections (netstat/ss). For each command, explain what output would indicate a problem." },
-      { type: "bash", prompt: "Write a Bash script that: (1) finds all `.log` files in `/var/log` older than 7 days, (2) compresses them with gzip, (3) moves them to `/var/log/archive/`, (4) logs each action with a timestamp to `/var/log/archive/cleanup.log`." } as { type: "architecture"; prompt: string },
+      { type: "bash", prompt: "Write a Bash script that: (1) finds all `.log` files in `/var/log` older than 7 days, (2) compresses them with gzip, (3) moves them to `/var/log/archive/`, (4) logs each action with a timestamp to `/var/log/archive/cleanup.log`." },
     ],
   },
   bash: {
@@ -416,7 +416,7 @@ function clearAnswers(title: string) { try { localStorage.removeItem(answersKey(
 
 // ── Challenge URL helpers ─────────────────────────────────────────────────────
 
-const VALID_TYPES = new Set(["sql", "python", "javascript", "architecture"]);
+const VALID_TYPES = new Set(["sql", "python", "javascript", "architecture", "bash"]);
 
 function encodeChallenge(c: Challenge): string {
   return encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(c)))));
@@ -459,12 +459,14 @@ const TYPE_META = {
   python:       { label: "Python",       lang: "python",     color: "#8f7bf0", icon: "🐍" },
   javascript:   { label: "JavaScript",   lang: "javascript", color: "#facc15", icon: "⚡" },
   architecture: { label: "Architecture", lang: "",           color: "#f472b6", icon: "🏗️" },
+  bash:         { label: "Bash",         lang: "shell",      color: "#89e051", icon: "⌘" },
 };
 const PLACEHOLDER: Record<ChallengeTask["type"], string> = {
   sql:          "-- Write your SQL query here\nSELECT ...\n",
   python:       "# Write your Python solution here\ndef solution():\n    pass\n",
   javascript:   "// Write your JavaScript solution here\nfunction solution() {\n\n}\n",
   architecture: "Describe your solution here...\n\nApproach:\n- \n\nKey points:\n- ",
+  bash:         "# Write your bash script here\n# Example:\n#!/bin/bash\necho \"Hello World\"\n",
 };
 
 const TEMPLATE_JSON = JSON.stringify(

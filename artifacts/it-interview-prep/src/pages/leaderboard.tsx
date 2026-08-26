@@ -12,47 +12,10 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Trophy, Medal, Users, Target, Activity, Loader2, Timer, Zap, Swords, FlaskConical, Code2 } from "lucide-react";
+import { Trophy, Users, Target, Activity, Loader2, Timer, Zap, Swords, FlaskConical, Code2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type TabKind = "quiz" | "codelab";
-
-/** Crown + title decoration for top-2 players, respecting self-reported gender */
-function RoyalBadge({ rank, gender }: { rank: number; gender?: string | null }) {
-  if (rank > 1) return null;
-
-  const isKing = gender === "M" || (gender == null && rank === 0);
-  const isFirst = rank === 0;
-
-  const colorStyle = isFirst
-    ? { bg: "linear-gradient(135deg, #f59e0b22, #eab30844)", border: "#f59e0b66", text: "#f59e0b" }
-    : { bg: "linear-gradient(135deg, #a78bfa22, #c4b5fd44)", border: "#a78bfa66", text: "#a78bfa" };
-
-  const label = isKing ? "👑 King" : "👸 Queen";
-  const title = `${isKing ? "King" : "Queen"} — #${rank + 1} on the leaderboard`;
-
-  return (
-    <span
-      title={title}
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 4,
-        background: colorStyle.bg,
-        border: `1px solid ${colorStyle.border}`,
-        borderRadius: 20,
-        padding: "2px 8px",
-        fontSize: 11,
-        fontWeight: 800,
-        color: colorStyle.text,
-        letterSpacing: "0.03em",
-        whiteSpace: "nowrap",
-      }}
-    >
-      {label}
-    </span>
-  );
-}
 
 export default function Leaderboard() {
   const [, setLocation] = useLocation();
@@ -271,16 +234,12 @@ export default function Leaderboard() {
                         }
                       >
                         <td className="px-6 py-4 font-mono font-bold text-lg">
-                          {idx === 0 && <Medal className="inline w-6 h-6 text-yellow-500 mr-2" />}
-                          {idx === 1 && <Medal className="inline w-6 h-6 text-gray-400 mr-2" />}
-                          {idx === 2 && <Medal className="inline w-6 h-6 text-amber-700 mr-2" />}
                           #{idx + 1}
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex flex-col gap-1">
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className="font-bold text-base leading-tight">{entry.playerName}</span>
-                              <RoyalBadge rank={idx} gender={entry.gender} />
                             </div>
                             <span className="text-xs text-muted-foreground font-medium truncate max-w-[200px]">
                               📚 {entry.courseName}
@@ -397,15 +356,11 @@ export default function Leaderboard() {
                         }
                       >
                         <td className="px-6 py-4 font-mono font-bold text-lg">
-                          {idx === 0 && <Medal className="inline w-6 h-6 text-yellow-500 mr-2" />}
-                          {idx === 1 && <Medal className="inline w-6 h-6 text-gray-400 mr-2" />}
-                          {idx === 2 && <Medal className="inline w-6 h-6 text-amber-700 mr-2" />}
                           #{idx + 1}
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className="font-bold text-base">{entry.playerName}</span>
-                            <RoyalBadge rank={idx} gender={null} />
                           </div>
                         </td>
                         <td className="px-6 py-4 text-right font-mono font-bold text-lg text-primary">

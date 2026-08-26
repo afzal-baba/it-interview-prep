@@ -1,0 +1,43 @@
+Analyze the current project at https://mockinterviewprep.app/ - it's a React SPA for IT interview prep with 5,411+ questions.
+
+TASK 1: FIX index.html
+Open index.html and replace it with this optimized version:
+
+- Title: "TechInterviewPrep — 5,411+ IT Interview Questions + Free Resume Builder"
+- Description: Must mention both 5,411 questions + 12 free ATS resume templates + Docker, Python, AWS, React, Kafka
+- Add meta keywords: IT interview questions, free resume builder, ATS resume templates
+- Keep all og/twitter/canonical tags but update og:title and og:description to include resume builder
+- Fix fonts: Change Google Fonts import to only Inter 400,600,700 and JetBrains Mono 500,700 (currently loads 400-800 all weights, too heavy)
+- Add <link rel="manifest" href="/manifest.json">
+- Update JSON-LD: Add featureList ["5,411+ questions", "77 techs", "12 ATS resume templates", "Timed mode", "Challenge arena", "Resume builder"] and add BreadcrumbList with /resume-builder and /resume-templates
+- Improve noscript: Must include links to /resume-builder and /resume-templates plus list of techs and resume template names for SEO. Currently noscript only has 4 links.
+- PERFORMANCE: Remove replit-cdn.com feedback widget from production build. Only load it if hostname includes replit.dev. Wrap it in JS check. Currently it loads on every prod page.
+- Remove duplicate stylesheet link if any.
+
+TASK 2: ADD RESUME BUILDER ROUTES TO REACT APP
+- Find App.jsx / router file. Add two new routes: /resume-builder and /resume-templates
+- Find Navbar component. Add "Resume Builder" link with green "NEW FREE" badge
+- Create src/pages/ResumeBuilder.jsx - A full resume builder page that uses resumeData state and lets user pick from 12 templates and export PDF. Reuse existing UI style (dark theme #0f172a, Inter font)
+- Create src/pages/ResumeTemplatesGallery.jsx - Gallery showing 12 DISTINCT templates (not just color change). Each must have UNIQUE DOM STRUCTURE:
+    1. minimalist-black-white (two-col sidebar 30/70, black header)
+    2. gray-timeline (vertical timeline with dots)
+    3. ats-pure (single col centered, no colors)
+    4. infographic-bars (skill bars)
+    5. professional-split (name left contact right)
+    6. green-modern (green header full width)
+    7. purple-sidebar (35% purple sidebar with circle photo)
+    8. orange-dark-panel (amber top + dark right panel for skills)
+    9. slate-contemporary (dark slate right sidebar)
+    10. off-white-corporate (off-white #FEFCE8, serif, double border)
+    11. executive-huge-title (5xl name + grid 2 cols)
+    12. blue-l-shape (vertical blue bar 1/3 + overlapping white card)
+- Each template component in src/templates/free/*.jsx takes data prop {personalInfo, summary, experience, education, skills}
+- Gallery must show mini previews (scale 0.25) so they look visually distinct at thumbnail size. Filter buttons: All / ATS / Creative / Corporate
+- Make templates work with existing PDF export logic
+- Add these pages to sitemap.xml generator if you have one
+
+TASK 3: SEO
+- Create /public/manifest.json if missing with name TechInterviewPrep and theme_color #0f172a
+- Ensure /resume-builder and /resume-templates are in sitemap.xml
+
+Do not break existing question pages. Keep existing assets/index-*.js bundling. After done, I should see Resume Builder in nav, and /resume-templates shows 12 visually different templates.

@@ -13,12 +13,16 @@ Options were also never shuffled server-side, so position was predictable.
 ## What was fixed
 1. **Server-side option shuffle** (`artifacts/api-server/src/routes/courses.ts`) — Fisher-Yates shuffle on every request, `correctOptionIndex` recalculated after shuffle.
 2. **UI equal-height options** — web quiz uses a 2-col CSS grid with `min-h-[90px]` per button; mobile quiz uses `minHeight: 64` on each option row.
-3. **AI batch content rewrite** — `scripts/src/rewrite-wrong-answers.ts` used `gpt-5.6-luna` at BATCH_SIZE=8, CONCURRENCY=6 to rewrite wrong answers for all affected questions. Ran in 3 shell sessions (each ~5 min). After fix: avg wrong = 114 chars (now slightly *longer* than correct on average). Only 7 questions still have >25 char disparity (naturally short-answer questions).
+3. **AI batch content rewrite** — `scripts/src/rewrite-wrong-answers.ts` uses `gpt-5.6-luna` at BATCH_SIZE=8, CONCURRENCY=6 to rewrite wrong answers for affected questions. Run it repeatedly until validation reports no large correct-answer advantage; model output can leave a small number of residual outliers.
 
 **Why:** `needsRewrite()` threshold is 25 chars advantage. The rewrite prompt asks for similar length AND similar specificity (plausible-but-wrong), not just padding.
 
 ## Script location
-`scripts/src/rewrite-wrong-answers.ts` — re-runnable; queries DB each time and skips already-balanced questions.
+`scripts/src/rewrite-wrong-answers.ts` — re-runnable; queries DB each time, skips already-balanced questions and malformed option arrays. Imported banks can contain null/non-string options, so repair or exclude invalid rows before sending them to the model.
+
+**Why:** Batch imports can mix clean four-option records with malformed JSON payloads, and a single rewrite pass does not guarantee every generated distractor meets the length threshold.
+
+**How to apply:** Validate option arrays before rewriting, run the balance query after each batch, and manually review any residual outliers rather than padding answers mechanically.
 
 ## Scoring bug root cause: React Query background refetch mid-quiz (FIXED)
 The server uses `.orderBy(sql\`random()\`)` to randomize question order per-fetch. React Query's default `staleTime: 0` causes background refetches (e.g. on window focus). Each refetch returns questions in a DIFFERENT random order → `useMemo` re-runs with new `rawQuestions` reference → questions reshuffle → `questions[currentIndex]` becomes a completely different question than what the user was answering → wrong questions get scored, answers mapped incorrectly.

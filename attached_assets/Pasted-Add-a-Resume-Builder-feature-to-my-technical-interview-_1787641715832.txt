@@ -1,0 +1,72 @@
+Add a Resume Builder feature to my technical interview prep site (TechInterviewPrep). 
+This should NOT scrape or copy templates from LinkedIn, Indeed, or any job platform — 
+build original templates and content generation instead. Here's the spec:
+
+## 1. Resume templates
+Create 4 original, ATS-safe resume templates (no scraped designs):
+- "ATS-safe classic" — single column, no tables/graphics, standard section order
+- "Modern two-column" — sidebar for skills/contact, main column for experience
+- "Cloud/DevOps focus" — emphasizes certifications, infrastructure, and tooling up top
+- "Data/Backend focus" — emphasizes systems, pipelines, and technical projects up top
+
+Each template should be a structured JSON/schema-driven layout (sections: contact, 
+summary, skills, experience, projects, education, certifications) rendered to HTML/PDF, 
+not hardcoded text — so users fill in their own data via a form.
+
+## 2. Tech-stack-aware bullet point suggestions (LLM-powered)
+Given a technology the user selects (pull from my existing list of 77 tech categories) 
+plus optional context (their role/seniority, a short description of what they did), 
+call an LLM API (Claude, via the Anthropic API) to generate 3–5 tailored resume bullet 
+suggestions for that stack. Prompt the model with: the technology, the user's raw 
+input/context, and instructions to write concise, metric-oriented, ATS-friendly bullets 
+in active voice. Show suggestions as editable/insertable chips the user can tweak before 
+adding to their resume. Cache/store common technology + role combos to reduce repeat API 
+calls and cost.
+
+## 3. Job description keyword matcher (LLM-powered)
+Let the user paste in a job description (their own text, not fetched from a platform). 
+Send the job description + the user's current resume content to an LLM API call and ask 
+it to return structured JSON: 
+  { matched_keywords: [...], missing_keywords: [...], suggested_additions: [...] }
+Render this as:
+- Matched keywords (green)
+- Missing keywords (highlighted, with a one-click "ask AI to insert this into my resume" 
+  action that triggers a follow-up LLM call to draft a bullet using that keyword)
+Fall back to simple rule-based keyword extraction if the API call fails or is rate-limited, 
+so the feature degrades gracefully rather than breaking.
+
+## 4. ATS compatibility checker
+Analyze the built resume for common ATS-breaking issues:
+- Tables, images, or multi-column layouts (flag if template choice risks parsing issues)
+- Missing standard section headers
+- Unusual fonts/special characters
+- Resume length (flag if over 2 pages for non-senior roles)
+Show a simple pass/fail checklist with fix suggestions. This check can stay rule-based 
+(no LLM needed) since it's deterministic.
+
+## 5. Export
+- Export finished resume as PDF (use a library like jsPDF or Puppeteer/html-to-pdf 
+  depending on stack) and as plain text (for copy-paste into application forms).
+
+## 6. Tie-in to existing product
+- Add a "Resume" tab to the main nav alongside Courses/Leaderboard/Challenge.
+- On a user's profile, show completed courses/badges as an optional "Skills verified 
+  by TechInterviewPrep" section they can pull into the resume automatically.
+
+## LLM API integration notes
+- Use the Anthropic API (model: claude-sonnet-4-6 or latest available) via server-side 
+  calls only — never expose the API key client-side.
+- Keep prompts short and structured; request JSON output where the response needs to be 
+  parsed (bullet suggestions list, keyword match results) and instruct the model to return 
+  ONLY JSON with no preamble.
+- Add basic rate limiting per user to control API cost (e.g. max N resume-AI actions per 
+  day on free tier).
+- Show a loading state while the API call is in flight, and handle errors gracefully with 
+  a retry option.
+
+## Stack notes
+[Tell Replit here: e.g. "This is a Next.js app with a Postgres DB" or whatever your 
+actual stack is — the agent needs this to scaffold correctly.]
+
+Do not implement any web scraping of job boards or resume sites. All templates and 
+bullet content should be original or user-provided.

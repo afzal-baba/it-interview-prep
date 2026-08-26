@@ -1,7 +1,21 @@
 {
   "TOTAL_COURSES": 77,
-  "TOTAL_QUESTIONS": 2310,
-  "TOTAL_QUESTIONS_DISPLAY": "2310+",
+  "TOTAL_QUESTIONS": 5411,
+  "TOTAL_QUESTIONS_DISPLAY": "5,411+",
   "QUESTIONS_PER_COURSE": 30,
-  "DIFFICULTY_TIERS": 3
+  "DIFFICULTY_TIERS": 3,
+  "COURSE_SLUGS": [
+    "active-directory", "aem", "airflow", "ansible", "argocd-gitops", "aws",
+    "azure", "bash", "cicd", "cloud-security", "cybersecurity", "data-viz",
+    "data-warehouse", "databricks", "dbt", "deep-learning", "django", "docker-k8s",
+    "dotnet", "dotnet-csharp", "elasticsearch", "fastapi", "flink", "flutter",
+    "gcp", "generative-ai", "git", "golang", "graphql", "grpc", "java",
+    "javascript", "jira-agile", "kafka", "kubernetes-adv", "langchain", "linux",
+    "llm-apis", "machine-learning", "microservices", "mlops", "mongodb", "mysql",
+    "nestjs", "networking", "nodejs", "opentelemetry", "oracle", "php", "playwright",
+    "postgresql", "powershell", "prometheus-grafana", "python", "rabbitmq", "rails",
+    "react", "react-native", "redis", "rust", "sap", "scala", "spark", "splunk",
+    "spring-boot", "sql", "sre", "svelte", "system-design", "terraform", "testing-qa",
+    "typescript", "vault", "vector-databases", "virtualization", "vue-angular", "zero-trust"
+  ]
 }

@@ -1,0 +1,55 @@
+STOP using same layout with different colors. You must create 12 TRULY DISTINCT template components with different DOM structures.
+
+Find your template folder. For each template below, create a SEPARATE React component with UNIQUE JSX - not just props.
+
+DATA PROP (same for all):
+data = { personalInfo:{name,title,email,phone,location,linkedin}, summary, experience:[{role, company, date, desc}], education, skills[], certifications }
+
+CREATE THESE 12 FILES in src/templates/ :
+
+1. MinimalistBlackWhite.jsx
+- STRUCTURE: div.flex > aside.w-30% bg-gray-100 + main.w-70%. Header full width black bg. Sidebar has Skills + Contact.
+
+2. GrayTimeline.jsx
+- STRUCTURE: Single column. Left border 2px gray with absolute dots. Each job is flex: date w-25% + content w-75%.
+
+3. AtsPure.jsx
+- STRUCTURE: Single column centered. No sidebar, no colors. h1 centered, p centered contact, hr between sections. Font mono or sans.
+
+4. InfographicBars.jsx
+- STRUCTURE: Contact icons in flex row top. Skills rendered as <div class="bar" style="width:90%"> bars. Bold headings with bg-gray-200.
+
+5. ProfessionalSplit.jsx
+- STRUCTURE: Header: name left, contact right (justify-between). Experience row: company left bold, date right.
+
+6. GreenModern.jsx
+- STRUCTURE: header.bg-green-700.h-28.full width. Below: h2 with border-l-4 border-green-700 pl-2. Two columns.
+
+7. PurpleSidebar.jsx
+- STRUCTURE: flex-row-reverse? Actually left sidebar 35% bg-purple-100. Inside sidebar: circle div for photo placeholder, name, contact stacked.
+
+8. OrangeDarkPanel.jsx
+- STRUCTURE: top amber-500 h-32 with huge name. Below grid 65/35: main white + aside bg-zinc-900 text-white for skills.
+
+9. SlateContemporary.jsx
+- STRUCTURE: main 70% left, aside 30% right bg-slate-800. Name huge 3xl top-left. Contact vertical in sidebar with icons.
+
+10. OffWhiteCorporate.jsx
+- STRUCTURE: bg-[#FEFCE8] p-8 border-y-4 border-double border-black. Serif font for name (font-serif). Experience in grid rows with border-b.
+
+11. ExecutiveHugeTitle.jsx
+- STRUCTURE: h1 text-5xl font-black at top. div h-1 bg-black w-full. Below: grid grid-cols-2 for experience | education.
+
+12. BlueLShape.jsx
+- STRUCTURE: relative. Aside absolute left top bottom w-1/3 bg-blue-900. Main ml-1/4 bg-white -mt-8 shadow-xl rounded.
+
+CRITICAL RULES:
+- Do NOT reuse one component. Each file must have different JSX tags/layout.
+- No props for layout, only for data.
+- Use Tailwind. A4 size: w- min-h-
+- Update TemplateGallery.jsx to import all 12 and show mini previews (scale:0.3) so difference is visible at thumbnail size.
+- Make sure PDF export uses the actual JSX, not a screenshot.
+
+Test: If I screenshot all 12 at 200px wide, I should be able to tell them apart without reading text.
+
+Do it now.

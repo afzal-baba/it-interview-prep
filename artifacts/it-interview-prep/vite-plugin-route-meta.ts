@@ -18,7 +18,10 @@
 import type { Plugin } from 'vite';
 import { TOTAL_COURSES, TOTAL_QUESTIONS_DISPLAY } from './src/lib/platform-stats';
 
-const BASE_URL = 'https://techinterviewprep.replit.app';
+const BASE_URL =
+  process.env.VITE_SITE_URL ||
+  process.env.SITE_URL ||
+  'https://techinterviewprep.replit.app';
 
 interface RouteMeta {
   title: string;

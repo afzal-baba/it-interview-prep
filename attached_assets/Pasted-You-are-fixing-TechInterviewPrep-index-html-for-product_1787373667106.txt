@@ -1,0 +1,51 @@
+You are fixing TechInterviewPrep index.html for production deploy to https://mockinterviewprep.app
+
+CURRENT FILE: /index.html (user provided) already has 95% fixes done:
+- Title: "TechInterviewPrep — 5,411+ IT Interview Questions [Free]"
+- Description: "Master technical interviews with 5,411+ hand-crafted questions across 77 technologies..."
+- OG tags with 1200x630 png, alt text, theme-color, author, apple-touch-icon, sitemap link, BreadcrumbList JSON-LD
+- Fonts fixed (preconnect + stylesheet, no media=print hack)
+- Noscript with real nav
+
+TASKS:
+
+1. FIX DUPLICATE REPLIT WIDGET:
+In index.html you have:
+<script defer src="https://replit-cdn.com/replit-feedback-widget.js"></script>
+<script src="https://replit-cdn.com/feedback-widget/widget.global.js" data-deployment-id="108a343d-f24f-46a5-994b-a37a2f603d3e" data-position="bottom-right" data-repl-id="6ff97588-0432-400a-84db-6ad3b9a1ab3e"></script>
+DELETE first line. Keep only second line but ADD defer to it:
+<script defer src="https://replit-cdn.com/feedback-widget/widget.global.js" data-deployment-id="108a343d-f24f-46a5-994b-a37a2f603d3e" data-position="bottom-right" data-repl-id="6ff97588-0432-400a-84db-6ad3b9a1ab3e"></script>
+
+2. CONVERT TO TEMPLATE SYSTEM:
+- Create index.template.html = copy of current index.html but replace:
+  "5,411+" -> {{TOTAL_QUESTIONS}}
+  "77" in "77 technologies" -> {{TOTAL_TECH}}
+  "https://techinterviewprep.replit.app" -> {{SITE_URL}}
+  Keep "5,411+" inside og-image.png filename? No, keep filename same.
+- Keep current index.html as working file for dev, but build will generate from template.
+
+3. UPDATE scripts/generate-route-html.mjs TO USE THIS TEMPLATE:
+- Read template from index.template.html
+- Read source of truth: artifacts/it-interview-prep/platform-stats.json -> totalQuestions (5411) -> format as "5,411+" and totalTechnologies (77)
+- Read SITE_URL from env VITE_SITE_URL or process.env.SITE_URL or fallback https://techinterviewprep.replit.app, but for production use https://mockinterviewprep.app
+- Replace placeholders in template
+- Validate counts match in meta description, og:description, twitter:description, JSON-LD, noscript
+- Generate:
+  dist/index.html (home)
+  dist/about/index.html (title: "About — Features, Badges & All 77 Courses | TechInterviewPrep", add noscript with full 77 tech list)
+  dist/leaderboard/index.html (title: "Global Leaderboard — Top IT Interview Scorers", noscript with static table of top 10 mock leaderboard)
+  dist/race/index.html (title: "Challenge Arena — Real-time Head-to-Head IT Quiz Battles")
+  public/sitemap.xml (urls: /, /about, /leaderboard, /race, /courses/* for all 77 slugs, with {{SITE_URL}})
+  public/llms.txt (include counts, tech list, routes)
+- Copy public/sitemap.xml and public/llms.txt to dist/
+- Ensure public/og-image.png exists 1200x630 <300kb, public/og-image.svg also has matching counts
+- If og-image.png missing, generate it: dark slate-950 with grid, left text TechInterviewPrep + "5,411+ Questions • 77 Technologies • Free", right 6 tech icons with glow + small cyan laptop icon left of title
+- Log: "Injected 5,411+ / 77 into 4 routes, sitemap + llms validated"
+
+4. BUILD CHECK:
+- Ensure no duplicate replit script remains
+- Ensure fonts link is single stylesheet, not double
+- Ensure canonical, og:url, og:image use {{SITE_URL}} not hardcoded replit.app in template
+- Ensure JSON-LD BreadcrumbList present
+
+Deliver: fixed index.html, index.template.html, updated generator script, sitemap.xml, llms.txt, og-image.png verification

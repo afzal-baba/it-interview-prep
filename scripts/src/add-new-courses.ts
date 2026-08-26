@@ -7,7 +7,7 @@
 
 import OpenAI from "openai";
 import { db, coursesTable, questionsTable } from "@workspace/db";
-import { eq, and } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 import pLimit from "p-limit";
 
 const openai = new OpenAI({
@@ -149,8 +149,10 @@ async function main() {
   await Promise.all(jobs);
 
   // Summary
-  const [{ total }] = await db.execute<{ total: string }>({ sql: "SELECT COUNT(*) as total FROM questions", params: [] });
-  const [{ courses }] = await db.execute<{ courses: string }>({ sql: "SELECT COUNT(*) as courses FROM courses", params: [] });
+  const totalResult = await db.execute<{ total: string }>(sql`SELECT COUNT(*) as total FROM questions`);
+  const coursesResult = await db.execute<{ courses: string }>(sql`SELECT COUNT(*) as courses FROM courses`);
+  const [{ total }] = totalResult.rows;
+  const [{ courses }] = coursesResult.rows;
   console.log(`\n🎉 Done! Total courses: ${courses}, Total questions: ${total}\n`);
 }
 

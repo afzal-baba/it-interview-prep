@@ -1,0 +1,101 @@
+Add two connected community features to my technical interview prep site 
+(TechInterviewPrep, 77 tech categories, 5,411+ questions, existing courses/leaderboard/
+challenge arena): (1) Community Questions with AI explanations, and (2) Discussion 
+Forums segregated by technology. Build in phases as separate milestones.
+
+## PHASE 1 — Community Questions (user-submitted interview scenarios)
+
+### 1a. Submission flow
+- Add a "Submit a question" form accessible from a new "Community" nav tab.
+- Fields:
+  - Question/scenario text (required, textarea, 20-2000 chars)
+  - Technology/category (dropdown from existing 77 tech list)
+  - Company name (optional, free text with autocomplete from prior submissions)
+  - Round/stage (optional dropdown: phone screen, technical round, system design, onsite)
+  - Difficulty (optional: easy/medium/hard, self-rated)
+- Require login to submit. Rate limit to max 10 submissions/user/day.
+
+### 1b. AI-generated explanation
+- On submission, send question text + tech tag to an LLM (Anthropic API, server-side 
+  only) to generate: { concept, approach, example_answer } — what the question tests, 
+  how to approach it, and a concise example answer. Practical/coaching tone, not textbook.
+- Cache the explanation once generated. Render as an expandable card. Graceful retry 
+  state if the API call fails.
+
+### 1c. Moderation & trust
+- New submissions default to "pending" status, hidden until approved via a simple 
+  internal admin review queue (approve/reject).
+- Add a "report" button on published questions (inappropriate/duplicate/incorrect) 
+  that returns the item to the review queue.
+- Company-tagged entries show a disclaimer: "User-submitted and unverified — not 
+  officially affiliated with or confirmed by [Company]."
+- Run submitted text through basic profanity/toxicity filtering before it enters the 
+  review queue.
+- Basic duplicate detection (similarity check against existing entries in the same 
+  tech category) before publishing; suggest merge instead of duplicate.
+
+### 1d. Browsing & discovery
+- Browsable "Community Questions" page, filterable by technology/company/difficulty, 
+  sortable by newest/most helpful, with upvote/downvote per question.
+- Link relevant community questions from each technology's existing course page 
+  (e.g. "3 real interview questions from the community" section on the Kafka page).
+- Optional: small profile badge/counter ("Contributed 5 questions") to encourage 
+  participation. Show "Submitted by [username]" or "Anonymous" per user preference.
+
+## PHASE 2 — Discussion forums (segregated by technology)
+
+### 2a. Forum structure
+- Add a "Discussions" nav tab. Each of the 77 existing technologies gets its own forum 
+  section (reuse the same tech taxonomy as courses and community questions, don't create 
+  a separate category system).
+- Within each technology's forum: users can create discussion threads (title + body, 
+  optionally attach code snippets with syntax highlighting) and reply to existing threads.
+- Thread types/tags: "Question / need help", "Discussion", "Interview experience" — 
+  lets users signal intent so others browsing can filter.
+
+### 2b. Resolution mechanics
+- Thread author can mark a specific reply as "Resolved this" / accepted answer, similar 
+  to Stack Overflow. Resolved threads show a visual "Resolved" badge in listings.
+- Upvote/downvote on replies so the most helpful answer surfaces to the top even before 
+  being marked resolved.
+- Optional: let the AI generate a suggested starting answer when a new "need help" 
+  thread is posted (same Anthropic API pattern as Phase 1's explanations), clearly 
+  labeled "AI suggestion" and posted as the first reply — community members can then 
+  refine, correct, or upvote/downvote it like any other reply.
+
+### 2c. Cross-linking with Community Questions and Courses
+- If a Community Question (Phase 1) generates follow-up discussion, allow "Discuss this" 
+  to spin up a linked thread in that technology's forum instead of duplicating content.
+- Surface a "Recent discussions" widget on each technology's course page, same pattern 
+  as the community questions widget.
+
+### 2d. Moderation
+- Reuse the same reporting/moderation queue infrastructure from Phase 1 (don't build a 
+  second parallel system) — reports on threads/replies route to the same admin review page.
+- Rate limit thread/reply creation per user per day to prevent spam.
+- Basic profanity/toxicity filter on thread and reply submission, same as Phase 1.
+
+## General implementation notes
+- All LLM calls server-side only, API key never exposed client-side.
+- Reuse one shared taxonomy (the existing 77 technologies) across Courses, Community 
+  Questions, and Discussions — don't let these drift into separate tag systems.
+- Reuse one shared moderation/reporting system across both features rather than building 
+  it twice.
+- Keep this additive — don't modify existing Courses/Leaderboard/Challenge Arena flows.
+- Follow existing dark theme design tokens for all new UI.
+- Suggested schema additions:
+  - community_questions: id, user_id, question_text, tech_tag, company_name (nullable), 
+    round_stage (nullable), difficulty (nullable), status, ai_explanation (JSON, nullable), 
+    created_at, upvotes, downvotes
+  - forum_threads: id, user_id, tech_tag, title, body, thread_type, status, resolved_reply_id 
+    (nullable), created_at
+  - forum_replies: id, thread_id, user_id, body, is_ai_suggested (bool), upvotes, 
+    downvotes, created_at
+  - reports: id, target_type (question/thread/reply), target_id, reporter_id, reason, 
+    status, created_at
+
+## Stack notes
+Next.js (App Router) with TypeScript, Postgres via Prisma ORM, Tailwind CSS for 
+styling, NextAuth for authentication. Deploy target is Replit's built-in hosting. 
+Use Replit's built-in Postgres database if available, otherwise scaffold with a 
+standard Postgres connection.

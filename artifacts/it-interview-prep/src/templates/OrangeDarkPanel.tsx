@@ -1,0 +1,5 @@
+import type { ResumeData } from "@/lib/resume";
+import { BasicSections } from "./template-utils";
+export default function OrangeDarkPanel({ data }: { data: ResumeData }) {
+  return <div className="resume-template orange-dark-panel"><header><small>{data.contact.role}</small><h1>{data.contact.name || "YOUR NAME"}</h1><p>{data.contact.email} · {data.contact.phone} · {data.contact.location}</p></header><div className="orange-grid"><main><h2>Profile</h2><p>{data.summary}</p><h2>Experience</h2>{data.experience.map((item) => <section key={item.id}><div className="role-line"><b>{item.role}</b><time>{item.dates}</time></div><strong>{item.company}</strong>{item.bullets.map((bullet, i) => <p key={i}>• {bullet}</p>)}</section>)}<BasicSections data={data} /></main><aside><h2>Skills</h2>{data.skills.map((skill) => <div key={skill}>◆ {skill}</div>)}<h2>Education</h2>{data.education.map((item) => <p key={item}>{item}</p>)}</aside></div></div>;
+}

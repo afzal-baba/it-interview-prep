@@ -1,0 +1,67 @@
+Fix Code Lab TypeScript typecheck error for bash task.
+
+CONTEXT:
+- Error: Task labeled as "bash" but ChallengeTask["type"] only allows "sql" | "python" | "javascript" | "architecture"
+- Workaround in code: { type: "bash", prompt: "..." } as { type: "architecture"; prompt: string }
+- This is wrong because prompt is genuinely Bash scripting, showing as Architecture uses wrong editor.
+
+GOAL: Officially support Bash tasks. Small isolated fix, no DB migration, no API changes.
+
+STEPS - FIND FILES FIRST:
+1. Search entire repo for ChallengeTask type:
+   grep -r "ChallengeTask" --include="*.ts" --include="*.tsx"
+   Likely in: src/types/challenge.ts, src/lib/types.ts, types/index.ts, or components/CodeLab/types.ts
+
+2. Search for TYPE_META:
+   grep -r "TYPE_META" --include="*.ts" --include="*.tsx"
+   Likely in: components/CodeLab/config.ts or CodeLab/constants.ts
+
+3. Search for PLACEHOLDER:
+   grep -r "PLACEHOLDER" --include="*.ts" --include="*.tsx"
+
+4. Search for VALID_TYPES:
+   grep -r "VALID_TYPES" --include="*.ts" --include="*.tsx"
+
+5. Search for the bad cast:
+   grep -r 'as { type: "architecture"' --include="*.ts" --include="*.tsx"
+
+FIXES:
+
+A. Update ChallengeTask["type"] union:
+   BEFORE: type ChallengeTask = { type: "sql" | "python" | "javascript" | "architecture"; prompt: string; ... }
+   AFTER: type ChallengeTask = { type: "sql" | "python" | "javascript" | "architecture" | "bash"; prompt: string; ... }
+   If it's separate type: type TaskType = "sql" | "python" | "javascript" | "architecture" -> add | "bash"
+
+B. Add Bash metadata to TYPE_META object:
+   Add entry:
+   bash: {
+     label: "Bash",
+     language: "shell", // Monaco language
+     color: "#89e051" or "#4EAA25" or match your theme (green for shell),
+     icon: Terminal or Shell icon (use lucide-react Terminal icon),
+     bg: "bg-green-500/10" or similar to other types
+   }
+   Check existing entries for pattern: e.g. sql: { label: "SQL", language: "sql", ... } - match same structure
+
+C. Add Bash editor placeholder in PLACEHOLDER:
+   Add:
+   bash: "# Write your bash script here\n# Example:\n#!/bin/bash\necho \"Hello World\"\n"
+   Or whatever matches other placeholders style.
+
+D. Add "bash" to allowed custom challenge types in VALID_TYPES array:
+   BEFORE: const VALID_TYPES = ["sql", "python", "javascript", "architecture"] as const
+   AFTER: const VALID_TYPES = ["sql", "python", "javascript", "architecture", "bash"] as const
+
+E. Remove incorrect cast:
+   Find: { type: "bash", prompt: "..." } as { type: "architecture"; prompt: string }
+   Replace with: { type: "bash", prompt: "..." }  (no cast needed now)
+
+F. VERIFICATION:
+   Run:
+   - npm run typecheck or npx tsc --noEmit
+   - npm run build
+   - Preview Code Lab page and check Bash task shows Terminal icon, shell editor, not Architecture editor
+
+Do not change task from "bash" to "architecture" - keep it as bash. This is intentionally Bash exercise.
+
+Show diff of files changed and confirm tsc passes with 0 errors.

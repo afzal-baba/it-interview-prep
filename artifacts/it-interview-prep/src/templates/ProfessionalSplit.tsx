@@ -1,0 +1,5 @@
+import type { ResumeData } from "@/lib/resume";
+import { BasicSections } from "./template-utils";
+export default function ProfessionalSplit({ data }: { data: ResumeData }) {
+  return <div className="resume-template professional-split"><header><div><h1>{data.contact.name || "Your Name"}</h1><h3>{data.contact.role}</h3></div><address>{data.contact.email}<br />{data.contact.phone}<br />{data.contact.location}<br />{data.contact.website}</address></header><blockquote>{data.summary}</blockquote><h2>Experience</h2>{data.experience.map((item) => <div className="split-job" key={item.id}><div><b>{item.company}</b><div>{item.role}</div></div><time>{item.dates}</time><ul>{item.bullets.map((bullet, i) => <li key={i}>{bullet}</li>)}</ul></div>)}<div className="split-bottom"><section><h2>Skills</h2><p>{data.skills.join(" • ")}</p></section><BasicSections data={data} /></div></div>;
+}

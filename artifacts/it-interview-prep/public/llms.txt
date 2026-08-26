@@ -1,10 +1,87 @@
 # TechInterviewPrep
 
-> Free IT interview practice platform with 2310+ hand-crafted questions across 77 technologies including Oracle, AWS, Java, Python, Linux, Docker, React, Kafka, Vault, and more.
+> TechInterviewPrep: Free IT interview practice with 5,411+ questions across 77 technologies, including Docker, Python, AWS, React, Kafka, Vault, and more.
 
 ## Pages
 
 - /: Home — browse 77 IT courses and start practicing
-- /about: About TechInterviewPrep — features, badge system, and course list
-- /leaderboard: Global leaderboard of top scorers by course and difficulty
-- /race: Real-time challenge mode — race head-to-head against another player
+- /about: Features, badges, and all 77 courses
+- /leaderboard: Global leaderboard of top scorers
+- /race: Real-time head-to-head challenge arena
+- /courses/active-directory: Active Directory interview questions
+- /courses/aem: Aem interview questions
+- /courses/airflow: Airflow interview questions
+- /courses/ansible: Ansible interview questions
+- /courses/argocd-gitops: Argo CD & GitOps interview questions
+- /courses/aws: Aws interview questions
+- /courses/azure: Azure interview questions
+- /courses/bash: Bash interview questions
+- /courses/cicd: CI/CD interview questions
+- /courses/cloud-security: Cloud Security interview questions
+- /courses/cybersecurity: Cybersecurity interview questions
+- /courses/data-viz: Data Visualization interview questions
+- /courses/data-warehouse: Data Warehouse interview questions
+- /courses/databricks: Databricks interview questions
+- /courses/dbt: dbt interview questions
+- /courses/deep-learning: Deep Learning interview questions
+- /courses/django: Django interview questions
+- /courses/docker-k8s: Docker & Kubernetes interview questions
+- /courses/dotnet: Dotnet interview questions
+- /courses/dotnet-csharp: .NET & C# interview questions
+- /courses/elasticsearch: Elasticsearch interview questions
+- /courses/fastapi: Fastapi interview questions
+- /courses/flink: Flink interview questions
+- /courses/flutter: Flutter interview questions
+- /courses/gcp: Google Cloud interview questions
+- /courses/generative-ai: Generative Ai interview questions
+- /courses/git: Git interview questions
+- /courses/golang: Golang interview questions
+- /courses/graphql: Graphql interview questions
+- /courses/grpc: Grpc interview questions
+- /courses/java: Java interview questions
+- /courses/javascript: Javascript interview questions
+- /courses/jira-agile: Jira Agile interview questions
+- /courses/kafka: Kafka interview questions
+- /courses/kubernetes-adv: Kubernetes interview questions
+- /courses/langchain: Langchain interview questions
+- /courses/linux: Linux interview questions
+- /courses/llm-apis: LLM APIs interview questions
+- /courses/machine-learning: Machine Learning interview questions
+- /courses/microservices: Microservices interview questions
+- /courses/mlops: MLOps interview questions
+- /courses/mongodb: Mongodb interview questions
+- /courses/mysql: Mysql interview questions
+- /courses/nestjs: NestJS interview questions
+- /courses/networking: Networking interview questions
+- /courses/nodejs: Node.js interview questions
+- /courses/opentelemetry: OpenTelemetry interview questions
+- /courses/oracle: Oracle interview questions
+- /courses/php: Php interview questions
+- /courses/playwright: Playwright interview questions
+- /courses/postgresql: PostgreSQL interview questions
+- /courses/powershell: Powershell interview questions
+- /courses/prometheus-grafana: Prometheus & Grafana interview questions
+- /courses/python: Python interview questions
+- /courses/rabbitmq: Rabbitmq interview questions
+- /courses/rails: Rails interview questions
+- /courses/react: React interview questions
+- /courses/react-native: React Native interview questions
+- /courses/redis: Redis interview questions
+- /courses/rust: Rust interview questions
+- /courses/sap: Sap interview questions
+- /courses/scala: Scala interview questions
+- /courses/spark: Spark interview questions
+- /courses/splunk: Splunk interview questions
+- /courses/spring-boot: Spring Boot interview questions
+- /courses/sql: Sql interview questions
+- /courses/sre: Sre interview questions
+- /courses/svelte: Svelte interview questions
+- /courses/system-design: System Design interview questions
+- /courses/terraform: Terraform interview questions
+- /courses/testing-qa: Testing & QA interview questions
+- /courses/typescript: Typescript interview questions
+- /courses/vault: Vault interview questions
+- /courses/vector-databases: Vector Databases interview questions
+- /courses/virtualization: Virtualization interview questions
+- /courses/vue-angular: Vue & Angular interview questions
+- /courses/zero-trust: Zero Trust interview questions

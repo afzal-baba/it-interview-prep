@@ -1,0 +1,65 @@
+You are my senior frontend / SEO engineer. Your task is to fix and upgrade TechInterviewPrep based on the audit below.
+
+CURRENT STATE:
+- File: index.html in root is the template. It has hardcoded counts "5,411+ questions" and "77 technologies" duplicated in meta description, og:description, twitter:description, JSON-LD, and noscript copy. Comment says source of truth is artifacts/it-interview-prep/platform-stats.json
+- Canonical and og:url hardcode https://techinterviewprep.replit.app/ but we will deploy to custom domain via env var VITE_SITE_URL (default to that replit URL if not set). Final domain will be https://mockinterviewprep.app
+- og:image points to /og-image.png but only og-image.svg exists in public/. We need og-image.png 1200x630.
+- All routes are CSR: #root is empty, so /leaderboard, /race, /about are not crawlable. We have scripts/generate-route-html.mjs but it doesn't inject meta tags or generate static shells.
+- Fonts loading uses media="print" onload hack, replit feedback widget is render-blocking.
+- Hidden <nav aria-hidden="true" style="clip..."> hack should be removed.
+
+SOURCE OF TRUTH FILE:
+Read artifacts/it-interview-prep/platform-stats.json - it contains totalQuestions (e.g. 5411) and totalTechnologies (e.g. 77). Format it as "5,411+" and "77" everywhere.
+
+TASKS TO DO:
+
+1. FIX index.html -> Convert to template:
+- Title should be: TechInterviewPrep — {{TOTAL_QUESTIONS}} IT Interview Questions [Free] -> will be replaced with e.g. 5,411+
+- Description: Master technical interviews with {{TOTAL_QUESTIONS}} hand-crafted questions across {{TOTAL_TECH}} technologies. Choose Docker, Python, AWS, React, Kafka, and more — with timed mode and a real-time challenge arena.
+- Canonical and og:url use {{SITE_URL}} from env VITE_SITE_URL or fallback to https://techinterviewprep.replit.app
+- Add missing tags:
+  <meta name="author" content="TechInterviewPrep">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image:alt" content="TechInterviewPrep interface with tech stack icons">
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+- Fix fonts: Remove the preload as style + media=print hack. Just keep:
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap">
+- Fix replit widget: Add <link rel="preconnect" href="https://replit-cdn.com"> and add defer to the widget script tag.
+- Remove the aria-hidden clipped nav. Instead put a real semantic footer nav inside the <noscript> block visible to crawlers.
+- Enhance JSON-LD: Keep WebSite, Organization, SoftwareApplication, and ADD BreadcrumbList.
+- Ensure og-image.png exists at 1200x630 <300kb. Create a dark slate-950 OG image with grid, text left: "TechInterviewPrep" large white bold, subtext "5,411+ Questions • 77 Technologies • Free" in slate blue, right side 6 tech icons (Docker whale blue, Python blue+yellow, AWS white+orange smile, React cyan atom, Kubernetes blue hexagon, TypeScript blue square) each with subtle matching color glow/halo. Save as public/og-image.png and public/og-image.jpg fallback. Also update public/og-image.svg text to match the same counts.
+- Keep the build hashed JS/CSS script tags as Vite will inject them.
+
+2. REWRITE scripts/generate-route-html.mjs:
+- It should be ESM Node script.
+- Read JSON from artifacts/it-interview-prep/platform-stats.json
+- Read env VITE_SITE_URL or process.env.SITE_URL or default https://techinterviewprep.replit.app
+- Read index.html template (the file from root) and replace {{TOTAL_QUESTIONS}} with formatted number + plus (e.g. 5,411+), {{TOTAL_TECH}} with 77, {{SITE_URL}} with siteUrl.
+- Also validate that public/og-image.svg and public/llms.txt contain the same counts — if not, throw error.
+- Generate dist/ folder files:
+  dist/index.html = injected template
+  dist/about/index.html = same template but title "About — Features, Badges & All 77 Courses | TechInterviewPrep" and noscript with course list
+  dist/leaderboard/index.html = title "Global Leaderboard — Top IT Interview Scorers | TechInterviewPrep" and in <noscript> render a static <table> with top 10 mock leaderboard rows (rank, user, tech, score, badge) for SEO, plus filter description.
+  dist/race/index.html = title "Challenge Arena — Real-time Head-to-Head IT Quiz Battles"
+- Also generate public/sitemap.xml:
+  <urlset> with /, /about, /leaderboard, /race, and /courses/[tech-slug] for all 77 techs from platform-stats.json (if json has list, else hardcode common 77: docker, python, aws, react, kafka, kubernetes, typescript, javascript, sql, etc.). Each with <loc>{{SITE_URL}}/path</loc> <priority>.
+- Generate public/llms.txt with summary: "TechInterviewPrep: Free IT interview practice with {{TOTAL_QUESTIONS}} questions across {{TOTAL_TECH}} technologies..." and list of routes.
+- Log success: "Injected {{TOTAL_QUESTIONS}} / {{TOTAL_TECH}} into 4 routes, sitemap.xml + llms.txt + og-image validated"
+
+3. SITEMAP + LLMS:
+- Ensure public/sitemap.xml and public/llms.txt are also copied to dist/ on build.
+- Add route to vite.config.ts if needed to copy public.
+
+4. BUILD VALIDATION:
+- After generation, check that meta description, og:description, twitter:description, JSON-LD description, noscript copy all contain the same counts as JSON. If mismatch, fail build.
+
+Output after done:
+- Show me the diff of index.html before/after
+- List generated files in dist/
+- Confirm og-image.png exists and is 1200x630
+
+Do it now.
+```

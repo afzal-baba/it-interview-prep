@@ -1,0 +1,17 @@
+{
+  "name": "TechInterviewPrep",
+  "short_name": "TechInterviewPrep",
+  "description": "IT interview questions and a free ATS resume builder",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#05070f",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

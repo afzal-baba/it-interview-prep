@@ -14,13 +14,14 @@ import OpenAI from "openai";
 import { db, questionsTable } from "@workspace/db";
 import { eq, sql } from "drizzle-orm";
 import pLimit from "p-limit";
+import { access, writeFile } from "node:fs/promises";
 
 const openai = new OpenAI({
   baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
   apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
 });
 
-const MIN_CORRECT_ADVANTAGE = 25; // only rewrite when correct is >25 chars longer than the best wrong answer
+const MIN_CORRECT_ADVANTAGE = 20; // align with the audit's obvious length-bias threshold
 const BATCH_SIZE = 8;            // questions per GPT call
 const CONCURRENCY = 6;           // parallel GPT calls
 const DELAY_MS = 200;            // ms between batches to avoid rate limits
@@ -47,11 +48,25 @@ function correctAnswer(row: QuestionRow): string {
   return row.options[row.correctOptionIndex];
 }
 
+function isValidQuestionRow(row: QuestionRow): boolean {
+  return (
+    Array.isArray(row.options) &&
+    row.options.length === 4 &&
+    row.options.every((option): option is string => typeof option === "string" && option.trim().length > 0) &&
+    Number.isInteger(row.correctOptionIndex) &&
+    row.correctOptionIndex >= 0 &&
+    row.correctOptionIndex < row.options.length
+  );
+}
+
 function needsRewrite(row: QuestionRow): boolean {
-  const cl = correctAnswer(row).length;
-  const wrongs = getWrongOptions(row);
-  const maxWrong = Math.max(...wrongs.map((w) => w.length));
-  return cl - maxWrong > MIN_CORRECT_ADVANTAGE;
+  const lengths = row.options.map((option) => option.length);
+  const max = Math.max(...lengths);
+  const min = Math.min(...lengths);
+  const correctLength = correctAnswer(row).length;
+  const correctIsLongest = correctLength === max;
+  const ratio = min === 0 ? Number.POSITIVE_INFINITY : max / min;
+  return correctIsLongest && (correctLength - Math.max(...getWrongOptions(row).map((wrong) => wrong.length)) > MIN_CORRECT_ADVANTAGE || max - min > 20 || ratio > 1.5);
 }
 
 async function rewriteBatch(batch: QuestionRow[]): Promise<RewriteResult[]> {
@@ -63,7 +78,7 @@ async function rewriteBatch(batch: QuestionRow[]): Promise<RewriteResult[]> {
   }));
 
   const prompt = `You are improving a technical quiz. For each question below, the correct answer is significantly longer and more detailed than the wrong answers, making it easy to guess without reading. Rewrite the 3 wrong answers so they:
-- Are similar in length and detail to the correct answer (within ~20% of its character count)
+- Are similar in length and detail to the correct answer (within ~20% of its character count where possible)
 - Sound plausible and specific — not obviously silly
 - Remain clearly incorrect for someone who knows the topic
 - Preserve the same general "format" (if correct starts with a phrase like "A method that...", wrong answers should too)
@@ -88,8 +103,15 @@ ${JSON.stringify(payload, null, 2)}`;
 }
 
 async function applyRewrite(row: QuestionRow, rewrite: RewriteResult): Promise<void> {
+  const rewritten = [rewrite.wrong1, rewrite.wrong2, rewrite.wrong3];
+  if (
+    rewritten.some((option) => typeof option !== "string" || option.trim().length === 0) ||
+    new Set(rewritten).size !== rewritten.length
+  ) {
+    throw new Error(`Invalid or duplicate distractor output for question ${row.id}`);
+  }
+
   const newOptions = [...row.options];
-  const wrongs = getWrongOptions(row);
   const wrongIndices = row.options
     .map((_, i) => i)
     .filter((i) => i !== row.correctOptionIndex);
@@ -99,17 +121,40 @@ async function applyRewrite(row: QuestionRow, rewrite: RewriteResult): Promise<v
   newOptions[wrongIndices[1]] = rewrite.wrong2;
   newOptions[wrongIndices[2]] = rewrite.wrong3;
 
+  const candidate = newOptions.map((option, index) =>
+    index === row.correctOptionIndex ? option : rewritten[wrongIndices.indexOf(index)],
+  );
+  const correctLength = candidate[row.correctOptionIndex].length;
+  const maxWrong = Math.max(...candidate.filter((_, index) => index !== row.correctOptionIndex).map((option) => option.length));
+  if (correctLength - maxWrong > MIN_CORRECT_ADVANTAGE) {
+    throw new Error(`Rewrite did not remove length bias for question ${row.id}`);
+  }
+
   await db
     .update(questionsTable)
-    .set({ options: newOptions })
+    .set({ options: candidate })
     .where(eq(questionsTable.id, row.id));
 }
 
 async function main() {
   console.log("Loading questions from DB…");
-  const allQuestions = await db.select().from(questionsTable);
-  const affected = allQuestions.filter(needsRewrite) as QuestionRow[];
-  console.log(`Found ${affected.length} / ${allQuestions.length} questions that need rewriting`);
+  const allQuestions = (await db.select().from(questionsTable)) as unknown as QuestionRow[];
+  const validQuestions = allQuestions.filter(isValidQuestionRow);
+
+  const backupPath = process.env.QUESTION_BACKUP_PATH ?? "questions.backup.json";
+  try {
+    await access(backupPath);
+    console.log(`Backup already exists at ${backupPath}; leaving it unchanged.`);
+  } catch {
+    await writeFile(backupPath, `${JSON.stringify(allQuestions, null, 2)}\n`, "utf8");
+    console.log(`Saved original question bank to ${backupPath}.`);
+  }
+
+  const affected = validQuestions.filter(needsRewrite);
+  console.log(
+    `Found ${affected.length} / ${validQuestions.length} valid questions that need rewriting ` +
+      `(${allQuestions.length - validQuestions.length} invalid rows skipped)`,
+  );
 
   if (affected.length === 0) {
     console.log("Nothing to do.");

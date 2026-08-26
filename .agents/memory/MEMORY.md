@@ -2,3 +2,5 @@
 - [Quiz answer balance fix](quiz-answer-balance.md) — correct answers were 5× longer than wrong ones; fixed via server shuffle + AI batch rewrite (script in scripts/src/rewrite-wrong-answers.ts).
 - [Seed script & category grouping lessons](seed-and-category-lessons.md) — null bytes in TS strings, api-server must be rebuilt after schema changes, api-client-react Course type is manually maintained.
 - [Replit Auth setup quirks](replit-auth-setup.md) — auth store is `auth_sessions` (name clash with quiz `sessions`); no `format: uri/email` in spec (zod v3); api-zod manually exports AuthUser.
+- [Question bank rotation](question-bank-rotation.md) — imported pools stay larger than the fixed 10-question quiz; exclude the previous five browser rotations when selecting new questions.
+- [Protected admin caching](protected-admin-caching.md) — admin JSON endpoints must disable HTTP/browser caching or authenticated fetches can receive empty 304 responses.

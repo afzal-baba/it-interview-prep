@@ -13,6 +13,8 @@ import {
 
 import { QuizProvider } from '@/lib/quiz-context';
 import { Navbar } from '@/components/layout/navbar';
+import { GuideBot } from '@/components/guide-bot';
+import { RaceSocketProvider } from '@/lib/race-socket';
 
 import Home from '@/pages/home';
 import Quiz from '@/pages/quiz';
@@ -21,6 +23,10 @@ import Leaderboard from '@/pages/leaderboard';
 import Race from '@/pages/race';
 import About from '@/pages/about';
 import CodingChallenge from '@/pages/coding-challenge';
+import Resume from '@/pages/resume';
+import ResumeTemplates from '@/pages/resume-templates';
+import Community from '@/pages/community';
+import AdminCommunity from '@/pages/admin-community';
 
 const queryClient = new QueryClient();
 
@@ -37,6 +43,11 @@ function Router() {
             <Route path="/leaderboard" component={Leaderboard} />
             <Route path="/race" component={Race} />
             <Route path="/lab" component={CodingChallenge} />
+            <Route path="/resume" component={Resume} />
+            <Route path="/resume-builder" component={Resume} />
+            <Route path="/resume-templates" component={ResumeTemplates} />
+            <Route path="/community" component={Community} />
+            <Route path="/admin/community" component={AdminCommunity} />
             <Route path="/about" component={About} />
             <Route component={NotFound} />
           </Switch>
@@ -56,10 +67,13 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <QuizProvider>
         <TooltipProvider>
-          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
-            <Router />
-          </WouterRouter>
+          <RaceSocketProvider>
+            <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+              <Router />
+            </WouterRouter>
+          </RaceSocketProvider>
           <Toaster />
+          <GuideBot />
         </TooltipProvider>
       </QuizProvider>
     </QueryClientProvider>

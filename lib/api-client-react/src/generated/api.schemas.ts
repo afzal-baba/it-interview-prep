@@ -186,16 +186,12 @@ export interface LeaderboardEntry {
   timedMode?: boolean;
   /** Time bonus points earned */
   timeBonus?: number;
-  /** Player gender for King/Queen badge */
-  gender?: 'M' | 'F' | null;
 }
 
 export interface LeaderboardEntryInput {
   /** The session ID whose server-computed result should be recorded */
   sessionId: number;
   playerName: string;
-  /** Player gender for King/Queen badge (M or F) */
-  gender?: 'M' | 'F';
 }
 
 export interface CodelabProgress {
@@ -255,7 +251,14 @@ export type AuthorizationSessionHeaderParameter = string;
 
 export type ListQuestionsParams = {
 level: ListQuestionsLevel;
+/**
+ * @maximum 10
+ */
 limit?: number;
+/**
+ * Comma-separated question IDs used in the previous five quiz rotations.
+ */
+excludeIds?: string;
 };
 
 export type ListQuestionsLevel = typeof ListQuestionsLevel[keyof typeof ListQuestionsLevel];

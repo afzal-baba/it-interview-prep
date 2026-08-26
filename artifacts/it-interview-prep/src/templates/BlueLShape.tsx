@@ -1,0 +1,5 @@
+import type { ResumeData } from "@/lib/resume";
+import { BasicSections } from "./template-utils";
+export default function BlueLShape({ data }: { data: ResumeData }) {
+  return <div className="resume-template blue-l-shape"><aside><div className="blue-block" /></aside><div className="blue-card"><header><h1>{data.contact.name || "Your Name"}</h1><h3>{data.contact.role}</h3><p>{data.contact.email}<br />{data.contact.phone}<br />{data.contact.location}</p></header><section><h2>Summary</h2><p>{data.summary}</p></section><section><h2>Experience</h2>{data.experience.map((item) => <div className="blue-job" key={item.id}><time>{item.dates}</time><h3>{item.role}</h3><b>{item.company}</b>{item.bullets.map((bullet, i) => <p key={i}>{bullet}</p>)}</div>)}</section><section><h2>Skills</h2><div className="blue-skills">{data.skills.map((skill) => <span key={skill}>{skill}</span>)}</div></section><BasicSections data={data} /></div></div>;
+}

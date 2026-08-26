@@ -43,10 +43,14 @@ export const ListQuestionsParams = zod.object({
 })
 
 export const listQuestionsQueryLimitDefault = 10;
+export const listQuestionsQueryLimitMax = 10;
+
+
 
 export const ListQuestionsQueryParams = zod.object({
   "level": zod.enum(['beginner', 'intermediate', 'advanced']),
-  "limit": zod.coerce.number().int().default(listQuestionsQueryLimitDefault)
+  "limit": zod.coerce.number().int().max(listQuestionsQueryLimitMax).default(listQuestionsQueryLimitDefault),
+  "excludeIds": zod.coerce.string().optional().describe('Comma-separated question IDs used in the previous five quiz rotations.')
 })
 
 export const listQuestionsResponseOptionsMin = 4;
@@ -147,8 +151,7 @@ export const ListLeaderboardResponseItem = zod.object({
   "badges": zod.array(zod.string()),
   "createdAt": zod.coerce.date(),
   "timedMode": zod.boolean().optional().describe('Whether this score was achieved in timed mode'),
-  "timeBonus": zod.number().int().optional().describe('Time bonus points earned'),
-  "gender": zod.enum(["M", "F"]).nullish().describe('Player gender for King/Queen badge')
+  "timeBonus": zod.number().int().optional().describe('Time bonus points earned')
 })
 export const ListLeaderboardResponse = zod.array(ListLeaderboardResponseItem)
 
@@ -158,8 +161,7 @@ export const ListLeaderboardResponse = zod.array(ListLeaderboardResponseItem)
  */
 export const CreateLeaderboardEntryBody = zod.object({
   "sessionId": zod.number().int().describe('The session ID whose server-computed result should be recorded'),
-  "playerName": zod.string(),
-  "gender": zod.enum(["M", "F"]).optional().describe('Player gender for King/Queen badge (M or F)')
+  "playerName": zod.string()
 })
 
 export const CreateLeaderboardEntryResponse = zod.object({
@@ -175,8 +177,7 @@ export const CreateLeaderboardEntryResponse = zod.object({
   "badges": zod.array(zod.string()),
   "createdAt": zod.coerce.date(),
   "timedMode": zod.boolean().optional().describe('Whether this score was achieved in timed mode'),
-  "timeBonus": zod.number().int().optional().describe('Time bonus points earned'),
-  "gender": zod.enum(["M", "F"]).nullish().describe('Player gender for King/Queen badge')
+  "timeBonus": zod.number().int().optional().describe('Time bonus points earned')
 })
 
 

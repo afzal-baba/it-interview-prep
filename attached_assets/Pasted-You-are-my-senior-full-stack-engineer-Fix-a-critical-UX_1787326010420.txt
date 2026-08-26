@@ -1,0 +1,74 @@
+You are my senior full-stack engineer. Fix a critical UX bug in TechInterviewPrep: users are guessing correct answers by length, and questions are not shuffling.
+
+CONTEXT FROM SCREENSHOTS:
+- Screenshot 1: Q "What does git init do?" -> Correct A = "Initialises a new Git repository in the current directory" (42 chars, 2 lines) vs B/C/D = 19-22 chars (1 line). Green box is visually bigger.
+- Screenshot 2: Q "What does git add. do?" -> Correct C = "Stages all changes in the current directory and subdirectories for the next commit" (68 chars, 2 lines) vs others = 16-19 chars.
+- Pattern: Correct answer is always the longest paragraph. Users click longest without reading.
+- Second bug: Each course has ~30 questions per level (beginner/medium/advanced) but they appear in same order every time. No randomization from DB.
+
+TASK 1: AUDIT ENTIRE DATABASE (all 77 technologies)
+Create scripts/audit-questions.mjs that:
+1. Reads all questions from artifacts/it-interview-prep/platform-stats.json OR from database (check both: if Supabase/Mongo exists, use that, else JSON file at /artifacts or /data/questions.json)
+2. For each question, calculate option lengths
+3. Flag if: correctAnswer.length == Math.max(lengths) AND max/min > 1.5 OR max-min > 25 chars
+4. Output report: "Found X / 5411 questions with length bias" grouped by tech (docker, python, git, etc)
+5. Save to audit-length-bias.json
+
+TASK 2: AUTO-FIX OPTION LENGTHS FOR ALL COURSES
+Create scripts/balance-options.mjs that uses an LLM-friendly rewrite rule OR template expansion:
+Rules for rewriting:
+- All 4 options must be within 15% length (max 10 char diff)
+- All options must be 25-60 chars, single line, no wrapping to 2 lines unless all wrap
+- No "All of the above", no "None of the above"
+- Distractors must be plausible and same structure as correct (e.g. if correct starts with verb "Initialises...", all start with verb)
+- Example rewrite:
+  BEFORE:
+    A (correct): "Initialises a new Git repository in the current directory" (42)
+    B: "Downloads a repository" (22)
+  AFTER:
+    A (correct): "Initialises a new local Git repository"
+    B: "Downloads a remote repository locally"
+    C: "Commits all staged changes to history"
+    D: "Creates a new remote tracking branch"
+
+- Process ALL 77 techs, ALL levels. Keep meaning identical, only balance length.
+- Use AI or rule-based: If correct is long, trim filler words ("in the current directory and subdirectories for the next commit" -> "for the next commit"). If distractors short, expand with plausible adjective ("Downloads a repository" -> "Downloads a remote repository locally").
+- Save fixed version back to DB/JSON and keep backup as questions.backup.json
+
+TASK 3: FIX SHUFFLING - 2 LEVELS
+Backend:
+- Find where questions are fetched: likely /api/questions or lib/db.ts or server/routes.
+- Replace `find({tech, level}).limit(30)` with random sample:
+  Mongo: aggregate([{ $match: {tech, level}}, {$sample: {size: 10}}])
+  Postgres/Supabase:.select().eq('tech',tech).eq('level',level).order('random()').limit(10) OR SQL: ORDER BY RANDOM()
+- Add seed param: `seed = userId + day` so same user doesn't get same set on refresh abuse, but different users get different orders.
+
+Frontend:
+- In components/QuestionCard.tsx or where options render:
+  Implement Fisher-Yates shuffle on options every time question loads:
+  function shuffleOptions(q) {
+    const arr = [...q.options];
+    for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]] }
+    return {...q, options: arr, correctIndex: arr.indexOf(q.correctAnswer)}
+  }
+- Ensure correct answer position distribution is uniform (A 25%, B 25%, C 25%, D 25%). Log distribution.
+
+TASK 4: FIX UI TO PREVENT VISUAL CLUE
+In CSS (globals.css or QuestionCard.module.css):
+-.option-card { min-height: 80px; height: 80px; display:flex; align-items:center; text-wrap: balance; overflow:hidden }
+- All 4 cards must be equal height grid, 2x2 on desktop, 1x4 on mobile
+- Remove auto-height that makes longer answer bigger box
+
+TASK 5: ADD VALIDATION IN CI
+- In scripts/generate-route-html.mjs or new pre-commit hook, add check:
+  if (maxLen - minLen > 20) throw Error(`Unbalanced options in ${q.id}`)
+- Fail build if bias detected.
+
+DELIVERABLES:
+- Run audit and show report table: tech | total Qs | biased Qs | % biased
+- Show 10 before/after examples from different techs (git, docker, python, aws)
+- Confirm shuffle works: Show 3 consecutive fetches for same tech/level return different orders
+- Confirm UI: All option cards same height in screenshot
+- Save fixed files and commit
+
+Do it now for ALL courses, not just git.

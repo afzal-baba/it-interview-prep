@@ -1,0 +1,5 @@
+import type { ResumeData } from "@/lib/resume";
+import { BasicSections, Contact } from "./template-utils";
+export default function InfographicBars({ data }: { data: ResumeData }) {
+  return <div className="resume-template infographic-bars"><div className="icon-contact"><span>✉ {data.contact.email}</span><span>☎ {data.contact.phone}</span><span>⌖ {data.contact.location}</span></div><h1>{data.contact.name || "Your Name"}</h1><h3>{data.contact.role}</h3><h2>About</h2><p>{data.summary}</p><h2>Skills</h2><div className="skill-bars">{data.skills.map((skill, i) => <div key={skill}><label>{skill}</label><div className="bar"><i style={{ width: `${90 - i * 5}%` }} /></div></div>)}</div><h2>Experience</h2>{data.experience.map((item) => <div className="infographic-job" key={item.id}><b>{item.role}</b><Contact data={data} /> <strong>{item.company}</strong>{item.bullets.map((bullet, i) => <p key={i}>• {bullet}</p>)}</div>)}<BasicSections data={data} /></div>;
+}

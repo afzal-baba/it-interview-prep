@@ -3,58 +3,61 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TechInterviewPrep — Ace Your Next Technical Interview</title>
-    <!-- PLATFORM STATS SOURCE OF TRUTH: artifacts/it-interview-prep/platform-stats.json
-         That JSON file drives all TypeScript code (via src/lib/platform-stats.ts) and the
-         post-build script (scripts/generate-route-html.mjs).  When you update the JSON,
-         also update the counts in this file (meta description, JSON-LD, and noscript copy)
-         and in public/og-image.svg and public/llms.txt.  The build script validates them. -->
-    <meta name="description" content="Master technical interviews with 2310+ hand-crafted questions across 77 technologies. Choose Docker, Python, AWS, React, Kafka, and more — with timed mode and real-time challenge." />
+    <title>TechInterviewPrep — 5,411+ IT Interview Questions + Free Resume Builder</title>
+    <!-- Counts and absolute URLs are injected from platform-stats.json by the post-build generator. -->
+    <meta name="description" content="Master 5,411+ IT interview questions and use 12 free ATS resume templates for Docker, Python, AWS, React, Kafka, and more." />
+    <meta name="keywords" content="IT interview questions, free resume builder, ATS resume templates" />
+    <meta name="author" content="TechInterviewPrep" />
+    <meta name="theme-color" content="#0f172a" />
     <meta name="robots" content="index, follow" />
-    <meta property="og:title" content="TechInterviewPrep — Ace Your Next Technical Interview" />
-    <meta property="og:description" content="Master technical interviews with 2310+ hand-crafted questions across 77 technologies. Timed mode, leaderboard, and real-time challenge arena." />
+    <meta property="og:title" content="TechInterviewPrep — 5,411+ IT Interview Questions + Free Resume Builder" />
+    <meta property="og:description" content="Practice 5,411+ IT interview questions and build your resume with 12 free ATS templates for Docker, Python, AWS, React, and Kafka." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://techinterviewprep.replit.app/" />
+    <meta property="og:url" content="https://mockinterviewprep.app/" />
     <meta property="og:site_name" content="TechInterviewPrep" />
-    <meta property="og:image" content="https://techinterviewprep.replit.app/og-image.png" />
+    <meta property="og:image" content="https://mockinterviewprep.app/og-image.png" />
+    <meta property="og:image:alt" content="TechInterviewPrep interface with tech stack icons" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:locale" content="en_US" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="TechInterviewPrep — Ace Your Next Technical Interview" />
-    <meta name="twitter:description" content="Master technical interviews with 2310+ hand-crafted questions across 77 technologies. Timed mode, leaderboard, and real-time challenge arena." />
-    <meta name="twitter:image" content="https://techinterviewprep.replit.app/og-image.png" />
+    <meta name="twitter:title" content="TechInterviewPrep — 5,411+ IT Interview Questions + Free Resume Builder" />
+    <meta name="twitter:description" content="Practice 5,411+ IT interview questions and build your resume with 12 free ATS templates for Docker, Python, AWS, React, and Kafka." />
+    <meta name="twitter:image" content="https://mockinterviewprep.app/og-image.png" />
     <meta name="twitter:site" content="@TechInterviewPrep" />
-    <link rel="canonical" href="https://techinterviewprep.replit.app/" />
+    <link rel="canonical" href="https://mockinterviewprep.app/" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <link rel="manifest" href="/manifest.json" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@graph": [
         {
           "@type": "WebSite",
-          "@id": "https://techinterviewprep.replit.app/#website",
-          "url": "https://techinterviewprep.replit.app/",
+          "@id": "https://mockinterviewprep.app/#website",
+          "url": "https://mockinterviewprep.app/",
           "name": "TechInterviewPrep",
-          "description": "Free IT interview practice platform with 2310+ hand-crafted questions across 77 technologies. Timed mode, real-time challenge arena, and badge system."
+          "description": "Free IT interview practice platform with 5,411+ hand-crafted questions across 77 technologies. Timed mode, real-time challenge arena, and badge system."
         },
         {
           "@type": "Organization",
-          "@id": "https://techinterviewprep.replit.app/#organization",
+          "@id": "https://mockinterviewprep.app/#organization",
           "name": "TechInterviewPrep",
-          "url": "https://techinterviewprep.replit.app/",
+          "url": "https://mockinterviewprep.app/",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://techinterviewprep.replit.app/favicon.svg"
+          "url": "https://mockinterviewprep.app/favicon.svg"
           },
           "sameAs": []
         },
         {
           "@type": "SoftwareApplication",
-          "@id": "https://techinterviewprep.replit.app/#softwareapp",
+          "@id": "https://mockinterviewprep.app/#softwareapp",
           "name": "TechInterviewPrep",
-          "url": "https://techinterviewprep.replit.app/",
+          "url": "https://mockinterviewprep.app/",
           "applicationCategory": "EducationalApplication",
           "operatingSystem": "Web",
           "offers": {
@@ -62,47 +65,83 @@
             "price": "0",
             "priceCurrency": "USD"
           },
-          "description": "Free IT interview practice platform with 2310+ hand-crafted questions across 77 technologies including Docker, Python, AWS, React, Kafka, Vault, and more. Features timed mode, real-time head-to-head challenge arena, and a badge system.",
+          "description": "Free IT interview practice platform with 5,411+ hand-crafted questions across 77 technologies including Docker, Python, AWS, React, Kafka, Vault, and more. Features timed mode, real-time head-to-head challenge arena, and a badge system.",
+          "featureList": ["5,411+ questions", "77 techs", "12 ATS resume templates", "Timed mode", "Challenge arena", "Resume builder"],
           "publisher": {
-            "@id": "https://techinterviewprep.replit.app/#organization"
+            "@id": "https://mockinterviewprep.app/#organization"
           }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://mockinterviewprep.app/#breadcrumbs",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+                "item": "https://mockinterviewprep.app/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "IT Interview Practice",
+                "item": "https://mockinterviewprep.app/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Resume Builder",
+                "item": "https://mockinterviewprep.app/resume-builder"
+              },
+              {
+                "@type": "ListItem",
+                "position": 4,
+                "name": "Resume Templates",
+                "item": "https://mockinterviewprep.app/resume-templates"
+            }
+          ]
         }
       ]
     }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'" />
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" /></noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" />
   </head>
   <body>
     <div id="root"></div>
     <!-- Static content for crawlers that do not execute JavaScript.
-         Visually hidden via absolute positioning so it does not affect layout.
-         React hydration overwrites #root, leaving this content for bots. -->
+         React replaces #root for JavaScript clients. -->
     <noscript>
       <div style="max-width:800px;margin:0 auto;padding:2rem;font-family:sans-serif;color:#111">
         <h1>TechInterviewPrep — Free IT Interview Practice</h1>
-        <p>Master technical interviews with 2310+ hand-crafted questions across 77 technologies.
+          <p>Master technical interviews with 5,411+ hand-crafted questions across 77 technologies.
            Choose Docker, Python, AWS, TypeScript, Kubernetes, SQL, and more.
            Timed mode, global leaderboard, and a real-time head-to-head challenge arena — all free.</p>
         <nav>
           <ul>
-            <li><a href="/">Home — Browse all 77 courses and start practicing</a></li>
+              <li><a href="/">Home — Browse all 77 courses and start practicing</a></li>
             <li><a href="/about">About — Features, badge system, and course list</a></li>
             <li><a href="/leaderboard">Global Leaderboard — Top scorers by course and difficulty</a></li>
             <li><a href="/race">Challenge Arena — Real-time head-to-head IT quiz battles</a></li>
+            <li><a href="/resume-builder">Resume Builder — Create a resume with 12 free ATS templates</a></li>
+            <li><a href="/resume-templates">Resume Templates — Browse 12 distinct free designs</a></li>
+            <li>Free templates: Minimalist black &amp; white, Gray-white timeline, White-black simple ATS, Infographic single column, Professional single column, Green-lined modern, Purple professional, Orange amber creative, Sidebar contemporary, Corporate off-white, Minimalistic executive, Blue modern formal.</li>
           </ul>
         </nav>
       </div>
     </noscript>
-    <nav aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap">
-      <a href="/">Home</a>
-      <a href="/about">About</a>
-      <a href="/leaderboard">Leaderboard</a>
-      <a href="/race">Challenge</a>
-    </nav>
+    <script>
+      if (window.location.hostname.includes("replit.dev")) {
+        var feedbackScript = document.createElement("script");
+        feedbackScript.src = "https://replit-cdn.com/feedback-widget/widget.global.js";
+        feedbackScript.defer = true;
+        feedbackScript.dataset.deploymentId = "108a343d-f24f-46a5-994b-a37a2f603d3e";
+        feedbackScript.dataset.position = "bottom-right";
+        feedbackScript.dataset.replId = "6ff97588-0432-400a-84db-6ad3b9a1ab3e";
+        document.body.appendChild(feedbackScript);
+      }
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

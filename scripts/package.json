@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "hello": "tsx ./src/hello.ts",
+    "audit:length-bias": "tsx ./src/audit-length-bias.ts",
+    "validate:quiz-fix": "tsx ./src/validate-quiz-fix.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {

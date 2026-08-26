@@ -1,0 +1,5 @@
+import type { ResumeData } from "@/lib/resume";
+import { BasicSections } from "./template-utils";
+export default function ExecutiveHugeTitle({ data }: { data: ResumeData }) {
+  return <div className="resume-template executive-huge"><h1>{data.contact.name || "Your Name"}</h1><p className="executive-contact">{data.contact.role} · {data.contact.email} · {data.contact.phone} · {data.contact.location}</p><div className="black-rule" /><p className="lead">{data.summary}</p><div className="executive-columns"><section><h2>Experience</h2>{data.experience.map((item) => <article key={item.id}><h3>{item.role}</h3><p><b>{item.company}</b> · {item.dates}</p>{item.bullets.map((bullet, i) => <p key={i}>• {bullet}</p>)}</article>)}<BasicSections data={data} /></section><section><h2>Education</h2>{data.education.map((item) => <p key={item}>{item}</p>)}<h2>Capabilities</h2>{data.skills.map((skill) => <p key={skill}>{skill}</p>)}<h2>Certifications</h2>{data.certifications.map((item) => <p key={item}>{item}</p>)}</section></div></div>;
+}

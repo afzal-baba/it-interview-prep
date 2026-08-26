@@ -3,11 +3,12 @@ import { useLocation } from "wouter";
 import {
   useListCourses,
   useCreateSession,
+  getListCoursesQueryKey,
   SessionInputLevel,
   type Course,
 } from "@workspace/api-client-react";
 import { useQuizState } from "@/lib/quiz-context";
-import { TOTAL_COURSES, TOTAL_QUESTIONS_DISPLAY, DIFFICULTY_TIERS } from "@/lib/platform-stats";
+import { TOTAL_COURSES, TOTAL_QUESTIONS, TOTAL_QUESTIONS_DISPLAY, DIFFICULTY_TIERS } from "@/lib/platform-stats";
 import * as SiIcons from "react-icons/si";
 import { Search, X, ArrowLeft, Timer } from "lucide-react";
 
@@ -152,36 +153,53 @@ const getCourseIcon = (name: string): React.ComponentType<any> | null =>
 function NetworkCanvas() {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const canvas = ref.current!;
-    const ctx = canvas.getContext("2d")!;
+    const context = canvas.getContext("2d");
+    if (!context) return;
+    const ctx: CanvasRenderingContext2D = context;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
     let raf: number;
+    const LINK_DISTANCE = 140;
+    const MOUSE_DISTANCE = 160;
+    const MOUSE_PUSH_STRENGTH = 0.0018;
+    const dpr = () => Math.min(window.devicePixelRatio || 1, 2);
     interface Node { x: number; y: number; vx: number; vy: number; r: number }
     let nodes: Node[] = [];
+    let width = 0;
+    let height = 0;
+    let mouseX = -Infinity;
+    let mouseY = -Infinity;
 
     function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      const count = Math.min(90, Math.floor((canvas.width * canvas.height) / 16000));
+      width = window.innerWidth;
+      height = window.innerHeight;
+      const pixelRatio = dpr();
+      canvas.width = Math.floor(width * pixelRatio);
+      canvas.height = Math.floor(height * pixelRatio);
+      ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+
+      const count = Math.min(180, Math.floor((width * height) / 7000));
       nodes = Array.from({ length: count }, () => ({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        r: Math.random() * 1.5 + 0.5,
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.7,
+        vy: (Math.random() - 0.5) * 0.7,
+        r: Math.random() * 1.4 + 0.8,
       }));
     }
 
     function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, width, height);
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
           const d = Math.sqrt(dx * dx + dy * dy);
-          if (d < 140) {
+          if (d < LINK_DISTANCE) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(80,120,220,${0.22 * (1 - d / 140)})`;
-            ctx.lineWidth = 0.6;
+            ctx.strokeStyle = `rgba(79,216,176,${0.35 * (1 - d / LINK_DISTANCE)})`;
+            ctx.lineWidth = 0.55;
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
             ctx.stroke();
@@ -189,33 +207,57 @@ function NetworkCanvas() {
         }
       }
       for (const n of nodes) {
+        const mouseDx = n.x - mouseX;
+        const mouseDy = n.y - mouseY;
+        const mouseDistance = Math.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
+        if (mouseDistance > 0 && mouseDistance < MOUSE_DISTANCE) {
+          const influence = 1 - mouseDistance / MOUSE_DISTANCE;
+          n.x += (mouseDx / mouseDistance) * influence * MOUSE_PUSH_STRENGTH;
+          n.y += (mouseDy / mouseDistance) * influence * MOUSE_PUSH_STRENGTH;
+        }
+
+        n.x += n.vx;
+        n.y += n.vy;
+        if (n.x < n.r) { n.x = n.r; n.vx = Math.abs(n.vx); }
+        if (n.x > width - n.r) { n.x = width - n.r; n.vx = -Math.abs(n.vx); }
+        if (n.y < n.r) { n.y = n.r; n.vy = Math.abs(n.vy); }
+        if (n.y > height - n.r) { n.y = height - n.r; n.vy = -Math.abs(n.vy); }
+
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(90,130,230,0.55)";
+        ctx.fillStyle = "rgba(233,237,247,0.55)";
         ctx.fill();
-        n.x += n.vx; n.y += n.vy;
-        if (n.x < 0 || n.x > canvas.width)  n.vx *= -1;
-        if (n.y < 0 || n.y > canvas.height) n.vy *= -1;
       }
       raf = requestAnimationFrame(draw);
     }
 
     resize();
     draw();
-    let t: ReturnType<typeof setTimeout>;
-    const onResize = () => { clearTimeout(t); t = setTimeout(resize, 200); };
+    const onResize = () => resize();
+    const onMouseMove = (event: MouseEvent) => {
+      mouseX = event.clientX;
+      mouseY = event.clientY;
+    };
+    const onMouseLeave = () => {
+      mouseX = -Infinity;
+      mouseY = -Infinity;
+    };
     window.addEventListener("resize", onResize);
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseleave", onMouseLeave);
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", onResize);
-      clearTimeout(t);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseleave", onMouseLeave);
     };
   }, []);
 
   return (
     <canvas
       ref={ref}
-      style={{ position: "fixed", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0 }}
+      aria-hidden="true"
+      style={{ position: "fixed", inset: 0, width: "100%", height: "100%", background: "#070b14", pointerEvents: "none", zIndex: 0 }}
     />
   );
 }
@@ -644,7 +686,11 @@ function SearchBox({ search, onSearch }: { search: string; onSearch: (v: string)
 // ─── Home ─────────────────────────────────────────────────────────────────────
 export default function Home() {
   const { data: courses, isLoading, isError, refetch } = useListCourses({
-    query: { retry: 4, retryDelay: (n) => Math.min(1000 * 2 ** n, 10000) },
+    query: {
+      queryKey: getListCoursesQueryKey(),
+      retry: 4,
+      retryDelay: (n) => Math.min(1000 * 2 ** n, 10000),
+    },
   });
   const [, setLocation] = useLocation();
   const { setSession, setTimedMode } = useQuizState();
@@ -674,7 +720,7 @@ export default function Home() {
   }, [courses, challengeParams, selectedCourse]);
 
   useEffect(() => {
-    document.title = "IT Interview Prep — Practice Oracle, AWS, Java & 37 More Topics";
+    document.title = `TechInterviewPrep — ${TOTAL_QUESTIONS_DISPLAY} IT Interview Questions [Free]`;
   }, []);
 
   // ── Search alias expansion ────────────────────────────────────────────────
@@ -998,7 +1044,10 @@ export default function Home() {
               </h2>
               <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "var(--cin-faint)" }}>
                 {filteredCourses.length} {filteredCourses.length === 1 ? "module" : "modules"} ·{" "}
-                {filteredCourses.reduce((s, c) => s + c.questionCounts.beginner + c.questionCounts.intermediate + c.questionCounts.advanced, 0)} questions
+                {(search.trim()
+                  ? filteredCourses.reduce((s, c) => s + c.questionCounts.beginner + c.questionCounts.intermediate + c.questionCounts.advanced, 0)
+                  : TOTAL_QUESTIONS
+                ).toLocaleString()} questions
               </span>
             </div>
 
